@@ -1,78 +1,109 @@
-# React + TypeScript + Vite
+# TX Dashboard · Revenue OS (React + TypeScript + Vite)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Migración de `tx-dashboards/tx-dashboard-v3.html` (un HTML monolítico de ~4.500 líneas) a una
+aplicación React + TypeScript construida con Vite. La migración es **secuencial**: esta primera
+fase entrega la interfaz base del dashboard con una estructura de carpetas escalable, el adapter
+de datos tipado y verificado contra el original, y la lógica de negocio separada de la UI.
 
-Currently, two official plugins are available:
+## Estado de la migración
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+| Fase | Alcance | Estado |
+|---|---|---|
+| **1 · Base** | Estructura del proyecto, tokens de estilo, adapter en TS con test de paridad, topbar con filtros, KPI strip, tabs, tabla de portafolio con sort/paginación, fila expandible con Identity / Key figures / Source coverage | ✅ Esta entrega |
+| 2 · Tarjetas | Las 6 tarjetas de evidencia (Potential, Opportunities, BUY, LIST, SELL, Freshness) dentro de la fila expandida | Pendiente |
+| 3 · Definitions & Matrix | Matriz Est GMV × Product Tier con drill-down, tablas de metodología | Pendiente |
+| 4 · Datos | Script de build que compacta los 15 JSON (~9.6 MB) en un bundle por vista; derivar el período desde `_meta` en todos lados | Pendiente |
 
-## React Compiler
+## Cómo correrlo
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
-
-Note: This will impact Vite dev & build performances.
-You can also try [the experimental native React Compiler support in plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md#rust-react-compiler) by using `compiler: true` in the plugin options instead of using the Babel plugin.
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+npm install
+npm run dev        # http://localhost:5173
+npm run check      # typecheck + lint + tests + build (lo mismo que corre CI)
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+Otros scripts: `npm run typecheck`, `npm run lint`, `npm test`, `npm run build`, `npm run preview`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Estructura de carpetas
 
 ```
+public/
+  data/                     JSON de evidencia (copiados tal cual de tx-dashboards/data)
+    current/                cubos mensuales sell / buy / fees + _manifest.json
+src/
+  app/                      App shell (hoy una sola vista; aquí entra el router cuando haya más páginas)
+  styles/
+    tokens.css              Variables de diseño (colores, tipografía, radios, sombras, layout)
+    global.css              Reset + utilidades mínimas
+  components/ui/            Primitivas reutilizables sin lógica de negocio
+    SelectPill, TabButton/TabsNav, Chip (RemovableChip/ToggleChip), Badge, Sparkline, Spinner
+  data/
+    adapter/                Evidence Adapter — la capa de datos
+      files.ts              Registro de archivos JSON + fetch tolerante a fallos + IDs excluidos
+      types.ts              Tipos raw (shape de los JSON) y de dominio (AccountEvidence)
+      helpers.ts            Agregaciones puras de cubos, deltas, meses
+      store.ts              Carga en paralelo + índices por company_id
+      builders.ts           Reglas de negocio: Piso de red, penetración, take rate, etc.
+      index.ts              API pública (init, getAccountEvidence, getAllAccountIds, …)
+    sfdc/openOpportunities.ts   Oportunidades abiertas de Salesforce → "$ at Stake"
+  domain/                   Lógica pura sobre AccountEvidence (sin React, sin DOM)
+    format.ts               fmtMoney, fmtPct, evValue…
+    metrics.ts              $ at stake, diagnosis, opportunity flags, sparkline, GMV bands
+    thresholds.ts           Umbrales → tono/qualifier de cada celda (una sola fuente de verdad)
+    filters.ts              Modelo de filtros + applyFilters + conteos de tabs
+    sort.ts                 Sort por columna
+    kpis.ts                 KPIs del portafolio
+    timeframe.ts            Opciones de período derivadas del _meta de los cubos
+  state/filtersReducer.ts   Reducer de filtros (incluye las interacciones cruzadas)
+  hooks/
+    useDashboardData.ts     init del adapter + SFDC, evidence por timeframe en lotes rAF
+    usePortfolio.ts         filtros + sort + KPIs + paginación → modelo de la vista
+  features/
+    portfolio/              Vista principal
+      PortfolioView.tsx     Composición de la página
+      filterOptions.ts      Listas estáticas de los dropdowns y chips
+      components/           TopBar, KpiStrip, PortfolioTabs, PortfolioTable, PortfolioRow
+    account-detail/         Panel expandido por cuenta (fase 1: Identity, Key figures, Coverage)
+tests/
+  adapter.parity.test.ts    Compara el adapter TS contra el evidence_adapter_v3.js original
+  legacy/                   Copia del adapter JS original, solo para el test de paridad
+```
+
+**Regla de dependencias:** `components/ui` no importa de `domain` ni de `data`; `domain` no importa
+de React; `features` compone todo. Los estilos son CSS Modules por componente sobre los tokens
+globales de `styles/tokens.css`.
+
+## De dónde salen los datos
+
+La app es 100 % estática: lee los JSON de `public/data/` en el navegador. No hay backend ni consultas
+en vivo a Snowflake / Salesforce. El adapter (`src/data/adapter`) carga 14 archivos en paralelo,
+construye índices por `company_id` y calcula para cada cuenta el objeto `AccountEvidence`
+(`identity`, `potential`, `buy`, `list`, `sell`, `benchmarks`, `freshness`). Las reglas de negocio
+(Piso de red, penetración, buy estimado = 45 % del sell, take rate) viven solo en `builders.ts`.
+
+Para refrescar datos: regenerar los JSON con las queries documentadas en
+`tx-dashboards/data/current/refresh_queries.md` y copiarlos a `public/data/`. El `_meta.period_to`
+del cubo de sell alimenta las etiquetas del selector de período.
+
+## Verificación de paridad
+
+`tests/adapter.parity.test.ts` ejecuta el adapter original (JS) y el nuevo (TS) sobre los mismos JSON
+y exige salida idéntica para **todas** las cuentas (~4k) en los tres timeframes. La UI se verificó
+además comparando KPIs, conteos de tabs y orden de filas contra el HTML original: coinciden.
+
+## Diferencias deliberadas respecto al HTML original
+
+- Los tabs **BUY / LIST / SELL / CONFIG / Declining** ahora filtran la tabla (en el original solo
+  mostraban el conteo).
+- El **sparkline** de tendencia funciona: el original leía `m.sell_total`, un campo que no existe
+  (es `sell_gmv`), por lo que siempre se pintaba plano.
+- El selector de **período** deriva sus etiquetas del `_meta.period_to` del cubo en vez de tener
+  "Jul 2026" hardcodeado.
+- El nav superior a otras páginas del Revenue OS (`changes.html`, `issues.html`…) se omitió porque
+  esos archivos no existen en el repo original.
+
+## Deploy
+
+`.github/workflows/deploy-pages.yml` publica `dist/` en GitHub Pages en cada push a `main`
+(hay que habilitar Pages → Source: *GitHub Actions* en Settings). `.github/workflows/ci.yml` corre
+typecheck, lint, tests y build en cada PR.
