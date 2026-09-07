@@ -1,0 +1,14 @@
+-- ============================================================================
+-- hardgoods  →  replaces public/data/hardgoods_v2.json
+-- Grain : company (hardgoods_* and plants_* totals, online/offline, pct)
+-- Source: PRODUCTION.ANALYTICS.SALES_SV (via product_division_gmv)
+-- Status: PENDING — paste the query from the "TX fees action plan" chat
+--         (regen fase B, 2026-09-03). Provenance below comes from the JSON _meta.
+-- ----------------------------------------------------------------------------
+-- Metric : GMV by product division (hardgoods, plants) split online/offline + online pct
+-- Filters: R1 ks_flag=TRUE · shipping_date >= start of year · R4 sales<100000 · R5/R16 DISTINCT sale_item_id · segmentation ct_id from account universe
+-- Consumed by: buildSell() → hardgoods
+-- ============================================================================
+
+-- TODO: paste query here. Keep column names identical to the JSON fields so the
+-- adapter's builders (src/data/adapter/builders.ts) need no changes.

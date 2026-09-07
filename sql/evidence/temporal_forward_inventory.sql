@@ -1,0 +1,14 @@
+-- ============================================================================
+-- temporal_forward_inventory  →  replaces public/data/temporal_evidence_v2.json → forward_inventory_depth
+-- Grain : company × horizon_bucket
+-- Source: PRODUCTION.ANALYTICS.PREBOOK_DETAILS (base table — no _SV exists)
+-- Status: PENDING — paste the query from the "TX fees action plan" chat
+--         (regen fase B, 2026-09-03). Provenance below comes from the JSON _meta.
+-- ----------------------------------------------------------------------------
+-- Metric : DATEDIFF(day, CURRENT_DATE, shipping_date) bucketed; prebook_lines, total_value, distinct_vendors, distinct_products
+-- Filters: R1 ks_flag=TRUE · shipping_date > CURRENT_DATE · prebook_status NOT IN ('Cancelled','Voided') · dedup prebook_item_id
+-- Consumed by: buildList() → forward_inventory
+-- ============================================================================
+
+-- TODO: paste query here. Keep column names identical to the JSON fields so the
+-- adapter's builders (src/data/adapter/builders.ts) need no changes.

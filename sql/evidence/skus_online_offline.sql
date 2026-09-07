@@ -1,0 +1,14 @@
+-- ============================================================================
+-- skus_online_offline  →  replaces public/data/skus_online_offline.json
+-- Grain : company
+-- Source: PRODUCTION.ANALYTICS.SALE_DETAILS
+-- Status: PENDING — paste the query from the "TX fees action plan" chat
+--         (regen fase B, 2026-09-03). Provenance below comes from the JSON _meta.
+-- ----------------------------------------------------------------------------
+-- Metric : COUNT(DISTINCT product_description) per channel_group (online = eCommerce/K2K/API, offline = else), 2026 YTD
+-- Filters: R1 ks_flag=TRUE · R4 sales<100000 · dump accounts excluded · product_description IS NOT NULL · dedup sale_item_id
+-- Consumed by: buildBuy() → skus_online_offline
+-- ============================================================================
+
+-- TODO: paste query here. Keep column names identical to the JSON fields so the
+-- adapter's builders (src/data/adapter/builders.ts) need no changes.

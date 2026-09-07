@@ -1,0 +1,14 @@
+-- ============================================================================
+-- config_evidence  →  replaces public/data/config_evidence_v2.json (config + bunches_reality parts)
+-- Grain : company
+-- Source: PRODUCTION.ANALYTICS.COMPANIES_SV (config, nightly refresh) + PRODUCTION.ANALYTICS.SALES_SV (bunches_reality)
+-- Status: PENDING — paste the query from the "TX fees action plan" chat
+--         (regen fase B, 2026-09-03). Provenance below comes from the JSON _meta.
+-- ----------------------------------------------------------------------------
+-- Metric : config: raw company flags (is_on_hand_inventory_units / sell_in_bunches, ecommerce_max_age / max_age_sell, …) · bunches_reality: actually_sells_bunches_ecom = EXISTS sales with inventory_division='Units' AND sales_channel='eCommerce' in period
+-- Filters: config: ks_flag=TRUE · bunches_reality: inventory_division='Units' AND sales_channel='eCommerce' AND shipping_date in current year AND ks_flag=TRUE AND sales<100000, SELECT DISTINCT sale_item_id
+-- Consumed by: buildList() → config; buildDiagnosis() → 'Bunches OFF'; detectOpportunityFlags() → hasList / hasConfig (MaxAge < 30 / < 10)
+-- ============================================================================
+
+-- TODO: paste query here. Keep column names identical to the JSON fields so the
+-- adapter's builders (src/data/adapter/builders.ts) need no changes.

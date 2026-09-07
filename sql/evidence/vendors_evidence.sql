@@ -1,0 +1,14 @@
+-- ============================================================================
+-- vendors_evidence  →  replaces public/data/vendors_evidence_v2.json
+-- Grain : company (sub-objects vendor_lifecycle / categories_top20 / k2k_connections / vendor_leakage)
+-- Source: PRODUCTION.ANALYTICS.PROCUREMENT_DETAILS + K2K_CONNECTIONS
+-- Status: PENDING — paste the query from the "TX fees action plan" chat
+--         (regen fase B, 2026-09-03). Provenance below comes from the JSON _meta.
+-- ----------------------------------------------------------------------------
+-- Metric : vendor_lifecycle: total_cost 2026 YTD, active/dormant/churned relative to CURRENT_DATE (30/90d) · categories_top20: top 20 categories by total_gmv per company · k2k_connections: ks_flag=TRUE, all-time, split by connection_source · vendor_leakage: active K2K connections JOIN 2026 procurement; leakage = offline buy from connected vendors
+-- Filters: R1 ks_flag=TRUE · 14-ID internal exclusion · VENDOR_NAME is buyer-local (use K2K join pattern for canonical vendors)
+-- Consumed by: buildBuy() → k2k_lifecycle, vendor_lifecycle, categories_top20, leakage; detectOpportunityFlags() → hasBuy (leakage_cost > 10K, dormant > 0)
+-- ============================================================================
+
+-- TODO: paste query here. Keep column names identical to the JSON fields so the
+-- adapter's builders (src/data/adapter/builders.ts) need no changes.

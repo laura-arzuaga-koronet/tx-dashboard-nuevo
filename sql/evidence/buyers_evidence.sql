@@ -1,0 +1,14 @@
+-- ============================================================================
+-- buyers_evidence  →  replaces public/data/buyers_evidence_v2.json
+-- Grain : company (one record; sub-objects buyers / repeat_rate / concentration / login_cvr / new_user_cvr)
+-- Source: PRODUCTION.ANALYTICS.SALE_DETAILS (buyers, repeat, concentration) + USER_STATS (login_cvr, new_user_cvr)
+-- Status: PENDING — paste the query from the "TX fees action plan" chat
+--         (regen fase B, 2026-09-03). Provenance below comes from the JSON _meta.
+-- ----------------------------------------------------------------------------
+-- Metric : online_buyers, offline_buyers, total_buyers, l30d_online/offline, aov_online/offline, new_month, churned; repeat rate; buyer concentration; CVR
+-- Filters: R1 ks_flag=TRUE · R4 sales<100000 · R5/R16 dedup sale_item_id · R6 online = eCommerce+K2K+API · period 2026 YTD
+-- Consumed by: buildSell() → buyers_table, cvr, new_user_cvr, repeat_rate, concentration
+-- ============================================================================
+
+-- TODO: paste query here. Keep column names identical to the JSON fields so the
+-- adapter's builders (src/data/adapter/builders.ts) need no changes.

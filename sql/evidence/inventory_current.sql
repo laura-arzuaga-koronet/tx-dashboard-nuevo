@@ -1,0 +1,14 @@
+-- ============================================================================
+-- inventory_current  →  replaces public/data/inventory_current_v1.json
+-- Grain : company (by_inventory_type, by_inventory_division, totals)
+-- Source: PRODUCTION.ANALYTICS.INVENTORY_DETAILS (no _SV exists — only inventory table)
+-- Status: PENDING — paste the query from the "TX fees action plan" chat
+--         (regen fase B, 2026-09-03). Provenance below comes from the JSON _meta.
+-- ----------------------------------------------------------------------------
+-- Metric : published units/lines per inventory type and division; proxy for eShop visibility (not confirmed)
+-- Filters: R1 ks_flag=TRUE · total_units > 0 · R7 vendor blank on some Units rows (by design)
+-- Consumed by: buildList() → inventory_current
+-- ============================================================================
+
+-- TODO: paste query here. Keep column names identical to the JSON fields so the
+-- adapter's builders (src/data/adapter/builders.ts) need no changes.

@@ -1,0 +1,18 @@
+-- ============================================================================
+-- accounts (system part)  →  replaces the reproducible columns of accounts_v3.json
+-- Source: Salesforce · Account  (+ Snowflake PRODUCTION.ANALYTICS.COMPANIES for
+--         company_id, komet_status, has_eshop / has_procurement / has_core / has_k2k)
+-- Status: DRAFT — the legacy _meta says "STG_SALESFORCE_ACCOUNT + COMPANIES + cubes".
+--         Verify the join key (Koronet company id custom field on Account) and the
+--         exact field API names in your org before using.
+-- ----------------------------------------------------------------------------
+-- The MANUAL columns of accounts_v3 (gmv_reference/gmv_source when source is
+-- 'Estimado', in_christine_sheet, potential_tier, priority_level, archetype,
+-- prospect_reason, digital_pct_caveat) are NOT here — see sql/manual/.
+-- 'Estimado (AnnualRevenue×0.11)' IS reproducible: AnnualRevenue * 0.11.
+-- ============================================================================
+SELECT Id, Name, Type, RecordType.Name, Industry, AnnualRevenue,
+       /* Koronet_Company_Id__c, */  -- ← confirm custom field name
+       Owner.Name, LastModifiedDate
+FROM Account
+WHERE IsDeleted = false

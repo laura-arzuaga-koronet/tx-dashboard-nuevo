@@ -1,0 +1,14 @@
+-- ============================================================================
+-- temporal_variety_freshness  →  replaces public/data/temporal_evidence_v2.json → variety_freshness
+-- Grain : company × channel_type × freshness_bucket
+-- Source: PRODUCTION.ANALYTICS.SALE_DETAILS
+-- Status: PENDING — paste the query from the "TX fees action plan" chat
+--         (regen fase B, 2026-09-03). Provenance below comes from the JSON _meta.
+-- ----------------------------------------------------------------------------
+-- Metric : DATEDIFF(day, MAX(shipping_date), reference_date) per variety, bucketed; variety_count, avg_days_since
+-- Filters: R1 ks_flag=TRUE · R4 sales<100000 · R12 dump exclusion · R5/R16 dedup sale_item_id · period 2026 YTD · reference_date = CURRENT_DATE
+-- Consumed by: buildList() → variety_freshness; detectOpportunityFlags() → hasList (variety gap > 100)
+-- ============================================================================
+
+-- TODO: paste query here. Keep column names identical to the JSON fields so the
+-- adapter's builders (src/data/adapter/builders.ts) need no changes.

@@ -1,0 +1,15 @@
+-- ============================================================================
+-- open_opportunities  →  replaces public/data/sfdc_open_opportunities_v1.json
+-- Source: Salesforce · Opportunity (open only), matched by AccountId
+-- Status: READY (source_contract from the legacy _meta; no priority inference)
+-- Consumed by: src/data/sfdc/openOpportunities.ts → "$ at Stake" (sum per account_id)
+-- ----------------------------------------------------------------------------
+-- Field mapping to the JSON the adapter reads:
+--   Id → opportunity_id · AccountId → account_id · Name → opp_name ·
+--   StageName → stage · Amount → amount · CloseDate → close_date ·
+--   Owner.Name → owner · LastModifiedDate → last_modified_at
+-- ============================================================================
+SELECT Id, AccountId, Name, StageName, Amount, CloseDate, Type, Owner.Name, LastModifiedDate
+FROM Opportunity
+WHERE IsClosed = false
+ORDER BY AccountId, CloseDate

@@ -1,0 +1,14 @@
+-- ============================================================================
+-- temporal_sell_anticipation  →  replaces public/data/temporal_evidence_v2.json → sell_anticipation
+-- Grain : company × channel_type (online/offline) × bucket
+-- Source: PRODUCTION.ANALYTICS.SALE_DETAILS
+-- Status: PENDING — paste the query from the "TX fees action plan" chat
+--         (regen fase B, 2026-09-03). Provenance below comes from the JSON _meta.
+-- ----------------------------------------------------------------------------
+-- Metric : DATEDIFF(day, created_on_date, shipping_date) bucketed; total_orders, total_gmv, avg_days per bucket
+-- Filters: R1 ks_flag=TRUE · R4 sales<100000 · created_on_date <= shipping_date · R12 dump/waste/shrink accounts excluded (customer_name) · R5/R16 dedup sale_item_id · period 2026 YTD
+-- Consumed by: buildBuy() → anticipation_online / anticipation_offline
+-- ============================================================================
+
+-- TODO: paste query here. Keep column names identical to the JSON fields so the
+-- adapter's builders (src/data/adapter/builders.ts) need no changes.

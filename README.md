@@ -64,6 +64,12 @@ src/
       filterOptions.ts      Listas estáticas de los dropdowns y chips
       components/           TopBar, KpiStrip, PortfolioTabs, PortfolioTable, PortfolioRow
     account-detail/         Panel expandido por cuenta (fase 1: Identity, Key figures, Coverage)
+sql/                        Mapa JSON → query (Snowflake / Salesforce / Supabase) para la fase de datos en vivo
+  README.md                 Estado por fuente, reglas del modelo, hallazgos
+  cubes/                    sell / buy / fees (listas)
+  evidence/                 fuentes V2 (pendientes de pegar) + derivadas (pacing, benchmarks)
+  salesforce/               SOQL de oportunidades y cuentas
+  manual/                   Esquema Supabase para overrides, GMV externo e IDs excluidos
 tests/
   adapter.parity.test.ts    Compara el adapter TS contra el evidence_adapter_v3.js original
   legacy/                   Copia del adapter JS original, solo para el test de paridad

@@ -1,0 +1,16 @@
+-- ============================================================================
+-- benchmarks  →  replaces public/data/benchmarks_v2.json
+-- Status: DERIVED — no source query needed.
+-- ----------------------------------------------------------------------------
+-- The legacy file holds network + per-segment (ct_id) percentiles (median, p75,
+-- p90, best_account) over the metrics produced by the other evidence sources.
+-- Two options:
+--   a) compute in SQL on top of the evidence tables with
+--      PERCENTILE_CONT(0.5/0.75/0.9) WITHIN GROUP (ORDER BY metric)
+--      (Snowflake: precompute partition totals in a prior CTE — no nested
+--      window functions), or
+--   b) compute in the adapter once all evidence is loaded (cheaper to iterate;
+--      the percentile math is ~20 lines of TypeScript).
+-- Recommendation: (b) for phase 2; move to (a) only if Supabase serves the
+-- benchmarks to other consumers.
+-- ============================================================================

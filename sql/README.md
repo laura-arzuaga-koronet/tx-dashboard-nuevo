@@ -1,0 +1,64 @@
+# Fuentes de datos → queries
+
+Mapa de cada JSON que hoy lee el adapter (`public/data/`) a la query que lo reemplazará cuando el
+dashboard tome datos de Snowflake / Salesforce (vía Lovable + Supabase). El objetivo es que
+`src/data/adapter/builders.ts` no cambie: cada query devuelve las **mismas columnas** que el JSON.
+
+## Estado
+
+| JSON actual | Reemplazo | Fuente | Estado |
+|---|---|---|---|
+| `current/sell_monthly.json` | `cubes/sell_monthly.sql` | `SALE_DETAILS` | ✅ Lista (del repo legacy) |
+| `current/buy_monthly.json` | `cubes/buy_monthly.sql` | `PROCUREMENT_DETAILS` | ✅ Lista · ⚠ confirmar split online/offline |
+| `current/fees_monthly.json` | `cubes/fees_monthly.sql` | `CONSOLIDATED_TRANSACTION_FEES` | ✅ Lista · cambia el shape (ver Hallazgos) |
+| `buyers_evidence_v2.json` | `evidence/buyers_evidence.sql` | `SALE_DETAILS` + `USER_STATS` | ⏳ Pegar desde chat "TX fees action plan" |
+| `vendors_evidence_v2.json` | `evidence/vendors_evidence.sql` | `PROCUREMENT_DETAILS` + `K2K_CONNECTIONS` | ⏳ Pegar |
+| `temporal_evidence_v2.json` · sell_anticipation | `evidence/temporal_sell_anticipation.sql` | `SALE_DETAILS` | ⏳ Pegar |
+| `temporal_evidence_v2.json` · variety_freshness | `evidence/temporal_variety_freshness.sql` | `SALE_DETAILS` | ⏳ Pegar |
+| `temporal_evidence_v2.json` · forward_inventory_depth | `evidence/temporal_forward_inventory.sql` | `PREBOOK_DETAILS` | ⏳ Pegar |
+| `inventory_current_v1.json` | `evidence/inventory_current.sql` | `INVENTORY_DETAILS` | ⏳ Pegar |
+| `config_evidence_v2.json` | `evidence/config_evidence.sql` | `COMPANIES_SV` + `SALES_SV` | ⏳ Pegar |
+| `hardgoods_v2.json` | `evidence/hardgoods.sql` | `SALES_SV` | ⏳ Pegar |
+| `skus_online_offline.json` | `evidence/skus_online_offline.sql` | `SALE_DETAILS` | ⏳ Pegar |
+| `gmv_pacing.json` | `evidence/gmv_pacing.sql` | derivado de sell_monthly | ✅ Borrador (CTE) |
+| `benchmarks_v2.json` | `evidence/benchmarks.sql` | derivado | 📝 Decisión: SQL vs adapter |
+| `sfdc_open_opportunities_v1.json` | `salesforce/open_opportunities.soql` | Salesforce `Opportunity` | ✅ Lista |
+| `accounts_v3.json` (columnas de sistema) | `salesforce/accounts_system_fields.soql` | Salesforce `Account` + `COMPANIES` | 📝 Borrador — confirmar join key |
+| `accounts_v3.json` (columnas manuales) | `manual/schema.sql` → `tx_account_overrides` | Hoja de Christine + criterio humano | ✅ Esquema listo · seed pendiente |
+| `gmv_estimates_external.json` | `manual/schema.sql` → `tx_gmv_estimates_external` | Investigación externa | ✅ Esquema listo · seed pendiente |
+| IDs excluidos (hardcoded) | `manual/schema.sql` → `tx_excluded_company_ids` | — | ✅ Con datos |
+
+## Reglas del modelo (aplican a toda query)
+
+Resumen de `tx-dashboards/data/current/refresh_queries.md` y de los `_meta` de los JSON V2.
+
+- **R1** `ks_flag = TRUE` siempre. Es el error silencioso número uno.
+- **R4** `sales < 100000` en queries sobre ventas (guardia contra datos corruptos).
+- **R5 / R16** Dedup por `sale_item_id` (`ROW_NUMBER` o `SELECT DISTINCT`); `customer_location_id` fuera del dedup.
+- **R6** Online = `eCommerce` + `K2K` + `API`; offline = todo lo demás.
+- **R8** Tablas semánticas donde existan, pero **sin** sufijo `_SV` en el nombre físico (`PRODUCTION.ANALYTICS.SALE_DETAILS`). `INVENTORY_DETAILS` y `PREBOOK_DETAILS` no tienen versión semántica.
+- **R12** Excluir cuentas dump / waste / shrink (por `customer_name`).
+- `SALE_STATUS = 'Confirmed'` es case-sensitive; `'confirmed'` devuelve cero filas sin error.
+- Nunca filtrar solo `sale_order_type = 'Invoice'`: se pierden los prebooks de eSuite. Siempre `(Invoice AND Confirmed) OR Prebook`.
+- Campo de ingreso según tabla: `sales` (SALE_DETAILS) · `total_cost` (PROCUREMENT_DETAILS) · `fee_amount` (fees). No mezclar.
+- Campo de fecha según cubo: `shipping_date` (sell y buy) · `transaction_date` (fees) · `created_on_date` solo para tendencias de creación.
+- `company_id` es NUMBER en SALE_DETAILS / PROCUREMENT_DETAILS y TEXT en las tablas de fees: castear al unir.
+- Procurement: `sales_channel = 'Procurement'` obligatorio + exclusión de los 14 IDs internos al unir con `COMPANIES`.
+- `VENDOR_NAME` en PROCUREMENT_DETAILS es local a cada comprador; para vendors canónicos usar el patrón de join K2K.
+- Agregar en SQL (`GROUP BY`), nunca traer filas crudas; nombrar columnas explícitamente.
+- Snowflake: sin funciones ventana anidadas (precomputar en CTE); `rows` es palabra reservada (usar `row_cnt`).
+
+## Hallazgos al mapear (revisar antes de go-live)
+
+1. **Fees YTD está inflado en el dashboard legacy.** `fees_monthly.json` (regenerado 2026-08-24) guarda el YTD 2025 como una fila por compañía con `month='2025-01'` y `fee_channel='total'`. El adapter suma todas las filas de la compañía sin filtrar por mes (`aggregateFeesCube`), así que `fees_ytd_2026` incluye el total 2025. Sobre el universo completo: adapter = $2.51M vs. $1.47M reales de 2026 (el manifest reporta $1,478K). El port en TS reproduce el mismo número por paridad. Corrección propuesta: filtrar `month >= año actual` para `fees_ytd_2026` y usar las filas `total` de 2025 para `fees_ytd_2025`, lo que además habilita el KPI "Fees YoY" que hoy siempre sale vacío.
+2. **Etiquetas de canal mezcladas en sell_monthly.** Los meses 2024-08 a 2025-07 usan `eCommerce` / `K2K` / `API` / `Offline`; de 2025-08 en adelante usan `Online` / `Offline`. El adapter solo reconoce `Online` como online, así que en el año anterior K2K y API cuentan como offline. No afecta los KPIs YTD 2026 (solo `Online`/`Offline` en esos meses) pero sí cualquier comparación online YoY. `cubes/sell_monthly.sql` emite `channel_group` normalizado para resolverlo.
+3. **Split buy_online / buy_offline no documentado.** La hipótesis en `refresh_queries.md` es `sales_channel = 'Procurement'` = online. Confirmar contra la query original antes de confiar en `buy_online_pct`.
+4. **`accounts_v3.json` es mixto.** ~600 de 4.026 cuentas tienen columnas curadas a mano (cascada Christine, prioridad, tier). Van a `tx_account_overrides`; el resto se reconstruye desde SFDC + COMPANIES.
+5. **La hoja de Christine no está versionada** (el `_meta` de config apunta a un archivo local). Al sembrar `tx_account_overrides` desde `accounts_v3.json` queda capturada.
+
+## Cómo validar cada query
+
+Mismo patrón que `tests/adapter.parity.test.ts`: correr la query, volcar el resultado al shape del JSON
+y comparar contra el archivo actual en `public/data/`. Para los cubos la comparación es exacta salvo
+los hallazgos 1 y 2; para las fuentes V2 la fecha de referencia (`CURRENT_DATE`) cambia los buckets
+temporales, así que comparar con tolerancia o fijar la fecha en la query durante la validación.
