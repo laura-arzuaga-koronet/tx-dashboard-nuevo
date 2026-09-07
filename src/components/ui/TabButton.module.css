@@ -1,0 +1,34 @@
+.tab {
+  font-size: var(--font-body);
+  font-weight: 600;
+  color: var(--text-muted);
+  padding: 7px 14px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 0.15s, border-color 0.15s;
+}
+.tab:hover { color: var(--text-secondary); }
+.active { color: var(--blue); border-bottom-color: var(--blue); }
+
+.count {
+  font-size: var(--font-micro);
+  font-weight: 700;
+  background: var(--border-light);
+  border-radius: 8px;
+  padding: 1px 5px;
+  margin-left: 4px;
+  color: var(--text-muted);
+}
+.active .count { background: var(--blue-bg); color: var(--blue); }
+
+.nav {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.navFlush { border-bottom: none; margin-bottom: 0; gap: 0; }
+.spacer { margin-left: auto; }

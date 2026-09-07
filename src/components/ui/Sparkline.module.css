@@ -1,0 +1,5 @@
+.spark { display: flex; align-items: flex-end; gap: 2px; height: 20px; }
+.bar { width: 6px; border-radius: 2px 2px 0 0; background: var(--border); }
+.up { background: var(--green); }
+.down { background: var(--red); }
+.flat { background: var(--text-muted); }

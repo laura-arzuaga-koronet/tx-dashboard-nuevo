@@ -1,0 +1,40 @@
+/* Active-filter chip (blue, removable) */
+.chip {
+  font-size: var(--font-caption);
+  font-weight: 600;
+  color: var(--blue);
+  background: var(--blue-bg);
+  border: 1px solid var(--blue-border);
+  border-radius: 10px;
+  padding: 2px 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+.x { color: var(--blue-light); font-weight: 700; font-size: var(--font-body); }
+
+.clear {
+  font-size: var(--font-caption);
+  color: var(--text-muted);
+  cursor: pointer;
+  background: none;
+  border: none;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* Toggle chip (priority / impl quick filters) */
+.toggle {
+  font-size: var(--font-caption);
+  padding: 2px 8px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.toggle:hover { border-color: var(--blue-light); color: var(--blue); }
+.toggleActive { background: var(--blue); color: #fff; border-color: var(--blue); }
+.toggleActive:hover { color: #fff; }

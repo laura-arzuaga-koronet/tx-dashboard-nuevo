@@ -1,0 +1,5 @@
+.main {
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: 16px var(--content-gutter) 40px;
+}

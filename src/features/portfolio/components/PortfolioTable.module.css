@@ -1,0 +1,85 @@
+.wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  background: var(--surface);
+  margin-bottom: 16px;
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-body);
+}
+.table thead {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--bg);
+}
+.th {
+  font-size: var(--font-caption);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+  background: var(--bg);
+}
+.sortable { cursor: pointer; user-select: none; transition: color 0.15s; }
+.sortable:hover { color: var(--blue); }
+.sortActive { color: var(--blue); }
+
+.stickyCol { position: sticky; z-index: 5; background: var(--surface); }
+.table thead .stickyCol { z-index: 11; background: var(--bg); }
+.col1 { left: 0; width: var(--sticky-col-1-width); }
+.col2 { left: var(--sticky-col-1-width); min-width: var(--sticky-col-2-min-width); }
+
+.table td {
+  padding: 0;
+  border-bottom: 1px solid var(--border-light);
+  vertical-align: top;
+}
+.table tbody tr:last-child td { border-bottom: none; }
+.table tbody tr:hover td { background: var(--surface-hover); }
+.rowExpanded td,
+.rowExpanded td.stickyCol { background: var(--blue-bg) !important; }
+
+.empty {
+  padding: 32px;
+  text-align: center;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.sectionLabel {
+  font-size: var(--font-caption);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.loadMoreWrap { text-align: center; padding: 12px; }
+.loadMore {
+  font-size: var(--font-body);
+  font-weight: 600;
+  color: var(--blue);
+  background: var(--blue-bg);
+  border: 1px solid var(--blue-border);
+  border-radius: var(--radius-sm);
+  padding: 6px 20px;
+  cursor: pointer;
+}
+.loadMore:hover { background: var(--blue-hover); }
+
+.note {
+  font-size: var(--font-caption);
+  color: var(--text-muted);
+  font-style: italic;
+  padding: 4px 0 2px;
+}
