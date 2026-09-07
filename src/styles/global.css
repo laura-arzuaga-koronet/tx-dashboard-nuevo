@@ -1,0 +1,42 @@
+@import './tokens.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-body);
+  color: var(--text-primary);
+  background: var(--bg);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+select,
+input {
+  font-family: inherit;
+}
+
+/* Shared utility: semantic text colors used by metric cells */
+.text-green { color: var(--green); font-weight: 600; }
+.text-amber { color: var(--amber); font-weight: 600; }
+.text-red { color: var(--red); font-weight: 600; }
+.text-blue { color: var(--blue); font-weight: 600; }
+.text-muted { color: var(--text-muted); }
+.text-muted-italic { color: var(--text-muted); font-style: italic; }
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

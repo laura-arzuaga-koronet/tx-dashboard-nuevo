@@ -1,0 +1,67 @@
+/*
+ * Design tokens — single source of truth for color, type and spacing.
+ * Ported verbatim from tx-dashboard-v3.html :root so the migrated UI
+ * matches the legacy dashboard pixel-for-pixel.
+ */
+:root {
+  /* Surfaces */
+  --bg: #f8fafc;
+  --surface: #ffffff;
+  --surface-hover: #fafbfd;
+  --border: #e2e8f0;
+  --border-light: #f1f5f9;
+
+  /* Text */
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  --text-caption: #64748b;
+
+  /* Semantic colors */
+  --green: #16a34a;
+  --green-bg: #f0fdf4;
+  --green-border: #bbf7d0;
+  --amber: #d97706;
+  --amber-bg: #fffbeb;
+  --amber-border: #fde68a;
+  --red: #dc2626;
+  --red-bg: #fef2f2;
+  --red-border: #fecaca;
+  --blue: #2563eb;
+  --blue-bg: #eff6ff;
+  --blue-border: #bfdbfe;
+  --blue-light: #3b82f6;
+  --blue-hover: #dbeafe;
+
+  /* Badge palettes */
+  --badge-indigo-bg: #e0e7ff;
+  --badge-indigo-fg: #3730a3;
+  --badge-amber-bg: #fef3c7;
+  --badge-amber-fg: #92400e;
+  --badge-emerald-bg: #d1fae5;
+  --badge-emerald-fg: #065f46;
+  --badge-pink-bg: #fce7f3;
+  --badge-pink-fg: #9d174d;
+
+  /* Typography */
+  --font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+  --font-micro: 9px;
+  --font-caption: 10px;
+  --font-body: 11px;
+  --font-emphasis: 12px;
+  --font-section: 14px;
+  --font-card: 16px;
+  --font-kpi: 18px;
+
+  /* Shape & elevation */
+  --radius: 6px;
+  --radius-sm: 4px;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+
+  /* Layout */
+  --content-max-width: 1280px;
+  --content-gutter: 24px;
+  --sticky-col-1-width: 32px;
+  --sticky-col-2-min-width: 220px;
+}
