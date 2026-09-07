@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { fmtMoney, fmtPct, fmtSignedPct } from '../../../domain/format';
 import type { PortfolioKpis } from '../../../domain/kpis';
+import type { Period } from '../../../domain/period';
 import styles from './KpiStrip.module.css';
 
 interface KpiItemProps {
@@ -26,12 +27,12 @@ function yoyDelta(pct: number | null) {
   return { text: `${fmtSignedPct(pct)} YoY`, tone: pct >= 0 ? ('up' as const) : ('down' as const) };
 }
 
-export function KpiStrip({ kpis, loading }: { kpis: PortfolioKpis; loading: boolean }) {
+export function KpiStrip({ kpis, loading, period }: { kpis: PortfolioKpis; loading: boolean; period: Period }) {
   const v = (s: string) => (loading ? 'Loading…' : s);
   return (
     <div className={styles.strip} aria-busy={loading}>
-      <KpiItem value={v(fmtMoney(kpis.totalSell, true))} label="Total Sell GMV" delta={loading ? null : yoyDelta(kpis.sellYoyPct)} />
-      <KpiItem value={v(fmtMoney(kpis.totalFees, true))} label="Fees YTD" delta={loading ? null : yoyDelta(kpis.feesYoyPct)} />
+      <KpiItem value={v(fmtMoney(kpis.totalSell, true))} label={`Total Sell GMV · ${period.label}`} delta={loading ? null : yoyDelta(kpis.sellYoyPct)} />
+      <KpiItem value={v(fmtMoney(kpis.totalFees, true))} label={`Fees · ${period.label}`} delta={loading ? null : yoyDelta(kpis.feesYoyPct)} />
       <KpiItem value={v(`${kpis.accountsWithData} of ${kpis.total}`)} label="Accounts with Data" />
       <KpiItem
         value={v(fmtPct(kpis.avgOnlinePct, 1))}

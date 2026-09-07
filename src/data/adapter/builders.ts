@@ -15,8 +15,9 @@ import {
   selectPeriod,
   sellMonthlyTotals,
   sid,
-  sumPriorYtd,
+  sumRange,
 } from './helpers';
+import { covers, type Period } from './period';
 import { store } from './store';
 import type {
   Benchmarks,
@@ -36,7 +37,6 @@ import type {
   SellDomain,
   SourcingTable,
   TemporalRow,
-  Timeframe,
   VarietyFreshness,
 } from './types';
 
@@ -88,7 +88,15 @@ export function buildIdentity(companyId: string): Identity | null {
 }
 
 /* ── POTENTIAL ────────────────────────────────────────────────────────── */
-export function buildPotential(companyId: string, timeframe: Timeframe): Potential {
+/**
+ * Annualization factor for a period: 12 / months WITH DATA inside the range.
+ * For full-year and L12M periods with complete data this is 1.
+ */
+function annualize(monthsWithData: number): number {
+  return monthsWithData > 0 ? 12 / monthsWithData : 0;
+}
+
+export function buildPotential(companyId: string, period: Period): Potential {
   const acct = store.accountById[companyId] ?? ({} as Partial<Identity> & Record<string, unknown>);
 
   // GMV reference (Christine cascade, from accounts_v3)
@@ -115,30 +123,35 @@ export function buildPotential(companyId: string, timeframe: Timeframe): Potenti
 
   const gmvOra = gmvSource === 'ORA' && gmvRef ? { value: gmvRef } : null;
 
-  // Cubes
+  // Cubes — everything below is scoped to `period` (and `period.prior` for YoY).
+  // A YoY baseline is only reported when the cube actually covers the whole prior
+  // range; otherwise a partial baseline would fake a huge growth number.
   const sellRows = store.sellCubeById[companyId] ?? [];
-  const sellAggYtd = aggregateSellCube(sellRows, 'ytd');
-  const sellYtd2025 = sumPriorYtd(sellRows, 'sell_gmv');
+  const sellAgg = aggregateSellCube(sellRows, period);
+  const sellPriorCovered = covers(store.coverage.sell, period.prior);
+  const sellPrior = sellPriorCovered ? sumRange(sellRows, 'sell_gmv', period.prior) : null;
 
   const buyRows = store.buyCubeById[companyId] ?? [];
-  const buyAggYtd = aggregateBuyCube(buyRows, 'ytd');
-  const buyYtd2025 = sumPriorYtd(buyRows, 'buy_gmv');
+  const buyAgg = aggregateBuyCube(buyRows, period);
+  const buyPriorCovered = covers(store.coverage.buy, period.prior);
+  const buyPrior = buyPriorCovered ? sumRange(buyRows, 'buy_gmv', period.prior) : null;
 
-  // NOTE: the legacy adapter also aggregated by `timeframe` but never used the result;
-  // every displayed figure is YTD. Kept as-is for parity. `timeframe` drives sell/buy sections.
-  void timeframe;
-
-  const feesAgg = aggregateFeesCube(store.feesCubeById[companyId] ?? []);
-  const feesYtd2026 = feesAgg ? feesAgg.total : null;
+  const feesRows = store.feesCubeById[companyId] ?? [];
+  const feesAgg = aggregateFeesCube(feesRows, period);
+  const feesPeriod = feesAgg ? feesAgg.total : null;
   const feesByChannel = feesAgg ? feesAgg.byChannel : null;
-  const feesYtd2025: number | null = null; // not in fees cube
+  const feesPriorCovered = covers(store.coverage.fees, period.prior);
+  const feesPrior = feesPriorCovered ? sumRange(feesRows, 'fee_amount', period.prior) : null;
+  const notCovered = 'prior period not fully covered by data';
 
-  const sellOfflineYtd = sellAggYtd && sellAggYtd.offline > 0 ? sellAggYtd.offline : null;
-  const buyOfflineYtd = buyAggYtd && buyAggYtd.offline > 0 ? buyAggYtd.offline : null;
-  const koronetSellYtd = sellAggYtd ? sellAggYtd.total : null;
-  const koronetBuyYtd = buyAggYtd ? buyAggYtd.total : null;
-  const onlineSellYtd = sellAggYtd ? sellAggYtd.online : 0;
-  const onlineBuyYtd = buyAggYtd ? buyAggYtd.online : 0;
+  const sellOffline = sellAgg && sellAgg.offline > 0 ? sellAgg.offline : null;
+  const buyOffline = buyAgg && buyAgg.offline > 0 ? buyAgg.offline : null;
+  const koronetSell = sellAgg ? sellAgg.total : null;
+  const koronetBuy = buyAgg ? buyAgg.total : null;
+  const onlineSell = sellAgg ? sellAgg.online : 0;
+  const onlineBuy = buyAgg ? buyAgg.online : 0;
+  const sellMonths = sellAgg ? sellAgg.months.length : 0;
+  const buyMonths = buyAgg ? buyAgg.months.length : 0;
 
   // Penetration + "Piso de red" rule: Est GMV can never be below what we already measure.
   let sellPenetration: number | null = null;
@@ -149,11 +162,10 @@ export function buildPotential(companyId: string, timeframe: Timeframe): Potenti
   let buyPenNote: string | null = null;
 
   const noReference = !gmvRef || gmvRef <= 0 || gmvSource === 'not in Christine cascade' || gmvSource === 'Sin dato';
-  const ytdMonthsSell = sellAggYtd ? sellAggYtd.months.length : 0;
 
   // Rule D: no GMV reference but Koronet activity → auto Piso de red
-  if (noReference && koronetSellYtd && koronetSellYtd > 0 && ytdMonthsSell > 0) {
-    gmvRef = koronetSellYtd * (12 / ytdMonthsSell);
+  if (noReference && koronetSell && koronetSell > 0 && sellMonths > 0) {
+    gmvRef = koronetSell * annualize(sellMonths);
     gmvSource = 'Piso de red';
     gmvConfidence = 'Alta';
     gmvIsFloor = true;
@@ -163,8 +175,8 @@ export function buildPotential(companyId: string, timeframe: Timeframe): Potenti
   if (gmvRef && gmvRef > 0 && gmvSource !== 'not in Christine cascade' && gmvSource !== 'Sin dato') {
     const isTautological = /^(Medido|Piso)/.test(gmvSource ?? '');
 
-    if (koronetSellYtd && koronetSellYtd > 0 && ytdMonthsSell > 0) {
-      const annualizedSell = koronetSellYtd * (12 / ytdMonthsSell);
+    if (koronetSell && koronetSell > 0 && sellMonths > 0) {
+      const annualizedSell = koronetSell * annualize(sellMonths);
       if (isTautological) {
         sellPenetration = 100;
         sellPenEv = 'tautological';
@@ -184,53 +196,43 @@ export function buildPotential(companyId: string, timeframe: Timeframe): Potenti
       sellPenNote = gmvSource;
     }
 
-    if (buyGmvEst && buyGmvEst > 0 && koronetBuyYtd && koronetBuyYtd > 0) {
-      const buyYtdMonths = buyAggYtd ? buyAggYtd.months.length : 0;
-      if (buyYtdMonths > 0) {
-        const annualizedBuy = koronetBuyYtd * (12 / buyYtdMonths);
-        if (isTautological || sellPenEv === 'tautological') {
-          buyPenetration = 100;
-          buyPenEv = 'tautological';
-        } else if (annualizedBuy > buyGmvEst) {
-          buyGmvEst = annualizedBuy;
-          buyPenetration = 100;
-          buyPenEv = 'tautological';
-        } else {
-          buyPenetration = (annualizedBuy / buyGmvEst) * 100;
-          buyPenEv = gmvConfidence === 'Alta' ? 'model' : 'proxy';
-        }
-        buyPenNote = gmvSource;
+    if (buyGmvEst && buyGmvEst > 0 && koronetBuy && koronetBuy > 0 && buyMonths > 0) {
+      const annualizedBuy = koronetBuy * annualize(buyMonths);
+      if (isTautological || sellPenEv === 'tautological') {
+        buyPenetration = 100;
+        buyPenEv = 'tautological';
+      } else if (annualizedBuy > buyGmvEst) {
+        buyGmvEst = annualizedBuy;
+        buyPenetration = 100;
+        buyPenEv = 'tautological';
+      } else {
+        buyPenetration = (annualizedBuy / buyGmvEst) * 100;
+        buyPenEv = gmvConfidence === 'Alta' ? 'model' : 'proxy';
       }
+      buyPenNote = gmvSource;
     }
   }
 
   // Online % = annualized online / Est GMV (same denominator as penetration)
-  const sellMonthCount = sellAggYtd ? sellAggYtd.months.length : 0;
-  const buyMonthCount = buyAggYtd ? buyAggYtd.months.length : 0;
-
   let sellOnlinePct: number | null = null;
-  if (koronetSellYtd && koronetSellYtd > 0 && gmvRef && gmvRef > 0) {
-    sellOnlinePct = onlineSellYtd > 0 && sellMonthCount > 0
-      ? ((onlineSellYtd * (12 / sellMonthCount)) / gmvRef) * 100
-      : 0;
+  if (koronetSell && koronetSell > 0 && gmvRef && gmvRef > 0) {
+    sellOnlinePct = onlineSell > 0 && sellMonths > 0 ? ((onlineSell * annualize(sellMonths)) / gmvRef) * 100 : 0;
   }
   let buyOnlinePct: number | null = null;
-  if (koronetBuyYtd && koronetBuyYtd > 0 && buyGmvEst && buyGmvEst > 0) {
-    buyOnlinePct = onlineBuyYtd > 0 && buyMonthCount > 0
-      ? ((onlineBuyYtd * (12 / buyMonthCount)) / buyGmvEst) * 100
-      : 0;
+  if (koronetBuy && koronetBuy > 0 && buyGmvEst && buyGmvEst > 0) {
+    buyOnlinePct = onlineBuy > 0 && buyMonths > 0 ? ((onlineBuy * annualize(buyMonths)) / buyGmvEst) * 100 : 0;
   }
   // online ⊂ total → online% ≤ penetration%
   if (sellOnlinePct != null && sellPenetration != null && sellOnlinePct > sellPenetration) sellOnlinePct = sellPenetration;
   if (buyOnlinePct != null && buyPenetration != null && buyOnlinePct > buyPenetration) buyOnlinePct = buyPenetration;
 
-  // Take rate
+  // Take rate = fees / sell, both inside the period
   let takeRate: number | null = null;
-  if (feesYtd2026 && koronetSellYtd && koronetSellYtd > TAKE_RATE_MIN_SELL) {
-    takeRate = (feesYtd2026 / koronetSellYtd) * 100;
+  if (feesPeriod && koronetSell && koronetSell > TAKE_RATE_MIN_SELL) {
+    takeRate = (feesPeriod / koronetSell) * 100;
   }
 
-  const sellYoyDelta = koronetSellYtd && sellYtd2025 ? delta(koronetSellYtd, sellYtd2025) : null;
+  const feesYoy = feesPeriod && feesPrior ? delta(feesPeriod, feesPrior) : null;
   const daysObserved = paceRec ? num(paceRec.days_observed) : null;
 
   return {
@@ -240,30 +242,36 @@ export function buildPotential(companyId: string, timeframe: Timeframe): Potenti
     gmv_ora: gmvOra,
     buy_gmv_estimated: { value: buyGmvEst },
 
-    koronet_sell_ytd: ev(koronetSellYtd, koronetSellYtd ? 'observed' : 'gap', 'sell cube'),
-    koronet_buy_ytd: ev(koronetBuyYtd, koronetBuyYtd ? 'observed' : 'gap', 'buy cube'),
-    sell_ytd_2025: ev(sellYtd2025, sellYtd2025 ? 'observed' : 'gap'),
-    buy_ytd_2025: ev(buyYtd2025, buyYtd2025 ? 'observed' : 'gap'),
+    koronet_sell_period: ev(koronetSell, koronetSell ? 'observed' : 'gap', 'sell cube'),
+    koronet_buy_period: ev(koronetBuy, koronetBuy ? 'observed' : 'gap', 'buy cube'),
+    sell_prior_period: ev(sellPrior, sellPrior ? 'observed' : 'gap', sellPriorCovered ? null : notCovered),
+    buy_prior_period: ev(buyPrior, buyPrior ? 'observed' : 'gap', buyPriorCovered ? null : notCovered),
 
     sell_online_pct: ev(sellOnlinePct, sellOnlinePct != null ? 'observed' : 'gap'),
     buy_online_pct: ev(buyOnlinePct, buyOnlinePct != null ? 'observed' : 'gap'),
-    sell_offline_ytd: ev(sellOfflineYtd, sellOfflineYtd ? 'observed' : 'gap'),
-    buy_offline_ytd: ev(buyOfflineYtd, buyOfflineYtd ? 'observed' : 'gap'),
+    sell_offline_period: ev(sellOffline, sellOffline ? 'observed' : 'gap'),
+    buy_offline_period: ev(buyOffline, buyOffline ? 'observed' : 'gap'),
 
     sell_penetration: ev(sellPenetration, sellPenEv, sellPenNote),
     buy_penetration: ev(buyPenetration, buyPenEv, buyPenNote),
 
-    fees_ytd_2026: ev(feesYtd2026, feesYtd2026 ? 'observed' : 'gap', 'fees cube'),
-    fees_ytd_2025: ev<number>(feesYtd2025, 'gap'),
+    fees_period: ev(feesPeriod, feesPeriod ? 'observed' : 'gap', 'fees cube'),
+    fees_prior_period: ev(feesPrior, feesPrior ? 'observed' : 'gap', feesPriorCovered ? 'fees cube' : notCovered),
     fees_by_channel: { value: feesByChannel },
-    fees_yoy_pct: ev<number>(null, 'gap'),
-    take_rate: ev(takeRate, feesYtd2026 && koronetSellYtd ? 'model' : 'gap'),
+    fees_yoy_pct: ev(feesYoy ? feesYoy.pct : null, feesYoy ? 'observed' : 'gap'),
+    take_rate: ev(takeRate, feesPeriod && koronetSell ? 'model' : 'gap'),
 
-    sell_yoy_delta: sellYoyDelta,
-    sell_mom_delta: computeMomDelta(sellMonthlyTotals(sellRows), 'sell_gmv'),
-    buy_mom_delta: computeMomDelta(buyMonthlyTotals(buyRows), 'buy_gmv'),
+    sell_yoy_delta: koronetSell && sellPrior ? delta(koronetSell, sellPrior) : null,
+    buy_yoy_delta: koronetBuy && buyPrior ? delta(koronetBuy, buyPrior) : null,
+    sell_mom_delta: computeMomDelta(sellMonthlyTotals(filterUpTo(sellRows, period.to)), 'sell_gmv'),
+    buy_mom_delta: computeMomDelta(buyMonthlyTotals(filterUpTo(buyRows, period.to)), 'buy_gmv'),
     fees_mom_delta: null,
   };
+}
+
+/** Rows up to and including the period's last month (MoM is measured at the period's end). */
+function filterUpTo<R extends { month?: string }>(rows: R[], to: string): R[] {
+  return rows.filter((r) => !!r.month && r.month <= to);
 }
 
 /* ── BUY DOMAIN ───────────────────────────────────────────────────────── */
@@ -279,7 +287,7 @@ function summarizeBuckets(rows: TemporalRow[]): BucketSummary {
   return { buckets, total_orders: totalOrders, avg_days: totalOrders > 0 ? weightedDays / totalOrders : null };
 }
 
-export function buildBuy(companyId: string, timeframe: Timeframe): BuyDomain {
+export function buildBuy(companyId: string, period: Period): BuyDomain {
   const name = store.idToName[companyId];
   const vendRec = store.vendorsById[companyId] ?? (name ? store.vendorsByName[name] ?? null : null);
   const saRows = store.temporalSAById[companyId] ?? (name ? store.temporalSAByName[name] ?? null : null);
@@ -287,18 +295,18 @@ export function buildBuy(companyId: string, timeframe: Timeframe): BuyDomain {
 
   const buyRows = store.buyCubeById[companyId] ?? [];
   const monthly = buyMonthlyTotals(buyRows);
-  const buyAggYtd = aggregateBuyCube(buyRows, 'ytd');
-  const buyYtd2025 = sumPriorYtd(buyRows, 'buy_gmv');
+  const buyAgg = aggregateBuyCube(buyRows, period);
+  const buyPrior = covers(store.coverage.buy, period.prior) ? sumRange(buyRows, 'buy_gmv', period.prior) : null;
 
   let sourcingTable: SourcingTable | null = null;
   if (monthly.length) {
     const byMonth: Record<string, MonthlyBuyTotal> = {};
     for (const m of monthly) byMonth[m.month] = m;
-    const sp = selectPeriod(byMonth, timeframe);
+    const sp = selectPeriod(byMonth, period);
     sourcingTable = {
-      ytd_2026: buyAggYtd ? buyAggYtd.total : null,
-      ytd_2025: buyYtd2025,
-      yoy_delta: buyAggYtd && buyYtd2025 ? delta(buyAggYtd.total, buyYtd2025) : null,
+      period_total: buyAgg ? buyAgg.total : null,
+      prior_period_total: buyPrior,
+      yoy_delta: buyAgg && buyPrior ? delta(buyAgg.total, buyPrior) : null,
       monthly: byMonth,
       current_month: sp.current,
       current_month_key: sp.current ? sp.current.month : null,
@@ -402,21 +410,20 @@ export function buildList(companyId: string): ListDomain {
 }
 
 /* ── SELL DOMAIN ──────────────────────────────────────────────────────── */
-export function buildSell(companyId: string, timeframe: Timeframe): SellDomain {
+export function buildSell(companyId: string, period: Period): SellDomain {
   const name = store.idToName[companyId];
   const buyRec = store.buyersById[companyId] ?? (name ? store.buyers[name] ?? null : null);
   const hgRec = name ? store.hardgoodsByName[name] ?? null : null;
 
   const sellRows = store.sellCubeById[companyId] ?? [];
   const monthly = sellMonthlyTotals(sellRows);
-  const n = monthly.length;
 
-  let currentMonth = n ? monthly[n - 1] : null;
-  let priorMonth = n >= 2 ? monthly[n - 2] : null;
-  if (timeframe === 'prior_month') {
-    currentMonth = n >= 2 ? monthly[n - 2] : null;
-    priorMonth = n >= 3 ? monthly[n - 3] : null;
-  }
+  // Latest month inside the period, and the month before it (MoM reference).
+  const byMonth: Record<string, (typeof monthly)[number]> = {};
+  for (const m of monthly) byMonth[m.month] = m;
+  const sp = selectPeriod(byMonth, period);
+  const currentMonth = sp.current;
+  const priorMonth = sp.prior;
 
   let buyersTable: BuyersTable | null = null;
   const bd = buyRec?.buyers as LooseRecord | undefined;
@@ -450,10 +457,10 @@ export function buildSell(companyId: string, timeframe: Timeframe): SellDomain {
       }
     : null;
 
-  const agg = aggregateSellCube(sellRows, 'ytd');
-  const sellOnlineYtd = agg && agg.online > 0 ? agg.online : null;
-  const sellOfflineYtd = agg && agg.offline > 0 ? agg.offline : null;
-  const sellTotalYtd = agg && agg.total > 0 ? agg.total : null;
+  const agg = aggregateSellCube(sellRows, period);
+  const sellOnline = agg && agg.online > 0 ? agg.online : null;
+  const sellOffline = agg && agg.offline > 0 ? agg.offline : null;
+  const sellTotal = agg && agg.total > 0 ? agg.total : null;
 
   const cvr = buyRec?.login_cvr ?? null;
   const newUserCvr = buyRec?.new_user_cvr ?? null;
@@ -467,9 +474,9 @@ export function buildSell(companyId: string, timeframe: Timeframe): SellDomain {
     repeat_rate: repeatRate ? ev(repeatRate, 'observed', 'buyers_evidence_v2') : null,
     concentration: concentration ? ev(concentration, 'observed', 'buyers_evidence_v2') : null,
     hardgoods: hardgoods ? ev(hardgoods, 'observed', 'hardgoods_v2') : null,
-    sell_online_ytd: ev(sellOnlineYtd, sellOnlineYtd ? 'observed' : 'gap'),
-    sell_offline_ytd: ev(sellOfflineYtd, sellOfflineYtd ? 'observed' : 'gap'),
-    sell_total_ytd: ev(sellTotalYtd, sellTotalYtd ? 'observed' : 'gap'),
+    sell_online_period: ev(sellOnline, sellOnline ? 'observed' : 'gap'),
+    sell_offline_period: ev(sellOffline, sellOffline ? 'observed' : 'gap'),
+    sell_total_period: ev(sellTotal, sellTotal ? 'observed' : 'gap'),
     monthly_series: monthly.length ? ev(monthly, 'observed', 'sell cube') : null,
     current_month: currentMonth,
     prior_month: priorMonth,

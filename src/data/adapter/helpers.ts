@@ -1,7 +1,9 @@
 /**
  * Pure helpers shared by the adapter builders.
- * Logic ported 1:1 from evidence_adapter_v3.js — do not "improve" the math here
- * without updating the parity tests in tests/adapter.parity.test.ts.
+ * Aggregation math is ported from evidence_adapter_v3.js; the one deliberate
+ * change is that EVERY cube (sell, buy and fees) is filtered by an explicit
+ * MonthRange — the legacy adapter summed fees without a month filter.
+ * See tests/adapter.parity.test.ts for what is expected to match the legacy.
  */
 import type {
   BuyCubeRow,
@@ -13,8 +15,8 @@ import type {
   MonthlyBuyTotal,
   MonthlySellTotal,
   SellCubeRow,
-  Timeframe,
 } from './types';
+import { inRange, type MonthRange } from './period';
 
 /** Stringify an id (company_id comes as number in some files, string in others). */
 export function sid(id: string | number | null | undefined): string | null {
@@ -50,14 +52,19 @@ export function latestMonthKey(monthlyDict: Record<string, unknown> | null | und
   return idx >= 0 ? keys[idx] : null;
 }
 
+/**
+ * Latest month inside the range (and the one before it, which may fall outside
+ * the range — it is a month-over-month reference, not a period metric).
+ */
 export function selectPeriod<T>(
   monthlyDict: Record<string, T> | null,
-  timeframe: Timeframe,
+  range: MonthRange,
 ): { current: T | null; prior: T | null } {
   if (!monthlyDict) return { current: null, prior: null };
-  const base = timeframe === 'prior_month' ? 1 : 0;
-  const ck = latestMonthKey(monthlyDict, base);
-  const pk = latestMonthKey(monthlyDict, base + 1);
+  const keys = Object.keys(monthlyDict).sort();
+  const inside = keys.filter((k) => inRange(k, range));
+  const ck = inside.length ? inside[inside.length - 1] : null;
+  const pk = ck ? keys[keys.indexOf(ck) - 1] ?? null : null;
   return {
     current: ck ? monthlyDict[ck] : null,
     prior: pk ? monthlyDict[pk] : null,
@@ -68,32 +75,26 @@ export function selectPeriod<T>(
 
 interface MonthRow { month?: string }
 
+/**
+ * Rule 6: online = eCommerce + K2K + API. The sell cube mixes two label
+ * generations ('eCommerce'/'K2K'/'API' up to 2025-07, 'Online' afterwards);
+ * both are online. The legacy adapter only recognized 'Online'.
+ */
+const ONLINE_CHANNELS: ReadonlySet<string> = new Set(['Online', 'eCommerce', 'K2K', 'API']);
+export function isOnlineChannel(channel: string | undefined): boolean {
+  return !!channel && ONLINE_CHANNELS.has(channel);
+}
+
 export function uniqueMonths(rows: MonthRow[]): string[] {
   const set = new Set<string>();
   for (const r of rows) if (r.month) set.add(r.month);
   return [...set].sort();
 }
 
-/** Rows belonging to the requested timeframe. YTD is hard-wired to calendar 2026 (as in V3). */
-export function filterByTimeframe<R extends MonthRow>(rows: R[], timeframe: Timeframe | undefined): R[] {
+/** Rows whose month falls inside the range (inclusive). */
+export function filterByRange<R extends MonthRow>(rows: R[], range: MonthRange): R[] {
   if (!rows || !rows.length) return [];
-  const allMonths = uniqueMonths(rows);
-
-  if (timeframe === 'ytd' || !timeframe) {
-    return rows.filter((r) => !!r.month && r.month >= '2026-01' && r.month <= '2026-12');
-  }
-  if (timeframe === 'current_month') {
-    const latest = allMonths[allMonths.length - 1];
-    return latest ? rows.filter((r) => r.month === latest) : [];
-  }
-  if (timeframe === 'prior_month') {
-    const prior = allMonths.length >= 2 ? allMonths[allMonths.length - 2] : null;
-    return prior ? rows.filter((r) => r.month === prior) : [];
-  }
-  if (timeframe === 'l12m') return rows;
-
-  // default: ytd
-  return rows.filter((r) => !!r.month && r.month >= '2026-01');
+  return rows.filter((r) => inRange(r.month, range));
 }
 
 export interface CubeAggregate {
@@ -103,24 +104,24 @@ export interface CubeAggregate {
   months: string[];
 }
 
-export function aggregateSellCube(rows: SellCubeRow[], timeframe: Timeframe): CubeAggregate | null {
+export function aggregateSellCube(rows: SellCubeRow[], range: MonthRange): CubeAggregate | null {
   if (!rows || !rows.length) return null;
-  const filtered = filterByTimeframe(rows, timeframe);
+  const filtered = filterByRange(rows, range);
   if (!filtered.length) return null;
 
   let total = 0, online = 0, offline = 0;
   for (const r of filtered) {
     const v = num(r.sell_gmv) ?? 0;
     total += v;
-    if (r.channel === 'Online') online += v;
+    if (isOnlineChannel(r.channel)) online += v;
     else offline += v;
   }
   return { total, online, offline, months: uniqueMonths(filtered) };
 }
 
-export function aggregateBuyCube(rows: BuyCubeRow[], timeframe: Timeframe): CubeAggregate | null {
+export function aggregateBuyCube(rows: BuyCubeRow[], range: MonthRange): CubeAggregate | null {
   if (!rows || !rows.length) return null;
-  const filtered = filterByTimeframe(rows, timeframe);
+  const filtered = filterByRange(rows, range);
   if (!filtered.length) return null;
 
   let total = 0, online = 0, offline = 0;
@@ -133,12 +134,15 @@ export function aggregateBuyCube(rows: BuyCubeRow[], timeframe: Timeframe): Cube
 }
 
 export function aggregateFeesCube(
-  rows: { fee_channel?: string; fee_amount?: number | string }[],
-): { total: number; byChannel: FeesByChannel } | null {
+  rows: { month?: string; fee_channel?: string; fee_amount?: number | string }[],
+  range: MonthRange,
+): { total: number; byChannel: FeesByChannel; months: string[] } | null {
   if (!rows || !rows.length) return null;
+  const filtered = filterByRange(rows, range);
+  if (!filtered.length) return null;
   let total = 0;
   const byChannel: FeesByChannel = { ecom: 0, k2k: 0, api: 0, indirect: 0 };
-  for (const r of rows) {
+  for (const r of filtered) {
     const v = num(r.fee_amount) ?? 0;
     total += v;
     const ch = (r.fee_channel ?? '').toLowerCase();
@@ -147,7 +151,7 @@ export function aggregateFeesCube(
     else if (ch === 'api') byChannel.api += v;
     else byChannel.indirect += v;
   }
-  return { total, byChannel };
+  return { total, byChannel, months: uniqueMonths(filtered) };
 }
 
 export function sellMonthlyTotals(rows: SellCubeRow[]): MonthlySellTotal[] {
@@ -159,7 +163,7 @@ export function sellMonthlyTotals(rows: SellCubeRow[]): MonthlySellTotal[] {
     byMonth[m] ??= { month: m, sell_gmv: 0, sell_online: 0, sell_offline: 0 };
     const v = num(r.sell_gmv) ?? 0;
     byMonth[m].sell_gmv += v;
-    if (r.channel === 'Online') byMonth[m].sell_online += v;
+    if (isOnlineChannel(r.channel)) byMonth[m].sell_online += v;
     else byMonth[m].sell_offline += v;
   }
   return Object.keys(byMonth).sort().map((k) => byMonth[k]);
@@ -198,9 +202,9 @@ export function computeMomDelta<T extends { month: string }>(
   };
 }
 
-/** Sum a cube's rows for the Jan–Jul 2025 window used as the prior-year YTD baseline. */
-export function sumPriorYtd<R extends MonthRow>(rows: R[], key: keyof R): number | null {
-  const window = rows.filter((r) => !!r.month && r.month >= '2025-01' && r.month <= '2025-07');
+/** Sum one numeric field over the rows inside a range; null when no rows. */
+export function sumRange<R extends MonthRow>(rows: R[], key: keyof R, range: MonthRange): number | null {
+  const window = filterByRange(rows, range);
   if (!window.length) return null;
   let total = 0;
   for (const r of window) total += num(r[key]) ?? 0;

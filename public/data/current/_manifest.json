@@ -2,7 +2,7 @@
   "generated_at": "2026-08-24",
   "period": "2024-08 to 2026-07 (24 months, last closed month)",
   "source": "Snowflake SALE_DETAILS + PROCUREMENT_DETAILS + CONSOLIDATED_TRANSACTION_FEES_SV",
-  "refresh_note": "Sell/buy cubes unchanged from Aug 13 (already through Jul 2026). Fees updated from Jul 2025 \u2192 Jul 2026. Sell trends added.",
+  "refresh_note": "Sell/buy cubes unchanged from Aug 13 (already through Jul 2026). Fees updated from Jul 2025 → Jul 2026. Sell trends added. | 2026-09-07 (tx-dashboard-nuevo): fees_monthly regenerated at true monthly grain; 2025 'total' rows replaced by monthly rows.",
   "cubes": {
     "sell_monthly": {
       "rows": 10552,
@@ -17,10 +17,12 @@
       "status": "complete"
     },
     "fees_monthly": {
-      "rows": 574,
-      "companies": 216,
-      "period": "YTD 2025 + YTD 2026",
-      "status": "UPDATED"
+      "rows": 5857,
+      "companies": 250,
+      "months": 20,
+      "period": "2025-01 to 2026-08 monthly (transaction_date)",
+      "source": "PRODUCTION.ANALYTICS.TRANSACTION_FEES via Cortex Analyst, 2026-09-07",
+      "status": "REGENERATED"
     },
     "sell_trends": {
       "rows": 48,
@@ -30,9 +32,9 @@
     }
   },
   "gates": {
-    "L12_GMV": "$1.61B \u2713",
-    "online_share": "17.6% \u2713",
-    "fees_YoY": "+34.2% \u2713 (gate ~+37%)",
+    "L12_GMV": "$1.61B ✓",
+    "online_share": "17.6% ✓",
+    "fees_YoY": "+34.2% ✓ (gate ~+37%)",
     "fees_YTD26": "$1,478K organic",
     "fees_YTD25": "$1,101K"
   }

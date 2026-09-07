@@ -9,7 +9,8 @@ de datos tipado y verificado contra el original, y la lógica de negocio separad
 
 | Fase | Alcance | Estado |
 |---|---|---|
-| **1 · Base** | Estructura del proyecto, tokens de estilo, adapter en TS con test de paridad, topbar con filtros, KPI strip, tabs, tabla de portafolio con sort/paginación, fila expandible con Identity / Key figures / Source coverage | ✅ Esta entrega |
+| **1 · Base** | Estructura del proyecto, tokens de estilo, adapter en TS con test de paridad, topbar con filtros, KPI strip, tabs, tabla de portafolio con sort/paginación, fila expandible con Identity / Key figures / Source coverage | ✅ |
+| **1b · Períodos** | Modelo `Period` (YTD · Full year · Last 12 months) con rangos explícitos y baseline YoY like-for-like; fees filtrados por período (corrige el KPI inflado del legacy); cubo de fees regenerado con grano mensual real desde Snowflake | ✅ Esta entrega |
 | 2 · Tarjetas | Las 6 tarjetas de evidencia (Potential, Opportunities, BUY, LIST, SELL, Freshness) dentro de la fila expandida | Pendiente |
 | 3 · Definitions & Matrix | Matriz Est GMV × Product Tier con drill-down, tablas de metodología | Pendiente |
 | 4 · Datos | Script de build que compacta los 15 JSON (~9.6 MB) en un bundle por vista; derivar el período desde `_meta` en todos lados | Pendiente |
@@ -40,6 +41,7 @@ src/
   data/
     adapter/                Evidence Adapter — la capa de datos
       files.ts              Registro de archivos JSON + fetch tolerante a fallos + IDs excluidos
+      period.ts             Modelo Period: ytd / prev_year / l12m anclados al último mes cerrado del cubo de sell
       types.ts              Tipos raw (shape de los JSON) y de dominio (AccountEvidence)
       helpers.ts            Agregaciones puras de cubos, deltas, meses
       store.ts              Carga en paralelo + índices por company_id
@@ -53,7 +55,7 @@ src/
     filters.ts              Modelo de filtros + applyFilters + conteos de tabs
     sort.ts                 Sort por columna
     kpis.ts                 KPIs del portafolio
-    timeframe.ts            Opciones de período derivadas del _meta de los cubos
+    period.ts               Helpers de UI sobre el modelo Period del adapter (labels, descripción de rangos)
   state/filtersReducer.ts   Reducer de filtros (incluye las interacciones cruzadas)
   hooks/
     useDashboardData.ts     init del adapter + SFDC, evidence por timeframe en lotes rAF
@@ -91,20 +93,46 @@ Para refrescar datos: regenerar los JSON con las queries documentadas en
 `tx-dashboards/data/current/refresh_queries.md` y copiarlos a `public/data/`. El `_meta.period_to`
 del cubo de sell alimenta las etiquetas del selector de período.
 
-## Verificación de paridad
+## Períodos y fórmulas
+
+Cada métrica se calcula estrictamente dentro de un rango de meses explícito. Los tres períodos se
+anclan en el último mes cerrado del cubo de sell (`_meta.period_to`, hoy 2026-07):
+
+| Período | Rango | Baseline YoY | Anualización |
+|---|---|---|---|
+| YTD 2026 | ene–jul 2026 | ene–jul 2025 | 12 / meses con datos |
+| Full year 2025 | ene–dic 2025 | ene–dic 2024 | 1 (12 meses) |
+| Last 12 months | ago 2025–jul 2026 | ago 2024–jul 2025 | 1 (12 meses) |
+
+Sell, buy y fees pasan por el mismo filtro (`filterByRange`); penetración, online % y take rate se
+calculan con los valores del rango. El YoY solo se reporta cuando el cubo cubre el rango anterior
+completo (el cubo de sell empieza en 2024-08 y el de fees en 2025-01, así que "Full year 2025" no
+tiene YoY de sell y "Last 12 months" no tiene YoY de fees): un baseline parcial inventaría crecimiento.
+
+## Verificación
 
 `tests/adapter.parity.test.ts` ejecuta el adapter original (JS) y el nuevo (TS) sobre los mismos JSON
-y exige salida idéntica para **todas** las cuentas (~4k) en los tres timeframes. La UI se verificó
-además comparando KPIs, conteos de tabs y orden de filas contra el HTML original: coinciden.
+y exige salida idéntica para **todas** las cuentas (~4k) en YTD, salvo tres desviaciones deliberadas
+que el test documenta: fees filtrados por período, canales online según Regla 6, y "mes actual" =
+último mes dentro del período. `tests/adapter.periods.test.ts` cruza fees / sell / buy de cada período
+contra sumas crudas de los JSON. La UI se verificó además comparando KPIs, conteos de tabs y orden de
+filas contra el HTML original: coinciden en todo menos en fees (ver abajo).
 
 ## Diferencias deliberadas respecto al HTML original
 
+- **Fees ya no está inflado.** El legacy sumaba todas las filas de fees de la compañía sin filtrar por
+  mes, y `fees_monthly.json` (24-ago) incluía el YTD 2025 como una fila `total`, así que "Fees YTD"
+  mostraba 2026 + 2025 ($2.51M vs $1.47M reales a nivel red; $351K vs $220K para Client Wholesalers).
+  El cubo se regeneró desde `PRODUCTION.ANALYTICS.TRANSACTION_FEES` (billed, `ks_flag=TRUE`, mes por
+  `transaction_date`) con grano mensual real ene-2025 → ago-2026, lo que además habilita el YoY de fees.
+- **Online = eCommerce + K2K + API (Regla 6).** El legacy solo reconocía la etiqueta `Online`, que el
+  cubo usa desde ago-2025; los meses anteriores usan `eCommerce/K2K/API` y contaban como offline.
+- El selector de período ofrece YTD · Full year · Last 12 months en vez de YTD / Jul / Jun / Q2 / H1
+  (que en el legacy no cambiaban las cifras del portafolio: todo era YTD).
 - Los tabs **BUY / LIST / SELL / CONFIG / Declining** ahora filtran la tabla (en el original solo
   mostraban el conteo).
 - El **sparkline** de tendencia funciona: el original leía `m.sell_total`, un campo que no existe
   (es `sell_gmv`), por lo que siempre se pintaba plano.
-- El selector de **período** deriva sus etiquetas del `_meta.period_to` del cubo en vez de tener
-  "Jul 2026" hardcodeado.
 - El nav superior a otras páginas del Revenue OS (`changes.html`, `issues.html`…) se omitió porque
   esos archivos no existen en el repo original.
 

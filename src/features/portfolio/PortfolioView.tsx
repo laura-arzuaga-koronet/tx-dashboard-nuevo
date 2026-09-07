@@ -2,10 +2,11 @@
  * Portfolio feature — composes the top bar, KPI strip, tabs and table.
  * Owns the period selection; everything else flows through usePortfolio().
  */
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { ErrorState } from '../../components/ui/Spinner';
+import { buildPeriods } from '../../data/adapter/period';
 import { fmtDate } from '../../domain/format';
-import { buildPeriodOptions, PERIOD_TIMEFRAME, type PeriodId } from '../../domain/timeframe';
+import { DEFAULT_PERIOD_ID, describePrior, describeRange, type PeriodId } from '../../domain/period';
 import { useDashboardData } from '../../hooks/useDashboardData';
 import { usePortfolio } from '../../hooks/usePortfolio';
 import { CoverageWarning, KpiStrip } from './components/KpiStrip';
@@ -15,13 +16,12 @@ import { TopBar } from './components/TopBar';
 import styles from './PortfolioView.module.css';
 
 export function PortfolioView() {
-  const [periodId, setPeriodId] = useState<PeriodId>('ytd');
+  const [periodId, setPeriodId] = useState<PeriodId>(DEFAULT_PERIOD_ID);
 
-  // The timeframe token is static per period id; only the labels depend on
-  // cube metadata (which arrives with the data), so there is no cycle here.
-  const data = useDashboardData(PERIOD_TIMEFRAME[periodId]);
-  const periodOptions = useMemo(() => buildPeriodOptions(data.cubeMeta.sell), [data.cubeMeta.sell]);
-  const period = periodOptions.find((p) => p.id === periodId) ?? periodOptions[0];
+  const data = useDashboardData(periodId);
+  // Until the data (and its anchor month) arrives, show periods built on the default anchor.
+  const periods = data.periods ?? buildPeriods();
+  const period = periods[periodId];
 
   const model = usePortfolio(data.evidence, data.sfdc.totals);
   const loading = data.status === 'loading' || data.recomputing;
@@ -32,19 +32,18 @@ export function PortfolioView() {
     );
   }
 
-  const periodLabel = period.label.toUpperCase();
 
   return (
     <>
       <TopBar
-        periodOptions={periodOptions}
-        periodId={period.id}
-        onPeriodChange={(id) => setPeriodId(id as PeriodId)}
+        periods={periods}
+        period={period}
+        onPeriodChange={setPeriodId}
         filters={model.filters}
         chips={model.chips}
         dispatch={model.dispatch}
       >
-        <KpiStrip kpis={model.kpis} loading={loading} />
+        <KpiStrip kpis={model.kpis} loading={loading} period={period} />
         {!loading && <CoverageWarning kpis={model.kpis} />}
       </TopBar>
 
@@ -55,7 +54,7 @@ export function PortfolioView() {
         <SectionLabel>
           {loading
             ? 'Loading portfolio…'
-            : `Portfolio · ${model.filtered.length} accounts · ${periodLabel} · Updated ${fmtDate(new Date())}`}
+            : `Portfolio · ${model.filtered.length} accounts · ${period.label} (${describeRange(period)}, ${describePrior(period)}) · Updated ${fmtDate(new Date())}`}
         </SectionLabel>
 
         <PortfolioTable

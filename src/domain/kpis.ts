@@ -27,16 +27,16 @@ export function computeKpis(list: readonly AccountEvidence[]): PortfolioKpis {
     const p = ev.potential;
     if (!p) continue;
 
-    const ks = evValue(p.koronet_sell_ytd);
+    const ks = evValue(p.koronet_sell_period);
     if (ks != null && ks > 0) { totalSell += ks; accountsWithData++; }
 
-    const ks25 = evValue(p.sell_ytd_2025);
+    const ks25 = evValue(p.sell_prior_period);
     if (ks25 != null && ks25 > 0) { totalSell2025 += ks25; hasSell2025 = true; }
 
-    const f = evValue(p.fees_ytd_2026);
+    const f = evValue(p.fees_period);
     if (f != null) totalFees += f;
 
-    const f25 = evValue(p.fees_ytd_2025);
+    const f25 = evValue(p.fees_prior_period);
     if (f25 != null) { totalFees2025 += f25; hasFees2025 = true; }
 
     const op = evValue(p.sell_online_pct);

@@ -29,6 +29,8 @@ import type {
   VendorsFile,
 } from './types';
 
+export interface MonthBounds { from: string; to: string }
+
 export interface AdapterStore {
   loaded: boolean;
 
@@ -50,6 +52,8 @@ export interface AdapterStore {
 
   // Cube metadata (used by the UI to derive the data period instead of hardcoding it)
   cubeMeta: { sell: CubeMeta | null; buy: CubeMeta | null; fees: CubeMeta | null };
+  /** First/last month actually present in each cube — bounds for "is this range fully covered?" */
+  coverage: { sell: MonthBounds | null; buy: MonthBounds | null; fees: MonthBounds | null };
 
   // Derived lookups
   accountById: Record<string, RawAccount>;
@@ -79,6 +83,7 @@ function emptyStore(): AdapterStore {
     accountsV3: [], sellCube: [], buyCube: [], feesCube: [], gmvPacing: [], gmvExternal: [],
     buyers: {}, vendors: [], temporal: {}, inventory: {}, benchmarks: {}, config: {}, hardgoods: [], skusOnlineOffline: {},
     cubeMeta: { sell: null, buy: null, fees: null },
+    coverage: { sell: null, buy: null, fees: null },
     accountById: {}, idToName: {}, nameToId: {},
     sellCubeById: {}, buyCubeById: {}, feesCubeById: {}, pacingById: {}, externalById: {},
     vendorsByName: {}, vendorsById: {}, hardgoodsByName: {}, skusById: {}, buyersById: {},
@@ -136,6 +141,11 @@ export function loadAll(fetcher: JsonFetcher = fetchJson): Promise<void> {
     store.cubeMeta = { sell: sell?._meta ?? null, buy: buy?._meta ?? null, fees: fees?._meta ?? null };
 
     buildLookups();
+    store.coverage = {
+      sell: monthBounds(store.sellCube),
+      buy: monthBounds(store.buyCube),
+      fees: monthBounds(store.feesCube),
+    };
     store.loaded = true;
   })();
 
@@ -146,6 +156,17 @@ export function loadAll(fetcher: JsonFetcher = fetchJson): Promise<void> {
 export function resetStore(): void {
   Object.assign(store, emptyStore());
   loadPromise = null;
+}
+
+function monthBounds(rows: { month?: string }[]): MonthBounds | null {
+  let from: string | null = null;
+  let to: string | null = null;
+  for (const r of rows) {
+    if (!r.month) continue;
+    if (from == null || r.month < from) from = r.month;
+    if (to == null || r.month > to) to = r.month;
+  }
+  return from && to ? { from, to } : null;
 }
 
 function pushTo<T>(map: Record<string, T[]>, key: string, row: T) {

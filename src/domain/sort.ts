@@ -23,14 +23,14 @@ export function getSortValue(ev: AccountEvidence, key: SortKey, sfdc: SfdcOppTot
   switch (key) {
     case 'name': return (ev._company_name ?? '').toLowerCase();
     case 'est_sell': return p?.gmv_reference?.value ?? null;
-    case 'koronet_sell': return p ? evValue(p.koronet_sell_ytd) : null;
+    case 'koronet_sell': return p ? evValue(p.koronet_sell_period) : null;
     case 'sell_pen': return p ? evValue(p.sell_penetration) : null;
     case 'online_pct': return p ? evValue(p.sell_online_pct) : null;
     case 'est_buy': return p?.buy_gmv_estimated?.value ?? null;
-    case 'koronet_buy': return p ? evValue(p.koronet_buy_ytd) : null;
+    case 'koronet_buy': return p ? evValue(p.koronet_buy_period) : null;
     case 'buy_pen': return p ? evValue(p.buy_penetration) : null;
     case 'buy_online_pct': return p ? evValue(p.buy_online_pct) : null;
-    case 'fees': return p ? evValue(p.fees_ytd_2026) : null;
+    case 'fees': return p ? evValue(p.fees_period) : null;
     case 'take_rate': return p ? evValue(p.take_rate) : null;
     case 'at_stake': return calcAtStake(ev, sfdc)?.amount ?? null;
   }
@@ -59,8 +59,8 @@ export function sortEvidence(list: readonly AccountEvidence[], sort: SortState, 
 /** Default ordering when data loads: fees desc, then name. */
 export function defaultOrder(list: readonly AccountEvidence[]): AccountEvidence[] {
   return [...list].sort((a, b) => {
-    const fa = a.potential?.fees_ytd_2026?.value ?? 0;
-    const fb = b.potential?.fees_ytd_2026?.value ?? 0;
+    const fa = a.potential?.fees_period?.value ?? 0;
+    const fb = b.potential?.fees_period?.value ?? 0;
     if (fb !== fa) return fb - fa;
     return (a._company_name ?? '').localeCompare(b._company_name ?? '');
   });

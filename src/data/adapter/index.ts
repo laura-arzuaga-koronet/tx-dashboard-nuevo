@@ -10,8 +10,9 @@
  */
 import { buildBenchmarks, buildBuy, buildFreshness, buildIdentity, buildList, buildPotential, buildSell } from './builders';
 import { sid } from './helpers';
+import { DEFAULT_ANCHOR, buildPeriods, resolvePeriod, type Period, type PeriodId } from './period';
 import { loadAll, resetStore, store, type JsonFetcher } from './store';
-import type { AccountEvidence, CubeMeta, LoadedState, Timeframe } from './types';
+import type { AccountEvidence, CubeMeta, LoadedState } from './types';
 
 function warnNotLoaded(): void {
   console.warn('[EvidenceAdapter] Data not loaded yet. Call init() first.');
@@ -26,10 +27,25 @@ export function isLoaded(): boolean {
   return store.loaded;
 }
 
-export function getAccountEvidence(companyId: string | number, timeframe: Timeframe = 'ytd'): AccountEvidence | null {
+/**
+ * Anchor month for period math: the sell cube's last closed month
+ * (`_meta.period_to`), falling back to DEFAULT_ANCHOR.
+ */
+export function getAnchorMonth(): string {
+  const to = store.cubeMeta.sell?.period_to;
+  return typeof to === 'string' && /^\d{4}-\d{2}$/.test(to) ? to : DEFAULT_ANCHOR;
+}
+
+/** The three selectable periods, resolved against the data's anchor month. */
+export function getPeriods(): Record<PeriodId, Period> {
+  return buildPeriods(getAnchorMonth());
+}
+
+export function getAccountEvidence(companyId: string | number, periodOrId: PeriodId | Period = 'ytd'): AccountEvidence | null {
   if (!store.loaded) { warnNotLoaded(); return null; }
   const id = sid(companyId);
   if (!id) return null;
+  const period = resolvePeriod(periodOrId, getAnchorMonth());
 
   const identity = buildIdentity(id);
   if (!identity) return null;
@@ -41,22 +57,22 @@ export function getAccountEvidence(companyId: string | number, timeframe: Timefr
   return {
     _company_id: id,
     _company_name: identity.company_name,
-    _timeframe: timeframe,
+    _period: period,
     identity,
-    potential: safe('potential', () => buildPotential(id, timeframe)),
-    buy: safe('buy', () => buildBuy(id, timeframe)),
+    potential: safe('potential', () => buildPotential(id, period)),
+    buy: safe('buy', () => buildBuy(id, period)),
     list: safe('list', () => buildList(id)),
-    sell: safe('sell', () => buildSell(id, timeframe)),
+    sell: safe('sell', () => buildSell(id, period)),
     benchmarks: safe('benchmarks', () => buildBenchmarks(id)),
     freshness: safe('freshness', () => buildFreshness(id)),
   };
 }
 
-export function getAccountByName(companyName: string, timeframe: Timeframe = 'ytd'): AccountEvidence | null {
+export function getAccountByName(companyName: string, period: PeriodId | Period = 'ytd'): AccountEvidence | null {
   if (!store.loaded) { warnNotLoaded(); return null; }
   const id = store.nameToId[companyName];
   if (!id) { console.warn('[EvidenceAdapter] No company_id found for name:', companyName); return null; }
-  return getAccountEvidence(id, timeframe);
+  return getAccountEvidence(id, period);
 }
 
 /** Sorted company ids from accounts_v3 (excluded demo ids removed). */
@@ -116,8 +132,11 @@ export const evidenceAdapter = {
   getAccountByName,
   getAllAccountIds,
   getCubeMeta,
+  getAnchorMonth,
+  getPeriods,
   getLoadedState,
   isClientWholesaler,
 };
 
-export type { AccountEvidence, Timeframe } from './types';
+export type { AccountEvidence } from './types';
+export type { Period, PeriodId } from './period';

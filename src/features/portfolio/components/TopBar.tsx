@@ -7,7 +7,7 @@ import type { ReactNode } from 'react';
 import { ClearAllButton, RemovableChip, ToggleChip } from '../../../components/ui/Chip';
 import { SelectPill } from '../../../components/ui/SelectPill';
 import type { ActiveChip, FilterState } from '../../../domain/filters';
-import type { PeriodOption } from '../../../domain/timeframe';
+import { PERIOD_IDS, type Period, type PeriodId } from '../../../domain/period';
 import type { FiltersAction, SingleFilterKey } from '../../../state/filtersReducer';
 import {
   ACCOUNT_CLASS_OPTIONS,
@@ -23,16 +23,16 @@ import {
 import styles from './TopBar.module.css';
 
 interface TopBarProps {
-  periodOptions: PeriodOption[];
-  periodId: string;
-  onPeriodChange: (id: string) => void;
+  periods: Record<PeriodId, Period>;
+  period: Period;
+  onPeriodChange: (id: PeriodId) => void;
   filters: FilterState;
   chips: ActiveChip[];
   dispatch: (action: FiltersAction) => void;
   children?: ReactNode;
 }
 
-export function TopBar({ periodOptions, periodId, onPeriodChange, filters, chips, dispatch, children }: TopBarProps) {
+export function TopBar({ periods, period, onPeriodChange, filters, chips, dispatch, children }: TopBarProps) {
   const set = (key: SingleFilterKey) => (value: string) => dispatch({ type: 'set', key, value });
 
   const removeChip = (chip: ActiveChip) => {
@@ -54,18 +54,10 @@ export function TopBar({ periodOptions, periodId, onPeriodChange, filters, chips
             <span className={styles.periodLabel}>Period</span>
             <SelectPill
               aria-label="Period"
-              value={periodId}
-              options={periodOptions.map((p) => ({ value: p.id, label: p.label }))}
-              onChange={onPeriodChange}
-            />
-            <span className={styles.vs}>vs</span>
-            <SelectPill
-              aria-label="Comparison period"
-              value=""
-              options={[{ value: '', label: 'Coming soon' }]}
-              onChange={() => undefined}
-              disabled
-              title="Comparison coming soon — needs monthly data pipeline"
+              value={period.id}
+              options={PERIOD_IDS.map((id) => ({ value: id, label: periods[id].label }))}
+              onChange={(id) => onPeriodChange(id as PeriodId)}
+              title={`${period.from} → ${period.to} · YoY vs ${period.prior.from} → ${period.prior.to}`}
             />
 
             <div className={styles.chips} aria-label="Active filters">

@@ -19,7 +19,7 @@ const COLUMNS: Column[] = [
   { key: 'koronet_buy', label: 'Koronet Buy' },
   { key: 'buy_pen', label: 'Buy Pen%' },
   { key: 'buy_online_pct', label: 'Online Buy%' },
-  { key: 'fees', label: 'Fees YTD' },
+  { key: 'fees', label: 'Fees' },
   { key: 'take_rate', label: 'Take Rate' },
   { key: null, label: 'Trend' },
   { key: 'at_stake', label: '$ at Stake' },

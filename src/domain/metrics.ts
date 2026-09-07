@@ -45,7 +45,7 @@ export function calcAtStake(ev: AccountEvidence | null, sfdcTotals: SfdcOppTotal
   }
   const p = ev.potential;
   if (!p) return null;
-  const offlineSell = evValue(p.sell_offline_ytd);
+  const offlineSell = evValue(p.sell_offline_period);
   if (offlineSell == null) return null;
   const takeRate = evValue(p.take_rate);
   const rate = takeRate != null && takeRate > 0 ? takeRate / 100 : DEFAULT_TAKE_RATE;
@@ -96,8 +96,8 @@ export function buildDiagnosis(ev: AccountEvidence | null): DiagnosisPart[] {
 
   const parts: DiagnosisPart[] = [];
   const onlinePct = evValue(p.sell_online_pct);
-  const offlineAmt = evValue(p.sell_offline_ytd);
-  const fees = evValue(p.fees_ytd_2026);
+  const offlineAmt = evValue(p.sell_offline_period);
+  const fees = evValue(p.fees_period);
 
   if (offlineAmt != null && offlineAmt > 0) {
     parts.push({ text: `${fmtMoney(offlineAmt, true)} offline at $0 fees`, strong: true });
@@ -133,7 +133,7 @@ export function buildDiagnosis(ev: AccountEvidence | null): DiagnosisPart[] {
 export function countInterventions(ev: AccountEvidence): number {
   let count = 0;
   const p = ev.potential;
-  if (p && (evValue(p.buy_offline_ytd) ?? 0) > 0) count++;
+  if (p && (evValue(p.buy_offline_period) ?? 0) > 0) count++;
   const raw = configRaw(ev);
   if (raw) {
     const bunches = raw.sell_in_bunches ?? raw.bunches;
@@ -162,7 +162,7 @@ export function detectOpportunityFlags(ev: AccountEvidence | null): OpportunityF
   const p = ev.potential;
 
   // BUY: offline buy GMV > 0 OR K2K leakage cost > $10K OR dormant K2K > 0
-  const buyOffline = p ? evValue(p.buy_offline_ytd) : null;
+  const buyOffline = p ? evValue(p.buy_offline_period) : null;
   const leakageCost = (ev.buy?.leakage?.value?.leakage_cost as number | undefined) ?? null;
   const dormantK2k = (ev.buy?.k2k_lifecycle?.value?.dormant as number | undefined) ?? null;
   const hasBuy = (buyOffline != null && buyOffline > 0)
@@ -193,7 +193,7 @@ export function detectOpportunityFlags(ev: AccountEvidence | null): OpportunityF
 
   // CONFIG (blocking): MaxAge < 10 OR 0TX post-go-live
   const implStage = ev.identity?.impl_stage ?? null;
-  const koronetSell = p ? evValue(p.koronet_sell_ytd) : null;
+  const koronetSell = p ? evValue(p.koronet_sell_period) : null;
   const hasPostGoLiveZeroTx = implStage != null && (koronetSell == null || koronetSell < 500);
   const hasConfig = maxAgeBlocking || hasPostGoLiveZeroTx;
 

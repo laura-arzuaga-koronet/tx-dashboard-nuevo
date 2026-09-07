@@ -47,12 +47,13 @@ export function AccountDetail({ ev, sfdcTotals }: AccountDetailProps) {
       </section>
 
       <section className={styles.card} aria-label="Key figures">
-        <div className={styles.label}>Key figures · {ev._timeframe.toUpperCase()}</div>
+        <div className={styles.label}>Key figures · {ev._period.label}</div>
         <div className={styles.title}>Potential snapshot</div>
         <Row label="Est GMV (sell)" value={p ? `${fmtMoney(p.gmv_reference.value, true)} · ${p.gmv_reference.source ?? '—'}` : null} />
-        <Row label="Koronet sell YTD" value={fmtMoney(p?.koronet_sell_ytd.value ?? null, true)} />
-        <Row label="Koronet buy YTD" value={fmtMoney(p?.koronet_buy_ytd.value ?? null, true)} />
-        <Row label="Fees YTD" value={fmtMoney(p?.fees_ytd_2026.value ?? null, true)} />
+        <Row label="Koronet sell" value={fmtMoney(p?.koronet_sell_period.value ?? null, true)} />
+        <Row label="Koronet buy" value={fmtMoney(p?.koronet_buy_period.value ?? null, true)} />
+        <Row label="Fees" value={fmtMoney(p?.fees_period.value ?? null, true)} />
+        <Row label="Fees prior period" value={fmtMoney(p?.fees_prior_period.value ?? null, true)} />
         <Row label="Take rate" value={fmtPct(p?.take_rate.value ?? null, 2)} />
         <Row label="$ at stake" value={atStake ? `${fmtMoney(atStake.amount, true)} (${atStake.source})` : null} />
         <Row label="Offline buyers" value={fmtInt(ev.sell?.buyers_table?.value?.offline_buyers ?? null)} />

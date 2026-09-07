@@ -81,14 +81,14 @@ export function PortfolioRow({ ev, sfdcTotals, expanded, onToggle }: PortfolioRo
   const identity = ev.identity;
 
   const gmv = gmvDisplay(ev);
-  const koronetSell = p ? evValue(p.koronet_sell_ytd) : null;
+  const koronetSell = p ? evValue(p.koronet_sell_period) : null;
   const sellPen = p ? evValue(p.sell_penetration) : null;
   const onlinePct = p ? evValue(p.sell_online_pct) : null;
   const estBuy = p?.buy_gmv_estimated?.value ?? null;
-  const koronetBuy = p ? evValue(p.koronet_buy_ytd) : null;
+  const koronetBuy = p ? evValue(p.koronet_buy_period) : null;
   const buyPen = p ? evValue(p.buy_penetration) : null;
   const buyOnlinePct = p ? evValue(p.buy_online_pct) : null;
-  const fees = p ? evValue(p.fees_ytd_2026) : null;
+  const fees = p ? evValue(p.fees_period) : null;
   const takeRate = p ? evValue(p.take_rate) : null;
 
   const sellPenS = sellPenetrationStyle(p);

@@ -11,7 +11,7 @@
    Shared primitives
 ──────────────────────────────────────────────────────────────────────── */
 
-export type Timeframe = 'ytd' | 'current_month' | 'prior_month' | 'l12m' | 'prior_quarter';
+export type { Period, PeriodId, MonthRange } from './period';
 
 /** Evidence state — how much we trust a value. */
 export type EvidenceState = 'observed' | 'proxy' | 'model' | 'gap' | 'tautological';
@@ -281,26 +281,30 @@ export interface Potential {
   gmv_ora: { value: number } | null;
   buy_gmv_estimated: { value: number | null };
 
-  koronet_sell_ytd: Ev<number>;
-  koronet_buy_ytd: Ev<number>;
-  sell_ytd_2025: Ev<number>;
-  buy_ytd_2025: Ev<number>;
+  /** Koronet sell / buy GMV inside the selected period. */
+  koronet_sell_period: Ev<number>;
+  koronet_buy_period: Ev<number>;
+  /** Same range one year earlier (YoY baseline). */
+  sell_prior_period: Ev<number>;
+  buy_prior_period: Ev<number>;
 
   sell_online_pct: Ev<number>;
   buy_online_pct: Ev<number>;
-  sell_offline_ytd: Ev<number>;
-  buy_offline_ytd: Ev<number>;
+  sell_offline_period: Ev<number>;
+  buy_offline_period: Ev<number>;
 
   sell_penetration: Ev<number>;
   buy_penetration: Ev<number>;
 
-  fees_ytd_2026: Ev<number>;
-  fees_ytd_2025: Ev<number>;
+  /** Billed fees inside the selected period (ecom + k2k + api). */
+  fees_period: Ev<number>;
+  fees_prior_period: Ev<number>;
   fees_by_channel: { value: FeesByChannel | null };
   fees_yoy_pct: Ev<number>;
   take_rate: Ev<number>;
 
   sell_yoy_delta: Delta | null;
+  buy_yoy_delta: Delta | null;
   sell_mom_delta: MomDelta | null;
   buy_mom_delta: MomDelta | null;
   fees_mom_delta: MomDelta | null;
@@ -327,8 +331,8 @@ export interface BucketSummary {
 }
 
 export interface SourcingTable {
-  ytd_2026: number | null;
-  ytd_2025: number | null;
+  period_total: number | null;
+  prior_period_total: number | null;
   yoy_delta: Delta | null;
   monthly: Record<string, MonthlyBuyTotal>;
   current_month: MonthlyBuyTotal | null;
@@ -397,9 +401,9 @@ export interface SellDomain {
   repeat_rate: Ev<unknown> | null;
   concentration: Ev<unknown> | null;
   hardgoods: Ev<LooseRecord> | null;
-  sell_online_ytd: Ev<number>;
-  sell_offline_ytd: Ev<number>;
-  sell_total_ytd: Ev<number>;
+  sell_online_period: Ev<number>;
+  sell_offline_period: Ev<number>;
+  sell_total_period: Ev<number>;
   monthly_series: Ev<MonthlySellTotal[]> | null;
   current_month: MonthlySellTotal | null;
   prior_month: MonthlySellTotal | null;
@@ -433,10 +437,12 @@ export interface Freshness {
 }
 
 /** The full evidence object for one account — what every UI component consumes. */
+import type { Period } from './period';
+
 export interface AccountEvidence {
   _company_id: string;
   _company_name: string | null;
-  _timeframe: Timeframe;
+  _period: Period;
   identity: Identity;
   potential: Potential | null;
   buy: BuyDomain | null;
