@@ -3,7 +3,7 @@
 -- Grain : company × month × channel
 -- Source: PRODUCTION.ANALYTICS.SALE_DETAILS
 -- Origin: tx-dashboards/data/current/refresh_queries.md (Cube 1), full-window form
--- Status: READY (verified query from the legacy repo)
+-- Status: READY (query from the legacy repo) · CHANNEL SEMANTICS VALIDATED 2026-09-08
 -- ----------------------------------------------------------------------------
 -- Rules applied (see sql/README.md → Reglas):
 --   R1  ks_flag = TRUE
@@ -13,10 +13,13 @@
 --
 -- Channel normalization: the legacy cube mixes two generations of labels
 -- (2024-08..2025-07 → eCommerce/K2K/API/Offline; 2025-08..2026-07 → Online/Offline).
--- The adapter treats ONLY 'Online' as online (helpers.ts → aggregateSellCube).
--- This query emits the raw channel AND a normalized `channel_group` so the
--- consumer can choose. Decide before go-live whether K2K/API count as online
--- (Rule 6 in the V2 files says online = eCommerce + K2K + API).
+-- VALIDATED 2026-09-08: the 'Online' label from 2025-08 onwards is already
+-- eCommerce + K2K + API collapsed into one bucket — K2K and API were never
+-- dropped. Jan–Jul 2026: cube Online 171.5M vs Snowflake ecom+K2K+API 166.6M
+-- (the residual is restatement drift, see sql/README.md → Hallazgo 6).
+-- So Rule 6 (online = eCommerce + K2K + API) is the correct reading for BOTH
+-- label generations, which is what the adapter now applies (helpers.ts →
+-- isOnlineChannel). `channel_group` below makes it explicit in SQL.
 -- ============================================================================
 SELECT
     company_id,

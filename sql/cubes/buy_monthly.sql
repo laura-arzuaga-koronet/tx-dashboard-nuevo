@@ -3,28 +3,35 @@
 -- Grain : company × month
 -- Source: PRODUCTION.ANALYTICS.PROCUREMENT_DETAILS  (Koronet Procurement, not eCommerce)
 -- Origin: tx-dashboards/data/current/refresh_queries.md (Cube 2)
--- Status: READY with one OPEN QUESTION (buy_online / buy_offline split)
+-- Status: READY · SPLIT VALIDATED against Snowflake on 2026-09-08
 -- ----------------------------------------------------------------------------
 -- Rules applied:
 --   R1  ks_flag = TRUE
---   sales_channel = 'Procurement' scopes to KP (other channels exist on the table)
 --   Revenue field is total_cost (NOT sales)
---   14-ID internal exclusion when joining COMPANIES (see sql/manual/excluded_ids.sql)
+--   14-ID internal exclusion when joining COMPANIES (see sql/manual/schema.sql)
 --   shipping_date drives the month bucket
 --
--- OPEN: the legacy cube carries buy_online / buy_offline (1,601 of 3,993 rows
--- have buy_online > 0). PROCUREMENT_DETAILS has no native online flag; the
--- CASE below (Procurement = online, else offline) is the hypothesis documented
--- in refresh_queries.md. Confirm against the query in the "TX fees action plan"
--- chat before trusting buy_online_pct.
+-- ONLINE/OFFLINE SPLIT — validated, and NOT what refresh_queries.md guessed.
+-- PROCUREMENT_DETAILS.sales_channel has five values; the cube's split is:
+--     online  = Web + Procurement + API
+--     offline = Unknown + N/A
+-- Verified for Jan–Jul 2026 against the cube (generated 2026-08-13):
+--     online   Snowflake  31,483,568  vs cube  31,480,451   (0.01%)
+--     offline  Snowflake 513,068,030  vs cube 512,878,435   (0.04%)
+-- Two consequences:
+--   1. refresh_queries.md says `sales_channel = 'Procurement'` is mandatory. That
+--      is WRONG for this cube: Procurement alone is only $19.3M of the $544M the
+--      cube reports for Jan–Jul 2026. Do NOT add that filter.
+--   2. 'Web' is a real online channel here ($11.8M Jan–Jul 2026) — dropping it
+--      would understate buy_online_pct by roughly a third.
 -- ============================================================================
 SELECT
     pd.company_id,
     pd.company_name,
     DATE_TRUNC('month', pd.shipping_date)::DATE                                            AS month,
     SUM(pd.total_cost)                                                                     AS buy_gmv,
-    SUM(CASE WHEN pd.sales_channel =  'Procurement' THEN pd.total_cost ELSE 0 END)         AS buy_online,
-    SUM(CASE WHEN pd.sales_channel <> 'Procurement' THEN pd.total_cost ELSE 0 END)         AS buy_offline,
+    SUM(CASE WHEN pd.sales_channel IN ('Web', 'Procurement', 'API') THEN pd.total_cost ELSE 0 END) AS buy_online,
+    SUM(CASE WHEN pd.sales_channel IN ('Unknown', 'N/A')            THEN pd.total_cost ELSE 0 END) AS buy_offline,
     COUNT(DISTINCT pd.purchase_order_number)                                               AS po_count
 FROM PRODUCTION.ANALYTICS.PROCUREMENT_DETAILS pd
 WHERE pd.ks_flag = TRUE
