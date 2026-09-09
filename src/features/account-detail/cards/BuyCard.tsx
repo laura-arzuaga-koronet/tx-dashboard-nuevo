@@ -100,8 +100,8 @@ export function BuyCard({ ev }: { ev: AccountEvidence }) {
 
   if (!buy) {
     return (
-      <EvidenceCard label="Card 3 · BUY" headline="Sin datos de compra" defaultOpen={false}>
-        <CardGap>No hay evidencia de sourcing para esta cuenta (buy cube ni vendors_evidence_v2).</CardGap>
+      <EvidenceCard label="Card 3 · BUY" headline="No buy data" defaultOpen={false}>
+        <CardGap>No sourcing evidence for this account (neither buy cube nor vendors_evidence_v2).</CardGap>
       </EvidenceCard>
     );
   }
@@ -123,20 +123,20 @@ export function BuyCard({ ev }: { ev: AccountEvidence }) {
   const offlineVendors = num(vendorLc, 'offline_vendors');
 
   const headline = [
-    buyOnlinePct != null ? `${fmtPct(buyOnlinePct, 0)} de la compra es online` : null,
-    buyOffline ? `${fmtMoney(buyOffline, true)} offline sin fees` : null,
-  ].filter(Boolean).join(' · ') || 'Sin compra medida en el período';
+    buyOnlinePct != null ? `${fmtPct(buyOnlinePct, 0)} of buying is online` : null,
+    buyOffline ? `${fmtMoney(buyOffline, true)} offline with no fees` : null,
+  ].filter(Boolean).join(' · ') || 'No measured buying in the period';
 
   const focus = kBuy != null
     ? <>
-        <strong>{fmtMoney(kBuy, true)}</strong> de procurement por Koronet
-        {buyOffline ? <>, de los cuales {fmtMoney(buyOffline, true)} son offline y no generan fees</> : null}.
-        {noK2k != null ? ` ${fmtInt(noK2k)} conexiones sin activar (elegibles para K2K).` : ''}
+        <strong>{fmtMoney(kBuy, true)}</strong> of procurement through Koronet
+        {buyOffline ? <>, of which {fmtMoney(buyOffline, true)} is offline and generates no fees</> : null}.
+        {noK2k != null ? ` ${fmtInt(noK2k)} connections not activated (eligible for K2K).` : ''}
         {leakageVendors != null && leakageVendors > 0 && leakageCost != null && leakageCost > 0
-          ? ` ${fmtInt(leakageVendors)} vendors ya conectados por K2K compran ${fmtMoney(leakageCost, true)} offline: recuperable sin conexiones nuevas.`
+          ? ` ${fmtInt(leakageVendors)} vendors already connected via K2K buy ${fmtMoney(leakageCost, true)} offline: recoverable without new connections.`
           : ''}
       </>
-    : <>Sin volumen de compra medido en el período.</>;
+    : <>No measured buy volume in the period.</>;
 
   /* ── Sourcing mensual ── */
   const months = sourcing ? periodMonths(sourcing.monthly, ev._period.from, ev._period.to) : [];
@@ -159,12 +159,12 @@ export function BuyCard({ ev }: { ev: AccountEvidence }) {
   const vendorRows: ReactNode[][] = [];
   if (vendorLc) {
     vendorRows.push(
-      ['Vendors totales', fmtInt(num(vendorLc, 'vendors_total')), '—'],
-      ['Activos L30D', fmtInt(num(vendorLc, 'active_l30d')), 'compraron en los últimos 30 días'],
-      ['Dormidos 30–90D', fmtInt(num(vendorLc, 'dormant_30_90d')), 'sin compra reciente'],
-      ['Perdidos 90D+', fmtInt(num(vendorLc, 'churned_90plus')), 'sin compra hace más de 90 días'],
-      ['Vendors online', fmtInt(num(vendorLc, 'online_vendors')), fmtMoney(num(vendorLc, 'online_buy_gmv'), true)],
-      ['Vendors offline', fmtInt(num(vendorLc, 'offline_vendors')), fmtMoney(num(vendorLc, 'offline_buy_gmv'), true)],
+      ['Total vendors', fmtInt(num(vendorLc, 'vendors_total')), '—'],
+      ['Active L30D', fmtInt(num(vendorLc, 'active_l30d')), 'bought in the last 30 days'],
+      ['Dormant 30–90D', fmtInt(num(vendorLc, 'dormant_30_90d')), 'no recent purchases'],
+      ['Churned 90D+', fmtInt(num(vendorLc, 'churned_90plus')), 'no purchases in more than 90 days'],
+      ['Online vendors', fmtInt(num(vendorLc, 'online_vendors')), fmtMoney(num(vendorLc, 'online_buy_gmv'), true)],
+      ['Offline vendors', fmtInt(num(vendorLc, 'offline_vendors')), fmtMoney(num(vendorLc, 'offline_buy_gmv'), true)],
     );
   }
 
@@ -173,11 +173,11 @@ export function BuyCard({ ev }: { ev: AccountEvidence }) {
     const total = num(k2k, 'total_connections');
     const active = num(k2k, 'active_connections');
     k2kRows.push(
-      ['Conexiones totales', fmtInt(total), '—'],
-      ['Activas', fmtInt(active), fmtPct(active != null && total ? share(active, total) : null)],
-      ['Inactivas', fmtInt(num(k2k, 'inactive_connections')), 'elegibles para activación'],
-      ['Antigüedad promedio', `${fmtInt(num(k2k, 'avg_connection_age_days'))} días`, '—'],
-      ['Última conexión', text(k2k, 'latest_connection')?.slice(0, 10) ?? '—', `primera: ${text(k2k, 'earliest_connection')?.slice(0, 10) ?? '—'}`],
+      ['Total connections', fmtInt(total), '—'],
+      ['Active', fmtInt(active), fmtPct(active != null && total ? share(active, total) : null)],
+      ['Inactive', fmtInt(num(k2k, 'inactive_connections')), 'eligible for activation'],
+      ['Average age', `${fmtInt(num(k2k, 'avg_connection_age_days'))} days`, '—'],
+      ['Latest connection', text(k2k, 'latest_connection')?.slice(0, 10) ?? '—', `first: ${text(k2k, 'earliest_connection')?.slice(0, 10) ?? '—'}`],
     );
   }
 
@@ -210,89 +210,89 @@ export function BuyCard({ ev }: { ev: AccountEvidence }) {
 
   return (
     <EvidenceCard label="Card 3 · BUY" headline={headline}>
-      <CardFocus><strong>Foco:</strong> {focus}</CardFocus>
+      <CardFocus><strong>Focus:</strong> {focus}</CardFocus>
 
       {sourcingRows.length ? (
-        <CardSection title="Sourcing mensual">
+        <CardSection title="Monthly sourcing">
           <CardTable
-            head={['Mes', 'Total', 'Online', 'Offline', 'Online %', 'YoY']}
+            head={['Month', 'Total', 'Online', 'Offline', 'Online %', 'YoY']}
             rows={sourcingRows}
           />
           <CardGap>
-            Período: {fmtMoney(sourcing?.period_total ?? null, true)} vs {fmtMoney(sourcing?.prior_period_total ?? null, true)} el año anterior
+            Period: {fmtMoney(sourcing?.period_total ?? null, true)} vs {fmtMoney(sourcing?.prior_period_total ?? null, true)} a year earlier
             {periodYoy != null ? ` (${fmtSignedPct(periodYoy)})` : ''}.
           </CardGap>
         </CardSection>
       ) : (
-        <CardGap>Sin filas de compra en el período seleccionado.</CardGap>
+        <CardGap>No buy rows in the selected period.</CardGap>
       )}
 
       {vendorRows.length ? (
-        <CardSection title="Ciclo de vida de vendors">
-          <CardTable head={['', 'Cantidad', 'Detalle']} rows={vendorRows} />
+        <CardSection title="Vendor lifecycle">
+          <CardTable head={['', 'Count', 'Detail']} rows={vendorRows} />
         </CardSection>
       ) : null}
 
       {k2kRows.length ? (
-        <CardSection title="Conexiones K2K">
-          <CardTable head={['', 'Valor', 'Detalle']} rows={k2kRows} />
+        <CardSection title="K2K connections">
+          <CardTable head={['', 'Value', 'Detail']} rows={k2kRows} />
         </CardSection>
       ) : null}
 
       {antRows.length ? (
-        <CardSection title="Anticipación de compra — días entre la orden y el envío">
-          <CardTable head={['Ventana', 'Online (órdenes)', 'Offline (órdenes)']} rows={antRows} />
+        <CardSection title="Order lead time — days between the order and the shipment">
+          <CardTable head={['Window', 'Online (orders)', 'Offline (orders)']} rows={antRows} />
           <CardGap>
-            Promedio ponderado: online {antOnline?.avg_days != null ? `${antOnline.avg_days.toFixed(1)}d` : '—'} ·
+            Weighted average: online {antOnline?.avg_days != null ? `${antOnline.avg_days.toFixed(1)}d` : '—'} ·
             offline {antOffline?.avg_days != null ? `${antOffline.avg_days.toFixed(1)}d` : '—'}.
             {spotPct != null && spotPct > 0
-              ? ` ${fmtPct(spotPct, 0)} de las órdenes online se colocan a 0–3 días del envío: compra spot, sin ventaja de planificación.`
+              ? ` ${fmtPct(spotPct, 0)} of online orders are placed 0–3 days before shipping: spot buying, with no planning advantage.`
               : ''}
           </CardGap>
         </CardSection>
       ) : null}
 
       {catRows.length ? (
-        <CardSection title={`Top categorías compradas (top ${TOP_CATEGORIES} de las 20 relevadas)`}>
-          <CardTable head={['Categoría', 'Online', 'Offline', 'Offline %', 'Vendors']} rows={catRows} />
+        <CardSection title={`Top categories bought (top ${TOP_CATEGORIES} of the 20 surveyed)`}>
+          <CardTable head={['Category', 'Online', 'Offline', 'Offline %', 'Vendors']} rows={catRows} />
           {heavyOffline.length ? (
             <CardGap>
-              {heavyOffline.length} categoría{heavyOffline.length !== 1 ? 's' : ''} con {OFFLINE_CATEGORY_PCT}%+ de su compra offline:{' '}
+              {heavyOffline.length} categor{heavyOffline.length !== 1 ? 'ies' : 'y'} with {OFFLINE_CATEGORY_PCT}%+ of their buying offline:{' '}
               {heavyOffline.slice(0, 6).map((c) => `${c.category} (${fmtMoney(c.offline_gmv, true)})`).join(', ')}.
-              Están comprando offline mientras existe oferta online.
+              They are buying offline while online supply exists.
             </CardGap>
           ) : null}
         </CardSection>
       ) : null}
 
       {leakage ? (
-        <CardSection title="Leakage — vendors conectados que igual compran offline">
+        <CardSection title="Leakage — connected vendors that still buy offline">
           <CardTable
-            head={['', 'Valor']}
+            head={['', 'Value']}
             rows={[
-              ['Vendors conectados que compran', fmtInt(num(leakage, 'connected_vendors_buying'))],
-              ['De ellos, con compra offline', fmtInt(leakageVendors)],
-              ['GMV offline de esos vendors', fmtMoney(leakageCost, true)],
-              ['GMV online de esos vendors', fmtMoney(num(leakage, 'online_cost'), true)],
-              ['% offline sobre su GMV', fmtPct(leakagePct, 0)],
+              ['Connected vendors that buy', fmtInt(num(leakage, 'connected_vendors_buying'))],
+              ['Of those, with offline buying', fmtInt(leakageVendors)],
+              ['Offline GMV of those vendors', fmtMoney(leakageCost, true)],
+              ['Online GMV of those vendors', fmtMoney(num(leakage, 'online_cost'), true)],
+              ['% offline of their GMV', fmtPct(leakagePct, 0)],
             ]}
           />
           <CardGap>
-            Es el volumen recuperable sin abrir conexiones nuevas: la conexión K2K ya existe y la compra igual sale offline.
+            This is the volume recoverable without opening new connections: the K2K connection already exists and the buying still goes offline.
           </CardGap>
         </CardSection>
       ) : null}
 
       {offlineVendors != null && offlineVendors > 0 ? (
         <CardGap>
-          Atajo Open Market: la carga manual de inventario permite listar producto de vendors sin K2K.
-          {` ${fmtInt(offlineVendors)} vendor${offlineVendors !== 1 ? 's' : ''} offline`} — un subconjunto puede subirse como
-          inventario Open Market sin integración K2K completa.
+          Open Market shortcut: manual inventory upload makes it possible to list product from vendors without K2K.
+          {` ${fmtInt(offlineVendors)} offline vendor${offlineVendors !== 1 ? 's' : ''}`} — a subset can be uploaded as
+          Open Market inventory without a full K2K integration.
         </CardGap>
       ) : null}
 
       <CardNext>
-        → Continúa en <strong>LIST</strong>: ¿la oferta que compran puede mostrarse a sus compradores?
+        → Continues in <strong>LIST</strong>: can the supply they buy be shown to their buyers?
       </CardNext>
     </EvidenceCard>
   );

@@ -163,8 +163,8 @@ export function activeChips(f: FilterState): ActiveChip[] {
   const chips: ActiveChip[] = [];
   const single: [keyof FilterState, string][] = [
     ['accountClass', f.accountClass],
-    ['businessType', f.businessType === UNIVERSE_TAB ? 'Universo WH'
-      : f.businessType === ONLY_618_TAB ? '618 · fuera de portafolio'
+    ['businessType', f.businessType === UNIVERSE_TAB ? 'WH universe'
+      : f.businessType === ONLY_618_TAB ? '618 · outside portfolio'
       : f.businessType],
     ['segment', f.segment],
     ['productTier', f.productTier],

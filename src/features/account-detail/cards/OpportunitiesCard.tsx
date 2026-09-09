@@ -13,7 +13,7 @@ import { calcAtStake, detectOpportunityFlags } from '../../../domain/metrics';
 import { CardFocus, CardGap, CardNext, CardRow, CardSection, CardTable, EvidenceCard } from '../EvidenceCard';
 
 type OppType = 'BUY' | 'LIST' | 'SELL' | 'CONFIG';
-type Effort = 'arreglo rápido' | 'investigación' | 'auditoría';
+type Effort = 'quick fix' | 'investigation' | 'audit';
 
 interface Opp {
   type: OppType;
@@ -66,8 +66,8 @@ export function OpportunitiesCard({ ev, sfdcTotals }: { ev: AccountEvidence; sfd
   const p = ev.potential;
   if (!p) {
     return (
-      <EvidenceCard label="Card 2 · OPPORTUNITIES" headline="Sin datos para detectar intervenciones" defaultOpen={false}>
-        <CardGap>Esta cuenta no tiene fila en accounts_v3 ni en los cubos.</CardGap>
+      <EvidenceCard label="Card 2 · OPPORTUNITIES" headline="No data to detect interventions" defaultOpen={false}>
+        <CardGap>This account has no row in accounts_v3 or in the cubes.</CardGap>
       </EvidenceCard>
     );
   }
@@ -88,10 +88,10 @@ export function OpportunitiesCard({ ev, sfdcTotals }: { ev: AccountEvidence; sfd
   if (buyOffline != null && buyOffline > 0) {
     const offlineVendors = numField(vendorLc, 'offline_vendors');
     const desc = [
-      `${offlineVendors != null ? `${fmtInt(offlineVendors)} proveedores` : 'Proveedores'} con procurement offline hoy — ${fmtMoney(buyOffline, true)} sin fees.`,
-      k2kEligible != null ? `${fmtInt(k2kEligible)} elegibles para K2K.` : null,
+      `${offlineVendors != null ? `${fmtInt(offlineVendors)} suppliers` : 'Suppliers'} with offline procurement today — ${fmtMoney(buyOffline, true)} with no fees.`,
+      k2kEligible != null ? `${fmtInt(k2kEligible)} eligible for K2K.` : null,
     ].filter(Boolean).join(' ');
-    opps.push({ type: 'BUY', effort: 'arreglo rápido', amount: buyOffline, desc, ref: 'tarjeta BUY' });
+    opps.push({ type: 'BUY', effort: 'quick fix', amount: buyOffline, desc, ref: 'BUY card' });
   }
 
   /* ── LIST: config (MaxAge, bunches) ── */
@@ -118,20 +118,20 @@ export function OpportunitiesCard({ ev, sfdcTotals }: { ev: AccountEvidence; sfd
       ? Math.round((varietyGap / offlineVar) * 100)
       : null;
     const desc = [
-      `MaxAge=${String(maxAge)} días — bloquea el inventario forward.`,
-      varietyGap != null ? `${fmtInt(varietyGap)} variedades offline no visibles online.` : 'Profundidad de catálogo bloqueada.',
-      pctBlocked != null ? `${pctBlocked}% del catálogo oculto.` : null,
+      `MaxAge=${String(maxAge)} days — blocks forward inventory.`,
+      varietyGap != null ? `${fmtInt(varietyGap)} offline varieties not visible online.` : 'Catalog depth blocked.',
+      pctBlocked != null ? `${pctBlocked}% of the catalog hidden.` : null,
     ].filter(Boolean).join(' ');
     // No priced impact: the legacy card never attached a $ figure to MaxAge.
-    opps.push({ type: 'LIST', effort: 'investigación', amount: null, desc, ref: 'tarjeta LIST' });
+    opps.push({ type: 'LIST', effort: 'investigation', amount: null, desc, ref: 'LIST card' });
   }
 
   if (bunchesOff && flags.hasList) {
     const desc = [
-      'Formato bunches deshabilitado — TAM retail bloqueado.',
-      sellOffline != null ? `${fmtMoney(sellOffline, true)} de GMV offline en bunches invisible online.` : null,
+      'Bunches format disabled — retail TAM blocked.',
+      sellOffline != null ? `${fmtMoney(sellOffline, true)} of offline GMV in bunches invisible online.` : null,
     ].filter(Boolean).join(' ');
-    opps.push({ type: 'LIST', effort: 'arreglo rápido', amount: sellOffline, desc, ref: 'tarjeta LIST' });
+    opps.push({ type: 'LIST', effort: 'quick fix', amount: sellOffline, desc, ref: 'LIST card' });
   }
 
   /* ── SELL: activación de compradores offline ── */
@@ -139,12 +139,12 @@ export function OpportunitiesCard({ ev, sfdcTotals }: { ev: AccountEvidence; sfd
   const offlineBuyers = bt?.offline_buyers ?? null;
   if (offlineBuyers != null && offlineBuyers > 0) {
     const desc = [
-      `${fmtInt(offlineBuyers)} compradores offline nunca invitados al eShop.`,
-      bt?.aov_online ? `AOV online: ${fmtMoney(bt.aov_online, true)}.` : null,
+      `${fmtInt(offlineBuyers)} offline buyers never invited to the eShop.`,
+      bt?.aov_online ? `Online AOV: ${fmtMoney(bt.aov_online, true)}.` : null,
     ].filter(Boolean).join(' ');
     // Priced as the online AOV they would each carry over.
     const amount = bt?.aov_online ? offlineBuyers * bt.aov_online : null;
-    opps.push({ type: 'SELL', effort: 'auditoría', amount, desc, ref: 'tarjeta SELL' });
+    opps.push({ type: 'SELL', effort: 'audit', amount, desc, ref: 'SELL card' });
   }
 
   /* ── BUY: leakage de vendors conectados a K2K comprando offline ── */
@@ -153,9 +153,9 @@ export function OpportunitiesCard({ ev, sfdcTotals }: { ev: AccountEvidence; sfd
   if (leakageCost != null && leakageCost > LEAKAGE_MIN) {
     const leakageVendors = numField(leakage, 'vendor_count');
     const desc = leakageVendors != null
-      ? `${fmtInt(leakageVendors)} vendors conectados por K2K comprando ${fmtMoney(leakageCost, true)} offline. Recuperable sin conexiones nuevas.`
-      : `Vendors conectados por K2K comprando ${fmtMoney(leakageCost, true)} offline. Recuperable sin conexiones nuevas.`;
-    opps.push({ type: 'BUY', effort: 'arreglo rápido', amount: leakageCost, desc, ref: 'tarjeta BUY' });
+      ? `${fmtInt(leakageVendors)} K2K-connected vendors buying ${fmtMoney(leakageCost, true)} offline. Recoverable with no new connections.`
+      : `K2K-connected vendors buying ${fmtMoney(leakageCost, true)} offline. Recoverable with no new connections.`;
+    opps.push({ type: 'BUY', effort: 'quick fix', amount: leakageCost, desc, ref: 'BUY card' });
   }
 
   /* ── BUY: conexiones K2K dormidas ── */
@@ -163,10 +163,10 @@ export function OpportunitiesCard({ ev, sfdcTotals }: { ev: AccountEvidence; sfd
   if (dormant != null && dormant > 0) {
     opps.push({
       type: 'BUY',
-      effort: 'investigación',
+      effort: 'investigation',
       amount: null,
-      desc: `${fmtInt(dormant)} conexiones K2K dormidas — conectadas pero nunca compraron. Inversión sin activar.`,
-      ref: 'tarjeta BUY',
+      desc: `${fmtInt(dormant)} dormant K2K connections — connected but never bought. Investment left unactivated.`,
+      ref: 'BUY card',
     });
   }
 
@@ -174,10 +174,10 @@ export function OpportunitiesCard({ ev, sfdcTotals }: { ev: AccountEvidence; sfd
   if (varietyGap != null && varietyGap > VARIETY_GAP_MIN) {
     opps.push({
       type: 'LIST',
-      effort: 'auditoría',
+      effort: 'audit',
       amount: null,
-      desc: `${fmtInt(varietyGap)} variedades vendidas offline que no se muestran online — profundidad de catálogo oculta al comprador online.`,
-      ref: 'tarjeta LIST',
+      desc: `${fmtInt(varietyGap)} varieties sold offline that are not shown online — catalog depth hidden from the online buyer.`,
+      ref: 'LIST card',
     });
   }
 
@@ -186,10 +186,10 @@ export function OpportunitiesCard({ ev, sfdcTotals }: { ev: AccountEvidence; sfd
   if (flags.isDeclining && yoyPct != null && yoyPct < DECLINE_PCT_MAX) {
     opps.push({
       type: 'SELL',
-      effort: 'investigación',
+      effort: 'investigation',
       amount: null,
-      desc: `Sell GMV cayendo ${fmtPct(Math.abs(yoyPct), 1)} YoY. Investigar: ¿inventario? ¿precios? ¿churn de compradores?`,
-      ref: 'tarjeta SELL',
+      desc: `Sell GMV falling ${fmtPct(Math.abs(yoyPct), 1)} YoY. Investigate: inventory? pricing? buyer churn?`,
+      ref: 'SELL card',
     });
   }
 
@@ -199,25 +199,25 @@ export function OpportunitiesCard({ ev, sfdcTotals }: { ev: AccountEvidence; sfd
   if (implStage && (koronetSell == null || koronetSell < ZERO_TX_SELL_MAX)) {
     opps.push({
       type: 'CONFIG',
-      effort: 'investigación',
+      effort: 'investigation',
       amount: null,
-      desc: `Implementación completa (etapa: ${implStage}) pero transacciones casi nulas. Problema de configuración o de activación.`,
+      desc: `Implementation complete (stage: ${implStage}) but almost no transactions. Configuration or activation problem.`,
       ref: null,
     });
   }
 
   if (!opps.length && stake == null) {
     return (
-      <EvidenceCard label="Card 2 · OPPORTUNITIES" headline="Sin intervenciones detectadas" defaultOpen={false}>
-        <CardGap>Ninguna señal de BUY, LIST, SELL ni CONFIG supera su umbral en este período.</CardGap>
+      <EvidenceCard label="Card 2 · OPPORTUNITIES" headline="No interventions detected" defaultOpen={false}>
+        <CardGap>No BUY, LIST, SELL or CONFIG signal clears its threshold in this period.</CardGap>
       </EvidenceCard>
     );
   }
 
   opps.sort((a, b) => TYPE_ORDER[a.type] - TYPE_ORDER[b.type]);
 
-  const stakeLabel = stake?.source === 'sfdc' ? '(opps SFDC)' : 'de escenario';
-  const headline = `${fmtMoney(stake?.amount ?? null, true)} ${stakeLabel} en juego · ${opps.length} intervenci${opps.length === 1 ? 'ón' : 'ones'}`;
+  const stakeLabel = stake?.source === 'sfdc' ? '(SFDC opps)' : 'scenario-based';
+  const headline = `${fmtMoney(stake?.amount ?? null, true)} ${stakeLabel} at stake · ${opps.length} intervention${opps.length === 1 ? '' : 's'}`;
 
   const bottleneck = configBlocker
     ? (opps.find((o) => o.type === 'LIST') ?? opps[0] ?? null)
@@ -236,8 +236,8 @@ export function OpportunitiesCard({ ev, sfdcTotals }: { ev: AccountEvidence; sfd
   const productProfile = [
     ev.identity?.ct_id ? `ID: ${ev.identity.ct_id}` : null,
     industry ? industry.replace('Floral - ', '') : null,
-    totalVarieties != null ? `${fmtInt(totalVarieties)} variedades` : null,
-    cfgRaw ? (bunchesOff ? 'Sólo cajas' : 'Cajas + bunches') : null,
+    totalVarieties != null ? `${fmtInt(totalVarieties)} varieties` : null,
+    cfgRaw ? (bunchesOff ? 'Boxes only' : 'Boxes + bunches') : null,
   ].filter(Boolean).join(' · ');
 
   const buyOfflinePct = buyOnlinePct != null ? Math.round(100 - buyOnlinePct) : null;
@@ -247,49 +247,49 @@ export function OpportunitiesCard({ ev, sfdcTotals }: { ev: AccountEvidence; sfd
       <CardFocus>
         <strong>{fmtMoney(stake?.amount ?? null, true)}</strong>{' '}
         {stake?.source === 'sfdc'
-          ? '— oportunidades abiertas en SFDC, tomadas de Salesforce.'
-          : '— escenario: ventana de 12 meses con 10% de conversión.'}
-        {' '}Ruta: {opps.map((o) => o.type).join(' → ')}.
+          ? '— open opportunities in SFDC, taken from Salesforce.'
+          : '— scenario: 12-month window at 10% conversion.'}
+        {' '}Path: {opps.map((o) => o.type).join(' → ')}.
       </CardFocus>
 
       <CardTable
-        head={['#', 'Frente', 'Esfuerzo', 'En juego', 'Intervención']}
+        head={['#', 'Front', 'Effort', 'At stake', 'Intervention']}
         rows={opps.map((o, i) => [
           `#${i + 1}`,
           <strong>{o.type}</strong>,
           o.effort,
           fmtMoney(o.amount, true),
-          <>{o.desc}{o.ref ? <> <em>→ ver {o.ref}</em></> : null}</>,
+          <>{o.desc}{o.ref ? <> <em>→ see {o.ref}</em></> : null}</>,
         ])}
       />
 
       <CardGap>
-        Contexto: la hipótesis principal (H-D1, sin confirmar) es que lo que empuja la compra offline
-        es el precio, no la configuración.
+        Context: the main hypothesis (H-D1, unconfirmed) is that what drives offline buying
+        is price, not configuration.
       </CardGap>
 
-      <CardSection title="Perfil y configuración">
-        <CardRow label="Perfil de producto" value={productProfile || '—'} tone={productProfile ? undefined : 'muted'} />
+      <CardSection title="Profile and configuration">
+        <CardRow label="Product profile" value={productProfile || '—'} tone={productProfile ? undefined : 'muted'} />
         <CardRow
-          label="Problemas de configuración"
-          value={configIssues.length ? `${configIssues.length} limitante${configIssues.length === 1 ? '' : 's'}` : 'Ninguno'}
+          label="Configuration issues"
+          value={configIssues.length ? `${configIssues.length} constraint${configIssues.length === 1 ? '' : 's'}` : 'None'}
           note={configIssues.length ? configIssues.join(' · ') : undefined}
           tone={configIssues.length ? 'amber' : 'muted'}
         />
       </CardSection>
 
       {bottleneck ? (
-        <CardSection title="Cuello de botella">
+        <CardSection title="Bottleneck">
           <CardRow label={bottleneck.type} value={bottleneck.desc} tone="red" />
-          <CardRow label="Próxima acción" value={nextAction} />
+          <CardRow label="Next action" value={nextAction} />
         </CardSection>
       ) : null}
 
       <CardNext>
-        → Continúa en <strong>BUY</strong>:{' '}
+        → Continues in <strong>BUY</strong>:{' '}
         {buyOfflinePct != null && buyOfflinePct > 0
-          ? `${buyOfflinePct}% del procurement es offline — ¿qué tan grande es la brecha de compra?`
-          : '¿qué tan grande es la brecha de compra?'}
+          ? `${buyOfflinePct}% of procurement is offline — how big is the buy gap?`
+          : 'how big is the buy gap?'}
       </CardNext>
     </EvidenceCard>
   );
@@ -299,24 +299,24 @@ function buildNextAction(
   o: Opp | null,
   ctx: { k2kEligible: number | null; sellOffline: number | null; maxAge: number | null },
 ): string {
-  if (!o) return 'Revisar las intervenciones de arriba.';
+  if (!o) return 'Review the interventions above.';
   if (o.type === 'BUY') {
     return ctx.k2kEligible != null
-      ? `Pedir la activación K2K de ${fmtInt(ctx.k2kEligible)} proveedores elegibles vía CS · CS confirma en 48h.`
-      : 'Identificar proveedores offline elegibles para K2K · pedir la activación vía CS.';
+      ? `Request K2K activation for ${fmtInt(ctx.k2kEligible)} eligible suppliers via CS · CS confirms within 48h.`
+      : 'Identify offline suppliers eligible for K2K · request activation via CS.';
   }
   if (o.type === 'LIST') {
-    if (o.effort === 'arreglo rápido') {
+    if (o.effort === 'quick fix') {
       return ctx.sellOffline != null
-        ? `Habilitar bunches en la config del eShop · desbloquea ${fmtMoney(ctx.sellOffline, true)} de GMV offline · cambio de 5 minutos · verificar con ops después del deploy.`
-        : 'Habilitar el formato bunches en la config del eShop · cambio de 5 minutos · confirmar con ops después del deploy.';
+        ? `Enable bunches in the eShop config · unblocks ${fmtMoney(ctx.sellOffline, true)} of offline GMV · 5-minute change · verify with ops after deploy.`
+        : 'Enable the bunches format in the eShop config · 5-minute change · confirm with ops after deploy.';
     }
     return ctx.maxAge != null
-      ? `Subir MaxAge de ${String(ctx.maxAge)} a 30+ días en la config del eShop · desbloquea el catálogo forward · confirmar impacto con ops.`
-      : 'Subir MaxAge a 30+ días en la config del eShop · desbloquea el catálogo forward · confirmar con ops.';
+      ? `Raise MaxAge from ${String(ctx.maxAge)} to 30+ days in the eShop config · unblocks the forward catalog · confirm impact with ops.`
+      : 'Raise MaxAge to 30+ days in the eShop config · unblocks the forward catalog · confirm with ops.';
   }
   if (o.type === 'SELL') {
-    return 'Exportar la lista de compradores offline · armar una campaña de invitación personalizada al eShop · empezar por los de mayor GMV.';
+    return 'Export the offline buyer list · build a personalized eShop invitation campaign · start with the highest-GMV ones.';
   }
-  return 'Auditar la config del eShop y el checklist de activación · verificar la etapa de implementación con CS · confirmar que el camino a la primera transacción está despejado.';
+  return 'Audit the eShop config and the activation checklist · verify the implementation stage with CS · confirm the path to the first transaction is clear.';
 }

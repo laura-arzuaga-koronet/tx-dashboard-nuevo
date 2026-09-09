@@ -1365,54 +1365,54 @@
       for (var i = 0; i < cases.length; i++) {
         if (cases[i][0]) return { kind: cases[i][1], note: cases[i][2] };
       }
-      return { kind: 'gap', note: 'sin dato' };
+      return { kind: 'gap', note: 'no data' };
     }
 
     var reasons = {
       gmv_reference: _why(gmvRef, [
-        [gmvSource === 'No vende (Koronet)', 'cero', 'no vende por Koronet'],
-        [gmvSource === 'Sin dato' || !gmvSource, 'gap', 'fuera de la cascada de Est GMV']
+        [gmvSource === 'No vende (Koronet)', 'cero', 'does not sell through Koronet'],
+        [gmvSource === 'Sin dato' || !gmvSource, 'gap', 'outside the Est GMV cascade']
       ]),
       koronet_sell_ytd: _why(koronetSellYtd, [
-        [!estaLive, 'cero', 'todavía no está live'],
+        [!estaLive, 'cero', 'not live yet'],
         /* Sus filas de venta existen, pero el cliente es la propia empresa: son
            compras suyas espejadas en la tabla de ventas. Cero real, no hueco —
            sin este caso, 37 cuentas del portafolio se leían como "falta dato". */
-        [(sellAgg && sellAgg.self_sale > 0), 'cero', 'sus «ventas» son compras suyas espejadas (auto-venta): no vende por Koronet'],
-        [true, 'gap', 'live pero sin ventas en el período']
+        [(sellAgg && sellAgg.self_sale > 0), 'cero', 'its «sales» are its own purchases mirrored (self-sale): it does not sell through Koronet'],
+        [true, 'gap', 'live but no sales in the period']
       ]),
       koronet_buy_ytd: _why(koronetBuyYtd, [
-        [!estaLive, 'cero', 'todavía no está live'],
-        [true, 'cero', 'no compra por Koronet en el período']
+        [!estaLive, 'cero', 'not live yet'],
+        [true, 'cero', 'does not buy through Koronet in the period']
       ]),
       sell_penetration: _why(sellPenetration, [
-        [!gmvRef, 'gap', 'sin Est GMV para comparar'],
-        [!koronetSellYtd, 'cero', 'sin ventas en el período']
+        [!gmvRef, 'gap', 'no Est GMV to compare against'],
+        [!koronetSellYtd, 'cero', 'no sales in the period']
       ]),
       sell_online_pct: _why(sellOnlinePct, [
-        [!koronetSellYtd, 'cero', 'sin ventas en el período'],
-        [true, 'cero', 'vende, pero nada online']
+        [!koronetSellYtd, 'cero', 'no sales in the period'],
+        [true, 'cero', 'sells, but nothing online']
       ]),
       buy_penetration: _why(buyPenetration, [
-        [!buyGmvEst, 'gap', 'sin Est Buy para comparar'],
-        [!koronetBuyYtd, 'cero', 'sin compras en el período']
+        [!buyGmvEst, 'gap', 'no Est Buy to compare against'],
+        [!koronetBuyYtd, 'cero', 'no purchases in the period']
       ]),
       buy_online_pct: _why(buyOnlinePct, [
-        [!koronetBuyYtd, 'cero', 'sin compras en el período'],
-        [true, 'cero', 'compra, pero todo offline']
+        [!koronetBuyYtd, 'cero', 'no purchases in the period'],
+        [true, 'cero', 'buys, but all offline']
       ]),
       fees_direct: _why(feesDirect, [
-        [feeTodoApagado, 'cero', 'fees deshabilitados en su configuración'],
-        [!sellOnlinePct, 'cero', 'sin ventas online: no genera fee'],
-        [true, 'gap', 'vende online pero no registra fee — revisar']
+        [feeTodoApagado, 'cero', 'fees disabled in its configuration'],
+        [!sellOnlinePct, 'cero', 'no online sales: earns no fee'],
+        [true, 'gap', 'sells online but records no fee — review']
       ]),
       fees_indirect: _why(feesIndirect, [
-        [!esCompradorK2K, 'cero', 'no es comprador en ninguna conexión K2K'],
-        [true, 'gap', 'es comprador K2K pero sin compras atribuidas']
+        [!esCompradorK2K, 'cero', 'not a buyer in any K2K connection'],
+        [true, 'gap', 'K2K buyer but no attributed purchases']
       ]),
       take_rate: _why(takeRate, [
-        [!feesTotal, 'cero', 'sin fees en el período'],
-        [estFlow <= 10000 * _frac, 'gap', 'Est Buy + Est Sell del período demasiado chico: el ratio sería ruido']
+        [!feesTotal, 'cero', 'no fees in the period'],
+        [estFlow <= 10000 * _frac, 'gap', 'Est Buy + Est Sell for the period too small: the ratio would be noise']
       ])
     };
 
@@ -1497,7 +1497,7 @@
       indirect_by_channel: { value: indirectAgg ? indirectAgg.byChannel : null },
       indirect_rate: _ev(indirectAgg && indirectAgg.effective_rate != null ? indirectAgg.effective_rate * 100 : null,
                          indirectAgg && indirectAgg.effective_rate != null ? 'observed' : 'gap',
-                         'tasa real de los vendedores de esta cuenta'),
+                         'realised rate of this account’s sellers'),
 
       trends:         trends,
       reasons:        reasons,
@@ -1508,7 +1508,7 @@
          coinciden al 91-98%, porque son el mismo flujo visto de los dos lados). */
       self_sale_gmv:  _ev(sellAgg && sellAgg.self_sale ? sellAgg.self_sale : null,
                           sellAgg && sellAgg.self_sale ? 'observed' : 'gap',
-                          'sell cube · customer_name = la propia compañía'),
+                          'sell cube · customer_name = the company itself'),
       take_rate:      _ev(takeRate, takeRate != null ? 'model' : 'gap', '(direct+indirect fees) / (est buy + est sell)'),
 
       // Sell trend

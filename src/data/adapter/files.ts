@@ -47,7 +47,7 @@ export const BAD_CUBE_ROWS: Readonly<Record<'sell' | 'buy', ReadonlyArray<{
 }>>> = {
   buy: [
     { companyId: '640977', from: '2025-04', to: '2025-10',
-      reason: 'Valores 3 órdenes de magnitud sobre su propia línea base (verificado 2026-09-08)' },
+      reason: 'Values 3 orders of magnitude above its own baseline (verified 2026-09-08)' },
   ],
   sell: [],
 };

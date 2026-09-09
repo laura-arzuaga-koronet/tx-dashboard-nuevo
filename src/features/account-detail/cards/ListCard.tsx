@@ -103,8 +103,8 @@ export function ListCard({ ev }: { ev: AccountEvidence }) {
 
   if (!list) {
     return (
-      <EvidenceCard label="Card 4 · LIST" headline="Sin datos de catálogo" defaultOpen={false}>
-        <CardGap>No hay evidencia de inventario ni de configuración para esta cuenta.</CardGap>
+      <EvidenceCard label="Card 4 · LIST" headline="No catalog data" defaultOpen={false}>
+        <CardGap>No inventory or configuration evidence for this account.</CardGap>
       </EvidenceCard>
     );
   }
@@ -134,21 +134,21 @@ export function ListCard({ ev }: { ev: AccountEvidence }) {
   const futureSales = flag(cfgRaw, 'ecommerce_future_sales_enabled') ?? flag(cfgRaw, 'future_sales_enabled');
 
   const headline = [
-    onlineCoverage != null ? `Publica el ${fmtPct(onlineCoverage, 0)} de las variedades que vende` : null,
-    varietyGap ? `${fmtInt(varietyGap)} variedades solo offline` : null,
+    onlineCoverage != null ? `Publishes ${fmtPct(onlineCoverage, 0)} of the varieties it sells` : null,
+    varietyGap ? `${fmtInt(varietyGap)} offline-only varieties` : null,
     bunchesOn === false ? 'bunches OFF' : null,
-  ].filter(Boolean).join(' · ') || 'Catálogo sin cobertura medida';
+  ].filter(Boolean).join(' · ') || 'Catalog with no measured coverage';
 
   const focus = <>
     {onlineCoverage != null
-      ? <>Muestra online <strong>{fmtPct(onlineCoverage, 0)}</strong> de lo que vende.</>
-      : <>La profundidad del catálogo online no se puede medir con la evidencia disponible.</>}
-    {varietyGap ? ` ${fmtInt(varietyGap)} variedades quedan fuera del canal online.` : ''}
+      ? <>Shows <strong>{fmtPct(onlineCoverage, 0)}</strong> of what it sells online.</>
+      : <>Online catalog depth cannot be measured with the available evidence.</>}
+    {varietyGap ? ` ${fmtInt(varietyGap)} varieties stay out of the online channel.` : ''}
     {bunchesOn === false && sellOffline
-      ? ` Bunches está apagado: el TAM retail queda bloqueado sobre ${fmtMoney(sellOffline, true)} de venta offline.`
+      ? ` Bunches is off: retail TAM is blocked on ${fmtMoney(sellOffline, true)} of offline sell.`
       : ''}
     {maxAge != null && !maxAgeOk
-      ? ` MaxAge en ${fmtInt(maxAge)} días bloquea el listado forward (necesita ${MAX_AGE_TARGET}+).`
+      ? ` MaxAge at ${fmtInt(maxAge)} days blocks forward listing (needs ${MAX_AGE_TARGET}+).`
       : ''}
   </>;
 
@@ -201,101 +201,101 @@ export function ListCard({ ev }: { ev: AccountEvidence }) {
   if (cfgRaw) {
     configRows.push([
       'MaxAge',
-      maxAge != null ? `${fmtInt(maxAge)} días` : '—',
-      maxAge == null ? 'sin dato' : maxAgeOk ? 'apto para listado forward' : `necesita ${MAX_AGE_TARGET}+ días`,
+      maxAge != null ? `${fmtInt(maxAge)} days` : '—',
+      maxAge == null ? 'no data' : maxAgeOk ? 'eligible for forward listing' : `needs ${MAX_AGE_TARGET}+ days`,
     ]);
     configRows.push([
       'Bunches',
       bunchesOn == null ? '—' : bunchesOn ? 'ON' : 'OFF',
-      bunchesReality != null ? 'medido sobre ventas ecom reales' : 'según flag de configuración',
+      bunchesReality != null ? 'measured on real ecom sales' : 'per configuration flag',
     ]);
     configRows.push([
       'eShop',
       eshops == null ? '—' : eshops ? 'ON' : 'OFF',
-      eshops ? 'tienda publicada' : 'sin tienda publicada',
+      eshops ? 'storefront published' : 'no storefront published',
     ]);
     configRows.push([
-      'Venta forward',
+      'Forward selling',
       futureSales == null ? '—' : futureSales ? 'ON' : 'OFF',
-      futureSales ? 'inventario forward visible' : 'las órdenes forward valen $0',
+      futureSales ? 'forward inventory visible' : 'forward orders are worth $0',
     ]);
 
-    if (maxAge != null && !maxAgeOk) issues.push(`MaxAge en ${fmtInt(maxAge)} días: bloquea el listado forward del catálogo.`);
+    if (maxAge != null && !maxAgeOk) issues.push(`MaxAge at ${fmtInt(maxAge)} days: blocks forward listing of the catalog.`);
     if (bunchesOn === false) {
       issues.push(sellOffline
-        ? `Bunches apagado: el TAM retail queda invisible sobre ${fmtMoney(sellOffline, true)} de venta offline.`
-        : 'Bunches apagado: el TAM retail queda invisible.');
+        ? `Bunches off: retail TAM stays invisible on ${fmtMoney(sellOffline, true)} of offline sell.`
+        : 'Bunches off: retail TAM stays invisible.');
     }
-    if (eshops === false) issues.push('Sin eShop publicada: no hay vidriera propia donde mostrar el inventario.');
-    if (futureSales === false) issues.push('Venta forward apagada: las órdenes anticipadas no se pueden capturar.');
+    if (eshops === false) issues.push('No eShop published: there is no own storefront to show the inventory.');
+    if (futureSales === false) issues.push('Forward selling off: advance orders cannot be captured.');
   }
 
   return (
     <EvidenceCard label="Card 4 · LIST" headline={headline}>
-      <CardFocus><strong>Foco:</strong> {focus}</CardFocus>
+      <CardFocus><strong>Focus:</strong> {focus}</CardFocus>
 
       {typeRows.length || divisionRows.length ? (
-        <CardSection title="Inventario actual publicado">
+        <CardSection title="Current published inventory">
           {typeRows.length ? (
             <CardTable
-              head={['Por tipo', 'Ítems', 'Productos', 'Categorías', 'Variedades', 'Unidades']}
+              head={['By type', 'Items', 'Products', 'Categories', 'Varieties', 'Units']}
               rows={typeRows}
             />
           ) : null}
           {divisionRows.length ? (
             <CardTable
-              head={['Por división', 'Ítems', 'Productos', 'Categorías', 'Variedades', 'Unidades']}
+              head={['By division', 'Items', 'Products', 'Categories', 'Varieties', 'Units']}
               rows={divisionRows}
             />
           ) : null}
           <CardGap>
-            Total: {fmtInt(totalItems)} ítems · {fmtInt(totalUnits)} unidades.
-            Los conteos únicos no se suman entre tipos (requieren deduplicación cruzada).
+            Total: {fmtInt(totalItems)} items · {fmtInt(totalUnits)} units.
+            Unique counts do not add up across types (they require cross deduplication).
           </CardGap>
         </CardSection>
       ) : (
-        <CardGap>Sin inventario publicado relevado para esta cuenta.</CardGap>
+        <CardGap>No published inventory recorded for this account.</CardGap>
       )}
 
       {freshnessRows.length ? (
-        <CardSection title="Frescura de variedades — cuándo vendió por última vez cada variedad">
-          <CardTable head={['Antigüedad', 'Online (variedades)', 'Offline (variedades)']} rows={freshnessRows} />
+        <CardSection title="Variety freshness — when each variety last sold">
+          <CardTable head={['Age', 'Online (varieties)', 'Offline (varieties)']} rows={freshnessRows} />
           <CardGap>
-            {fmtInt(onlineVar)} variedades online vs {fmtInt(offlineVar)} offline
-            {varietyGap ? ` — ${fmtInt(varietyGap)} de brecha` : ''}.
-            {staleOnline != null ? ` ${fmtPct(staleOnline, 0)} del catálogo online lleva 90+ días sin vender` : ''}
-            {staleOffline != null ? `, ${fmtPct(staleOffline, 0)} del offline` : ''}.
+            {fmtInt(onlineVar)} online varieties vs {fmtInt(offlineVar)} offline
+            {varietyGap ? ` — ${fmtInt(varietyGap)} gap` : ''}.
+            {staleOnline != null ? ` ${fmtPct(staleOnline, 0)} of the online catalog has gone 90+ days without selling` : ''}
+            {staleOffline != null ? `, ${fmtPct(staleOffline, 0)} of the offline one` : ''}.
           </CardGap>
         </CardSection>
       ) : null}
 
       {forwardRows.length ? (
-        <CardSection title="Profundidad forward — prebooks por horizonte">
-          <CardTable head={['Horizonte', 'Líneas', 'Valor', 'Vendors', 'Productos']} rows={forwardRows} />
+        <CardSection title="Forward depth — prebooks by horizon">
+          <CardTable head={['Horizon', 'Lines', 'Value', 'Vendors', 'Products']} rows={forwardRows} />
           <CardGap>
-            {fmtInt(forwardLines)} líneas de prebook por {fmtMoney(forwardValue, true)} comprometidas hacia adelante.
-            {futureSales === false ? ' La venta forward está apagada, así que este inventario no se puede listar.' : ''}
+            {fmtInt(forwardLines)} prebook lines for {fmtMoney(forwardValue, true)} committed forward.
+            {futureSales === false ? ' Forward selling is off, so this inventory cannot be listed.' : ''}
           </CardGap>
         </CardSection>
       ) : (
-        <CardGap>Sin prebooks en el horizonte relevado: la cuenta no compromete inventario hacia adelante.</CardGap>
+        <CardGap>No prebooks in the recorded horizon: the account does not commit inventory forward.</CardGap>
       )}
 
       {configRows.length ? (
-        <CardSection title="Configuración de la cuenta">
-          <CardTable head={['Ajuste', 'Estado', 'Qué implica']} rows={configRows} />
+        <CardSection title="Account configuration">
+          <CardTable head={['Setting', 'Status', 'What it implies']} rows={configRows} />
           {issues.length ? (
             <CardGap>
-              Problemas detectados: {issues.join(' ')}
+              Issues detected: {issues.join(' ')}
             </CardGap>
           ) : null}
         </CardSection>
       ) : (
-        <CardGap>Sin fila en config_evidence_v2: no se puede auditar la configuración de esta cuenta.</CardGap>
+        <CardGap>No row in config_evidence_v2: this account's configuration cannot be audited.</CardGap>
       )}
 
       <CardNext>
-        → Continúa en <strong>SELL</strong>: ¿sus compradores convierten lo que ya está online?
+        → Continues in <strong>SELL</strong>: do its buyers convert what is already online?
       </CardNext>
     </EvidenceCard>
   );

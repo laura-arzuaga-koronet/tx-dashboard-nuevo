@@ -42,7 +42,7 @@ export function isSoloDigital(ev: AccountEvidence): boolean {
 
 /** Sell online %: ≥30% green, 10–30% amber, >0 red, 0 muted. */
 export function sellOnlineStyle(ev: AccountEvidence): CellStyle {
-  if (isSoloDigital(ev)) return { tone: 'muted-italic', qualifier: 'solo digital visible' };
+  if (isSoloDigital(ev)) return { tone: 'muted-italic', qualifier: 'digital only visible' };
   const v = ev.potential ? evValue(ev.potential.sell_online_pct) : null;
   if (v == null) return NEUTRAL;
   if (v >= 30) return { tone: 'green', qualifier: 'digital-first' };
@@ -53,7 +53,7 @@ export function sellOnlineStyle(ev: AccountEvidence): CellStyle {
 
 /** Buy online %: ≥20% green, 5–20% amber, >0 red, 0 muted. */
 export function buyOnlineStyle(ev: AccountEvidence): CellStyle {
-  if (isSoloDigital(ev)) return { tone: 'muted-italic', qualifier: 'solo digital visible' };
+  if (isSoloDigital(ev)) return { tone: 'muted-italic', qualifier: 'digital only visible' };
   const v = ev.potential ? evValue(ev.potential.buy_online_pct) : null;
   if (v == null) return NEUTRAL;
   if (v >= 20) return { tone: 'green', qualifier: 'digital-first' };

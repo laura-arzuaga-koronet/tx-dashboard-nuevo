@@ -22,8 +22,8 @@ export function PotentialCard({ ev, sfdcTotals }: { ev: AccountEvidence; sfdcTot
   const p = ev.potential;
   if (!p) {
     return (
-      <EvidenceCard label="Card 1 · POTENTIAL" headline="Sin datos de potencial" defaultOpen={false}>
-        <CardGap>Esta cuenta no tiene fila en accounts_v3 ni en los cubos.</CardGap>
+      <EvidenceCard label="Card 1 · POTENTIAL" headline="No potential data" defaultOpen={false}>
+        <CardGap>This account has no row in accounts_v3 or in the cubes.</CardGap>
       </EvidenceCard>
     );
   }
@@ -47,10 +47,10 @@ export function PotentialCard({ ev, sfdcTotals }: { ev: AccountEvidence; sfdcTot
 
   const sellTautological = p.sell_penetration?.ev === 'tautological';
   const penLabel = sellTautological
-    ? 'Koronet es el canal principal'
-    : sellPen != null ? `${fmtPct(sellPen)} del sell capturado` : '';
+    ? 'Koronet is the primary channel'
+    : sellPen != null ? `${fmtPct(sellPen)} of sell captured` : '';
   const headline = [
-    sellOffline ? `${fmtMoney(sellOffline, true)} offline sin fees.` : null,
+    sellOffline ? `${fmtMoney(sellOffline, true)} offline with no fees.` : null,
     penLabel || null,
     sellOnline != null ? `${fmtPct(sellOnline)} online` : null,
   ].filter(Boolean).join(' ');
@@ -59,30 +59,30 @@ export function PotentialCard({ ev, sfdcTotals }: { ev: AccountEvidence; sfdcTot
   const oppCount = Object.values(detectOpportunityFlags(ev)).filter(Boolean).length;
 
   const focus = stake?.source === 'sfdc'
-    ? <><strong>{fmtMoney(stake.amount, true)} en oportunidades abiertas de SFDC</strong> — lo que se espera que esta cuenta pague.</>
+    ? <><strong>{fmtMoney(stake.amount, true)} in open SFDC opportunities</strong> — what this account is expected to pay.</>
     : sellOffline && buyOffline
-      ? <>{fmtMoney(sellOffline, true)} de venta offline + {fmtMoney(buyOffline, true)} de compra offline → <strong>{fmtMoney(stake?.amount ?? null, true)}</strong> si el 10% pasa a online (10% de conversión × {fmtPct(K2K_RATE, 1)} de tasa K2K, ventana de 12 meses)</>
+      ? <>{fmtMoney(sellOffline, true)} offline sell + {fmtMoney(buyOffline, true)} offline buy → <strong>{fmtMoney(stake?.amount ?? null, true)}</strong> if 10% moves online (10% conversion × {fmtPct(K2K_RATE, 1)} K2K rate, 12-month window)</>
       : sellOffline
-        ? <>{fmtMoney(sellOffline, true)} de venta offline → <strong>{fmtMoney(stake?.amount ?? null, true)}</strong> si el 10% pasa a online</>
-        : <>Sin volumen offline medido en el período: no hay escenario de conversión que estimar.</>;
+        ? <>{fmtMoney(sellOffline, true)} offline sell → <strong>{fmtMoney(stake?.amount ?? null, true)}</strong> if 10% moves online</>
+        : <>No offline volume measured in the period: there is no conversion scenario to estimate.</>;
 
   return (
-    <EvidenceCard label="Card 1 · POTENTIAL" headline={headline || 'Sin actividad en el período'}>
+    <EvidenceCard label="Card 1 · POTENTIAL" headline={headline || 'No activity in the period'}>
       <CardTable
-        head={['', 'Estimado', 'Koronet', 'Penetración', 'Online %']}
+        head={['', 'Estimated', 'Koronet', 'Penetration', 'Online %']}
         rows={[
           [
             <strong>SELL</strong>,
             <>{fmtMoney(estSell, true)}<br /><EvState state={p.gmv_reference?.confidence ?? 'gap'} label={p.gmv_reference?.source ?? 'gap'} />
               {p.gmv_reference?.annual != null && p.gmv_reference.annual !== estSell
-                ? <div className="ev-note">{fmtMoney(p.gmv_reference.annual, true)} anual, prorrateado al período</div> : null}</>,
+                ? <div className="ev-note">{fmtMoney(p.gmv_reference.annual, true)} annual, prorated to the period</div> : null}</>,
             fmtMoney(kSell, true),
             sellTautological ? '~100%' : fmtPct(sellPen),
             fmtPct(sellOnline),
           ],
           [
             <strong>BUY</strong>,
-            <>{fmtMoney(estBuy, true)}<br /><EvState state={estBuy ? 'model' : 'gap'} label={estBuy ? 'Modelo — ratio 45%' : 'gap'} /></>,
+            <>{fmtMoney(estBuy, true)}<br /><EvState state={estBuy ? 'model' : 'gap'} label={estBuy ? 'Model — 45% ratio' : 'gap'} /></>,
             fmtMoney(kBuy, true),
             p.buy_penetration?.ev === 'tautological' ? '~100%' : fmtPct(buyPen),
             fmtPct(buyOnline),
@@ -93,36 +93,36 @@ export function PotentialCard({ ev, sfdcTotals }: { ev: AccountEvidence; sfdcTot
       <CardTable
         head={['Fees', 'Monto', 'Base', 'Nota']}
         rows={[
-          ['Direct', fmtMoney(feesDirect, true), fmtMoney(kSell, true) + ' de venta', 'Facturado, lado vendedor'],
+          ['Direct', fmtMoney(feesDirect, true), fmtMoney(kSell, true) + ' of sell', 'Billed, sell side'],
           [
             'Indirect',
             fmtMoney(feesIndirect, true),
-            buyAttributed ? fmtMoney(buyAttributed, true) + ' comprado' : '—',
+            buyAttributed ? fmtMoney(buyAttributed, true) + ' purchased' : '—',
             indirectRate != null
-              ? `${fmtPct(indirectRate, 3)} — tasa real de sus proveedores`
-              : 'No es comprador en ninguna conexión K2K',
+              ? `${fmtPct(indirectRate, 3)} — its suppliers' realised rate`
+              : 'Not a buyer in any K2K connection',
           ],
           [
             <strong>Take rate</strong>,
             <strong>{fmtPct(takeRate, 2)}</strong>,
-            fmtMoney((estSell ?? 0) + (estBuy ?? 0), true) + ' de flujo estimado del período',
-            '(Direct + Indirect) / (Est Buy + Est Sell), ambos del período',
+            fmtMoney((estSell ?? 0) + (estBuy ?? 0), true) + ' of estimated period flow',
+            '(Direct + Indirect) / (Est Buy + Est Sell), both for the period',
           ],
         ]}
       />
 
       {selfSale ? (
         <CardGap>
-          {fmtMoney(selfSale, true)} de sus filas de venta tienen como cliente a la propia empresa:
-          son compras suyas espejadas en la tabla de ventas, ya excluidas del Koronet Sell.
+          {fmtMoney(selfSale, true)} of its sell rows have the company itself as the customer:
+          they are its own purchases mirrored in the sales table, already excluded from Koronet Sell.
         </CardGap>
       ) : null}
 
-      <CardFocus><strong>Foco:</strong> {focus}</CardFocus>
+      <CardFocus><strong>Focus:</strong> {focus}</CardFocus>
 
       <CardNext>
-        → Continúa en <strong>OPPORTUNITIES</strong>
-        {oppCount ? `: ${oppCount} intervención${oppCount !== 1 ? 'es' : ''} por ${fmtMoney(stake?.amount ?? null, true)}` : ''}
+        → Continues in <strong>OPPORTUNITIES</strong>
+        {oppCount ? `: ${oppCount} intervention${oppCount !== 1 ? 's' : ''} worth ${fmtMoney(stake?.amount ?? null, true)}` : ''}
       </CardNext>
     </EvidenceCard>
   );

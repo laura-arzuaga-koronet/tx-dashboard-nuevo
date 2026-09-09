@@ -71,7 +71,7 @@ export function CardRow({ label, value, note, tone }: {
 
 /** Small table used by several cards. */
 export function CardTable({ head, rows }: { head: ReactNode[]; rows: ReactNode[][] }) {
-  if (!rows.length) return <div className={styles.gap}>Sin datos para este período.</div>;
+  if (!rows.length) return <div className={styles.gap}>No data for this period.</div>;
   return (
     <div className={styles.tableWrap}>
       <table className={styles.table}>

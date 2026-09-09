@@ -41,7 +41,7 @@ export function AccountDetail({ ev, sfdcTotals }: AccountDetailProps) {
       <section className={styles.card} aria-label="Identity">
         <div className={styles.label}>Identity</div>
         <div className={styles.title}>{ev._company_name}</div>
-        <Row label="Company ID" value={id.company_id ?? 'sin ID Koronet'} />
+        <Row label="Company ID" value={id.company_id ?? 'no Koronet ID'} />
         <Row label="SFDC ID" value={id.sfdc_id} />
         <Row label="Account class" value={id.account_class} />
         <Row label="Segment" value={id.segment} />

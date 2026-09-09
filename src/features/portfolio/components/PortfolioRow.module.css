@@ -18,7 +18,7 @@
 .chevron { display: inline-block; transition: transform 0.2s ease; }
 .toggleOpen .chevron { transform: rotate(90deg); }
 
-.accountCell { padding: 10px 12px !important; }
+.accountCell { padding: 10px 8px !important; }
 .name {
   font-size: var(--font-emphasis);
   font-weight: 600;
@@ -30,9 +30,18 @@
 .diagnosis { font-size: var(--font-caption); color: var(--text-secondary); line-height: 1.4; }
 .diagnosis strong { font-weight: 600; color: var(--text-primary); }
 
-.metricCell { padding: 10px 12px !important; white-space: nowrap; }
+/* El número no se parte nunca; la nota de abajo sí. Forzando toda la celda a
+   una línea, "1.214% — its suppliers' realised rate" y "scenario est. · 2
+   interventions" estiraban sus columnas a ~150px cada una y empujaban $ at
+   stake fuera de la pantalla. La nota es secundaria: puede ocupar dos
+   renglones. */
+.metricCell { padding: 10px 6px !important; white-space: nowrap; }
+.metricCell .qualifier,
+.metricCell .stakeSource,
+.metricCell .caveat,
+.metricCell .why { white-space: normal; max-width: 15ch; }
 .value { font-size: var(--font-emphasis); font-weight: 600; color: var(--text-primary); }
-.qualifier { font-size: var(--font-caption); color: var(--text-muted); margin-top: 1px; font-weight: 400; }
+.qualifier { font-size: var(--font-caption); color: var(--text-muted); margin-top: 1px; font-weight: 400; line-height: 1.3; }
 .small { font-size: var(--font-emphasis); }
 .delta { font-size: var(--font-caption); font-weight: 600; color: var(--green); margin-left: 3px; }
 .deltaNeg { color: var(--red); }
@@ -41,7 +50,7 @@
 .trend { font-size: var(--font-micro); font-weight: 600; margin-top: 2px; }
 
 .stake { font-size: var(--font-emphasis); font-weight: 700; color: var(--text-primary); }
-.stakeSource { font-size: var(--font-caption); color: var(--text-muted); margin-top: 1px; }
+.stakeSource { font-size: var(--font-caption); color: var(--text-muted); margin-top: 1px; line-height: 1.3; }
 
 /* tones */
 .green { color: var(--green); font-weight: 600; }

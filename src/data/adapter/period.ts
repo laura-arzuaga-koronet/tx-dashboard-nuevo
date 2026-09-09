@@ -85,7 +85,7 @@ export function buildPeriods(anchor: string = DEFAULT_ANCHOR): Record<PeriodId, 
     ytd: make('ytd', `YTD ${year}`, ytd),
     h1: make('h1', `1er semestre ${year}`, h1),
     prev_year: make('prev_year', `Todo ${year - 1}`, prevYear),
-    l12m: make('l12m', 'Últimos 12 meses', l12m),
+    l12m: make('l12m', 'Last 12 months', l12m),
   };
 }
 

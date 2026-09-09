@@ -40,8 +40,8 @@ export function SellCard({ ev }: { ev: AccountEvidence }) {
   const sell = ev.sell;
   if (!sell) {
     return (
-      <EvidenceCard label="Card 5 · SELL" headline="Sin datos de venta" defaultOpen={false}>
-        <CardGap>Esta cuenta no tiene evidencia de venta (buyers_evidence_v2 ni cubo de sell).</CardGap>
+      <EvidenceCard label="Card 5 · SELL" headline="No sell data" defaultOpen={false}>
+        <CardGap>This account has no sell evidence (neither buyers_evidence_v2 nor the sell cube).</CardGap>
       </EvidenceCard>
     );
   }
@@ -89,17 +89,17 @@ export function SellCard({ ev }: { ev: AccountEvidence }) {
     ? Math.round(offlineBuyers * 0.1) * aovOnline * 12
     : null;
   const subtitle = shiftGmv != null
-    ? `+10% de compradores online = ${fmtMoney(shiftGmv, true)} de GMV desplazado = ${fmtMoney(shiftGmv * TAKE_RATE, true)} de fees/año`
+    ? `+10% online buyers = ${fmtMoney(shiftGmv, true)} of shifted GMV = ${fmtMoney(shiftGmv * TAKE_RATE, true)} of fees/year`
     : undefined;
 
   const headline = `${fmtPct(onlinePct)} online`
-    + (offlineBuyers ? `. ${fmtInt(offlineBuyers)} compradores offline todavía sin invitar.` : '.');
+    + (offlineBuyers ? `. ${fmtInt(offlineBuyers)} offline buyers still not invited.` : '.');
 
   const soWhat = [
     onlinePct != null ? `${fmtPct(onlinePct)} online` : null,
-    cvrPct != null ? `${fmtPct(cvrPct)} de CVR` : null,
-    repeatPct != null ? `${fmtPct(repeatPct)} de repetición` : null,
-    top5Pct != null ? `${fmtPct(top5Pct)} de concentración en el top 5` : null,
+    cvrPct != null ? `${fmtPct(cvrPct)} CVR` : null,
+    repeatPct != null ? `${fmtPct(repeatPct)} repeat rate` : null,
+    top5Pct != null ? `${fmtPct(top5Pct)} top 5 concentration` : null,
   ].filter(Boolean).join(', ');
 
   const repeatP75 = benchmark(ev.benchmarks, '5_repeat_rate', 'p75');
@@ -111,58 +111,58 @@ export function SellCard({ ev }: { ev: AccountEvidence }) {
   const upliftRows: [string, string][] = [];
   if (repeatPct != null && repeatP75 != null && repeatP75 > repeatPct && sellTotal) {
     upliftRows.push([
-      `Si la tasa de repetición llegara al p75 de la red (${fmtPct(repeatP75)} vs ${fmtPct(repeatPct)})`,
-      `+${fmtMoney(sellTotal * (repeatP75 - repeatPct) / 100, true)} de GMV`,
+      `If the repeat rate reached the network p75 (${fmtPct(repeatP75)} vs ${fmtPct(repeatPct)})`,
+      `+${fmtMoney(sellTotal * (repeatP75 - repeatPct) / 100, true)} of GMV`,
     ]);
   }
   if (offlineBuyers != null && aovOnline) {
     const activated = Math.round(offlineBuyers * ACTIVATION_SHARE);
     const gmv = activated * aovOnline * 12;
     upliftRows.push([
-      `Si el ${fmtPct(ACTIVATION_SHARE * 100, 0)} de los compradores offline pasara a online (${fmtInt(activated)} de ${fmtInt(offlineBuyers)})`,
-      `+${fmtMoney(gmv, true)} de GMV/año → ~${fmtMoney(gmv * TAKE_RATE, true)} de fees`,
+      `If ${fmtPct(ACTIVATION_SHARE * 100, 0)} of offline buyers moved online (${fmtInt(activated)} of ${fmtInt(offlineBuyers)})`,
+      `+${fmtMoney(gmv, true)} of GMV/year → ~${fmtMoney(gmv * TAKE_RATE, true)} of fees`,
     ]);
   }
 
   return (
     <EvidenceCard label="Card 5 · SELL" headline={headline} subtitle={subtitle}>
       <CardFocus>
-        <strong>Qué significa:</strong> {soWhat || 'Datos de venta cargados.'}
+        <strong>What this means:</strong> {soWhat || 'Sell data loaded.'}
         {offlineBuyers != null
-          ? ` La palanca es la activación: ${fmtInt(offlineBuyers)} compradores le compran offline y nunca fueron invitados a ordenar online.`
+          ? ` The lever is activation: ${fmtInt(offlineBuyers)} buyers purchase from them offline and were never invited to order online.`
           : ''}
       </CardFocus>
 
       {bt ? (
-        <CardSection title="Compradores">
+        <CardSection title="Buyers">
           {netBuyers != null ? (
             <CardRow
-              label="Neto de compradores"
+              label="Net buyers"
               value={`${netBuyers >= 0 ? '+' : ''}${fmtInt(netBuyers)}`}
               tone={netBuyers >= 0 ? 'green' : 'red'}
-              note={`${bt.new_month != null ? `+${fmtInt(bt.new_month)} nuevos` : ''}${bt.churned != null ? ` / −${fmtInt(bt.churned)} perdidos (últimos 3 meses)` : ''}`}
+              note={`${bt.new_month != null ? `+${fmtInt(bt.new_month)} new` : ''}${bt.churned != null ? ` / −${fmtInt(bt.churned)} lost (last 3 months)` : ''}`}
             />
           ) : null}
           <CardTable
-            head={['', 'Online', 'Offline', 'Total / contexto']}
+            head={['', 'Online', 'Offline', 'Total / context']}
             rows={[
               [
-                'Compradores',
+                'Buyers',
                 fmtInt(bt.online_buyers),
                 fmtInt(bt.offline_buyers),
                 <>
-                  <strong>{fmtInt(bt.total_buyers)}</strong> en total
+                  <strong>{fmtInt(bt.total_buyers)}</strong> in total
                   {bt.total_buyers != null && bt.online_buyers != null && bt.offline_buyers != null
                     && bt.total_buyers < bt.online_buyers + bt.offline_buyers
-                    ? ' — puede haber solapamiento'
+                    ? ' — there may be overlap'
                     : ''}
                 </>,
               ],
               [
-                'Activos últimos 30 días',
+                'Active last 30 days',
                 fmtInt(bt.l30d_online),
                 fmtInt(bt.l30d_offline),
-                retentionPct != null ? `${fmtPct(retentionPct, 0)} de retención online` : '—',
+                retentionPct != null ? `${fmtPct(retentionPct, 0)} online retention` : '—',
               ],
               [
                 'AOV',
@@ -173,58 +173,58 @@ export function SellCard({ ev }: { ev: AccountEvidence }) {
                   : '—',
               ],
               [
-                'Nuevos / perdidos',
+                'New / lost',
                 '—',
                 '—',
                 <>
-                  {bt.new_month != null ? `${fmtInt(bt.new_month)} activaciones` : '—'}
-                  {bt.churned != null ? ` · ${fmtInt(bt.churned)} en riesgo` : ''}
+                  {bt.new_month != null ? `${fmtInt(bt.new_month)} activations` : '—'}
+                  {bt.churned != null ? ` · ${fmtInt(bt.churned)} at risk` : ''}
                 </>,
               ],
             ]}
           />
         </CardSection>
       ) : (
-        <CardGap>Sin tabla de compradores: esta cuenta no está en buyers_evidence_v2.</CardGap>
+        <CardGap>No buyers table: this account is not in buyers_evidence_v2.</CardGap>
       )}
 
-      <CardSection title="Calidad de la demanda">
-        <CardRow label="GMV online del período" value={fmtMoney(sellOnline, true)} />
-        <CardRow label="GMV offline del período" value={fmtMoney(sellOffline, true)} tone="amber" />
+      <CardSection title="Demand quality">
+        <CardRow label="Online period GMV" value={fmtMoney(sellOnline, true)} />
+        <CardRow label="Offline period GMV" value={fmtMoney(sellOffline, true)} tone="amber" />
         <CardRow
-          label="Tasa de repetición"
+          label="Repeat rate"
           value={fmtPct(repeatPct)}
-          note={repeatP75 != null ? `p75 de la red: ${fmtPct(repeatP75)}` : undefined}
+          note={repeatP75 != null ? `network p75: ${fmtPct(repeatP75)}` : undefined}
           tone={repeatPct != null && repeatP75 != null && repeatPct >= repeatP75 ? 'green' : 'amber'}
         />
         <CardRow
-          label="Concentración top 5"
+          label="Top 5 concentration"
           value={fmtPct(top5Pct)}
-          note={concMedian != null ? `mediana de la red: ${fmtPct(concMedian)}` : undefined}
+          note={concMedian != null ? `network median: ${fmtPct(concMedian)}` : undefined}
           tone={top5Pct != null && top5Pct < 20 ? 'green' : 'amber'}
         />
-        <CardRow label="Retención últimos 30 días" value={fmtPct(retentionPct, 0)} />
+        <CardRow label="Retention last 30 days" value={fmtPct(retentionPct, 0)} />
       </CardSection>
 
       {cvrPct != null || newUserCvrPct != null ? (
-        <CardSection title="Conversión web (uso interno)">
+        <CardSection title="Web conversion (internal use)">
           <CardRow
-            label="CVR de esta cuenta"
+            label="CVR for this account"
             value={fmtPct(cvrPct)}
-            note={ecomUsers != null ? `sobre ${fmtInt(ecomUsers)} usuarios de eCommerce` : undefined}
+            note={ecomUsers != null ? `across ${fmtInt(ecomUsers)} eCommerce users` : undefined}
           />
-          <CardRow label="CVR de usuarios nuevos" value={fmtPct(newUserCvrPct)} />
-          <CardRow label="Mediana de la red" value={fmtPct(cvrMedian)} tone="muted" />
-          <CardRow label="p75 de la red" value={fmtPct(cvrP75)} tone="muted" />
+          <CardRow label="New user CVR" value={fmtPct(newUserCvrPct)} />
+          <CardRow label="Network median" value={fmtPct(cvrMedian)} tone="muted" />
+          <CardRow label="Network p75" value={fmtPct(cvrP75)} tone="muted" />
         </CardSection>
       ) : null}
 
       {recent.length ? (
-        <CardSection title="Serie mensual de venta">
+        <CardSection title="Monthly sell series">
           <CardTable
             head={seriesHasSelfSale
-              ? ['Mes', 'Total', 'Online', 'Offline', 'Auto-venta']
-              : ['Mes', 'Total', 'Online', 'Offline']}
+              ? ['Month', 'Total', 'Online', 'Offline', 'Self-sale']
+              : ['Month', 'Total', 'Online', 'Offline']}
             rows={recent.map((m) => {
               const row = [
                 fmtMonthKey(m.month),
@@ -240,32 +240,32 @@ export function SellCard({ ev }: { ev: AccountEvidence }) {
 
       {selfSaleTotal > 0 ? (
         <CardGap>
-          {fmtMoney(selfSaleTotal, true)} de la columna auto-venta son filas de venta cuyo cliente es la
-          propia empresa: son compras suyas espejadas en la tabla de ventas, no ventas, y ya están
-          excluidas del GMV de venta.
+          {fmtMoney(selfSaleTotal, true)} of the self-sale column are sell lines whose customer is the
+          company itself: they are its own purchases mirrored in the sales table, not sales, and are already
+          excluded from sell GMV.
         </CardGap>
       ) : null}
 
       {hg ? (
-        <CardSection title="Hardgoods y plantas">
+        <CardSection title="Hardgoods and plants">
           <CardRow
             label="Hardgoods"
             value={fmtMoney(hgTotal, true)}
             note={hgOnlinePct != null ? `${fmtPct(hgOnlinePct, 2)} online` : undefined}
           />
           <CardRow label="Hardgoods online / offline" value={`${fmtMoney(hgOnline, true)} / ${fmtMoney(hgOfflineRaw, true)}`} />
-          {plantsTotal ? <CardRow label="Plantas" value={fmtMoney(plantsTotal, true)} /> : null}
+          {plantsTotal ? <CardRow label="Plants" value={fmtMoney(plantsTotal, true)} /> : null}
         </CardSection>
       ) : null}
 
       {upliftRows.length ? (
-        <CardSection title="Si igualara al techo de la red (uso interno)">
-          <CardTable head={['Escenario', 'Efecto']} rows={upliftRows.map(([a, b]) => [a, b])} />
+        <CardSection title="If it matched the network ceiling (internal use)">
+          <CardTable head={['Scenario', 'Effect']} rows={upliftRows.map(([a, b]) => [a, b])} />
         </CardSection>
       ) : null}
 
       <CardNext>
-        → Continúa en <strong>DATA COVERAGE</strong>: cuánta de esta evidencia está realmente medida.
+        → Continues in <strong>DATA COVERAGE</strong>: how much of this evidence is actually measured.
       </CardNext>
     </EvidenceCard>
   );

@@ -17,8 +17,8 @@ export function FreshnessCard({ ev }: { ev: AccountEvidence }) {
   const f = ev.freshness;
   if (!f) {
     return (
-      <EvidenceCard label="Card 6 · DATA COVERAGE" headline="Sin datos de cobertura" defaultOpen={false}>
-        <CardGap>No se pudo evaluar qué fuentes tienen fila para esta cuenta.</CardGap>
+      <EvidenceCard label="Card 6 · DATA COVERAGE" headline="No coverage data" defaultOpen={false}>
+        <CardGap>Could not assess which sources have a row for this account.</CardGap>
       </EvidenceCard>
     );
   }
@@ -34,12 +34,12 @@ export function FreshnessCard({ ev }: { ev: AccountEvidence }) {
       defaultOpen={false}
     >
       <CardFocus>
-        <strong>Cómo leer las otras tarjetas:</strong>{' '}
+        <strong>How to read the other cards:</strong>{' '}
         {pct >= GOOD_COVERAGE
-          ? 'la mayoría de las fuentes respondió, así que los números de arriba están medidos, no estimados.'
+          ? 'most sources responded, so the figures above are measured, not estimated.'
           : pct >= WEAK_COVERAGE
-            ? 'faltan varias fuentes: donde una tarjeta muestra un hueco, es porque no hay fila, no porque el valor sea cero.'
-            : 'muy pocas fuentes respondieron para esta cuenta; tratá los números de arriba como indicativos.'}
+            ? 'several sources are missing: where a card shows a gap, it is because there is no row, not because the value is zero.'
+            : 'very few sources responded for this account; treat the figures above as indicative.'}
       </CardFocus>
 
       <CardRow
@@ -54,7 +54,7 @@ export function FreshnessCard({ ev }: { ev: AccountEvidence }) {
         head={['Fuente', 'Encontrada', 'Fecha de corte']}
         rows={f.sources.map((s) => [
           s.source,
-          s.found ? <span className="ev-state observed">Sí</span> : <span className="ev-state gap">No</span>,
+          s.found ? <span className="ev-state observed">Yes</span> : <span className="ev-state gap">No</span>,
           s.as_of ?? '—',
         ])}
       />

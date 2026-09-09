@@ -37,17 +37,17 @@ export function BusinessTypeTabs({ value, counts, dispatch, onToggleDefinitions,
         active={value === UNIVERSE_TAB}
         count={counts.universe}
         onClick={() => select(UNIVERSE_TAB)}
-        title="Portafolio de wholesalers: filtro canónico + hoja de Christine/Facundo"
+        title="Wholesaler portfolio: canonical filter + Christine/Facundo sheet"
       >
-        Universo WH
+        WH universe
       </TabButton>
       <TabButton
         active={value === ONLY_618_TAB}
         count={counts.only618}
         onClick={() => select(ONLY_618_TAB)}
-        title="Cuentas que solo la investigación del universo 618 identifica como wholesalers. Se registran para revisión pero NO entran al portafolio ni a sus KPI, y no se les cambia el business_type en Salesforce."
+        title="Accounts that only the 618 universe research identifies as wholesalers. Recorded for review but NOT included in the portfolio or its KPIs, and their business_type is not changed in Salesforce."
       >
-        618 · fuera de portafolio
+        618 · outside portfolio
       </TabButton>
       {onToggleDefinitions && (
         <>

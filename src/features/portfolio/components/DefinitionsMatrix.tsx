@@ -109,18 +109,18 @@ export function DefinitionsMatrix({ all, period, dispatch, onClose }: Props) {
 
   return (
     <div className={styles.wrap}>
-      <h2 className={styles.h2}>Matriz Est GMV × Product Tier</h2>
+      <h2 className={styles.h2}>Est GMV × Product Tier matrix</h2>
       <p className={styles.intro}>
-        Sobre el portafolio de wholesalers. La penetración es lo que movemos en el período sobre el flujo
-        estimado (sell + buy) de esas cuentas prorrateado a ese mismo período; el online % es cuánto de lo que movemos pasa por canales
-        digitales. Hacé clic en una celda para ver esas cuentas en la tabla.
+        Over the wholesaler portfolio. Penetration is what we move in the period over those accounts'
+        estimated flow (sell + buy) prorated to that same period; online % is how much of what we move
+        goes through digital channels. Click a cell to see those accounts in the table.
       </p>
 
       <div className={styles.tableWrap}>
         <table className={styles.matrix}>
           <thead>
             <tr>
-              <th title="Banda por Est GMV anual — no cambia con el período">Est GMV (anual)</th>
+              <th title="Band by annual Est GMV — does not change with the period">Est GMV (annual)</th>
               {PRODUCT_TIERS.map((t) => <th key={t}>{t}</th>)}
               <th className={styles.totalCol}>TOTAL</th>
             </tr>
@@ -151,7 +151,7 @@ export function DefinitionsMatrix({ all, period, dispatch, onClose }: Props) {
                             type="button"
                             className={styles.cell}
                             onClick={() => drill(tier, b.label)}
-                            title={`Ver las ${c.n} cuentas ${tier} en ${b.label}`}
+                            title={`View the ${c.n} ${tier} accounts in ${b.label}`}
                           >
                             <span className={styles.cellN}>{c.n}</span>
                             <span className={`${styles.cellPen} ${toneFor(p)}`}>{fmtPct(p)} pen.</span>
@@ -179,43 +179,43 @@ export function DefinitionsMatrix({ all, period, dispatch, onClose }: Props) {
               <td className={styles.totalCol}>
                 <span className={styles.cellN}>{grand.n}</span>
                 <span className={`${styles.cellPen} ${toneFor(pen(grand))}`}>{fmtPct(pen(grand))}</span>
-                <span className={styles.cellOnline}>{fmtMoney(grand.estFlow, true)} de flujo</span>
+                <span className={styles.cellOnline}>{fmtMoney(grand.estFlow, true)} of flow</span>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <h2 className={styles.h2}>Definiciones y metodología</h2>
+      <h2 className={styles.h2}>Definitions and methodology</h2>
 
-      <h3 className={styles.h3}>Fees y take rate</h3>
+      <h3 className={styles.h3}>Fees and take rate</h3>
       <DefTable rows={[
-        ['Direct Fees', 'Fees cobrados del lado de venta, del cubo TRANSACTION_FEES (billed, ks_flag=TRUE, mes por transaction_date).', 'observed'],
-        ['Indirect Fees', 'Lo que pagan los proveedores de esta cuenta cuando ella compra por canales con fee (eCommerce/K2K/API; Offline excluido). El comprador se identifica vía K2K_CONNECTIONS —un join determinístico por id, no por nombre— y se aplica la tasa REAL de cada vendedor: fees que Koronet le facturó dividido las ventas que le medimos en ese canal. La mediana de esas tasas es 1,495%, pero API cae a ~0% y ahí el 1,5% plano sobreestimaba.', 'model'],
-        ['Take Rate', '(Direct + Indirect) / (Est Buy + Est Sell). Antes era fees / koronet_sell, que medía ejecución sobre el volumen que ya movemos y estaba acotado por la propia tasa de fee. El denominador ahora es todo el flujo direccionable, así que el número se lee mucho más bajo: eso es el punto, no una regresión. Ambos lados abarcan los mismos meses: fees facturadas en el período sobre el flujo estimado de ese período. Contra el denominador anual, el take rate de YTD salía 12/8 más bajo por puro desajuste de unidades.', 'model'],
+        ['Direct Fees', 'Fees charged on the sell side, from the TRANSACTION_FEES cube (billed, ks_flag=TRUE, month by transaction_date).', 'observed'],
+        ['Indirect Fees', 'What this account\u2019s suppliers pay when it buys through fee-carrying channels (eCommerce/K2K/API; Offline excluded). The buyer is identified via K2K_CONNECTIONS — a deterministic id join, not name matching — and each seller\u2019s REALISED rate is applied: fees Koronet billed them divided by the sales we measure for them on that channel. The median of those rates is 1.495%, but API drops to ~0%, where a flat 1.5% overstated it.', 'model'],
+        ['Take Rate', '(Direct + Indirect) / (Est Buy + Est Sell). It used to be fees / koronet_sell, which measured execution over the volume we already move and was bounded by the fee rate itself. The denominator is now the whole addressable flow, so the number reads much lower: that is the point, not a regression. Both sides span the same months: fees billed in the period over the flow estimated for that period. Against the annual denominator, the YTD take rate came out 12/8 too low purely from the unit mismatch.', 'model'],
       ]} />
 
-      <h3 className={styles.h3}>Penetración y online</h3>
+      <h3 className={styles.h3}>Penetration and online</h3>
       <DefTable rows={[
-        ['Sell Penetration', 'Koronet sell del período / Est GMV prorrateado al mismo período. Cuando el Est GMV es Medido o Piso de red, la penetración es tautológica (~100%) y se marca como tal.', 'model'],
-        ['Buy Penetration', 'Koronet buy del período / Est Buy GMV prorrateado (Est GMV × 0,45, ratio de Christine).', 'model'],
-        ['Online %', 'Online del período / Est GMV prorrateado. Online = eCommerce + K2K + API (Regla 6): el cubo cambió de etiquetas a mitad de serie y los meses previos a ago-2025 usan los nombres por canal.', 'model'],
-        ['Piso de red', 'Si el Koronet anualizado supera el Estimado, el estimado estaba mal: se reemplaza por el medido. Evita penetraciones por encima de 100%.', 'observed'],
+        ['Sell Penetration', 'Koronet sell in the period / Est GMV prorated to that same period. When Est GMV is Medido or Piso de red, penetration is tautological (~100%) and is flagged as such.', 'model'],
+        ['Buy Penetration', 'Koronet buy in the period / Est Buy GMV prorated (Est GMV × 0.45, Christine\u2019s ratio).', 'model'],
+        ['Online %', 'Online in the period / Est GMV prorated. Online = eCommerce + K2K + API (Rule 6): the cube changed labels mid-series and months before Aug 2025 use the per-channel names.', 'model'],
+        ['Piso de red', 'If annualized Koronet exceeds the estimate, the estimate was wrong: it is replaced by the measured figure. Evaluated over a fixed 12-month window, so it does not move with the selector. Prevents penetration above 100%.', 'observed'],
       ]} />
 
-      <h3 className={styles.h3}>Períodos y tendencia</h3>
+      <h3 className={styles.h3}>Periods and trend</h3>
       <DefTable rows={[
-        ['Períodos', `Cuatro rangos explícitos anclados en el último mes cerrado del cubo de sell (hoy ${period.to}): YTD, 1er semestre, todo el año anterior y últimos 12 meses. Todas las métricas se calculan estrictamente dentro del rango.`, 'observed'],
-        ['Tendencia', 'Cada métrica se recalcula sobre los mismos meses corridos 12 atrás, con la misma fórmula y el mismo denominador. Los montos van en %, los porcentajes en puntos porcentuales. Se suprime cuando el cubo no cubre la ventana anterior completa: un baseline parcial inventaría crecimiento.', 'observed'],
-        ['Est GMV / Est Buy', 'Cifra anual prorrateada al período seleccionado (anual × meses / 12), un reparto plano porque la cascada no entrega serie mensual. Solo llevan tendencia cuando el origen es Medido o Piso de red: ahí el estimado ES nuestro cubo de sell y hereda su variación. Con origen ORA, FCS o externo no hay serie detrás y no se muestra delta.', 'model'],
+        ['Periods', `Four explicit ranges anchored on the sell cube\u2019s last closed month (today ${period.to}): YTD, first half, the whole prior year, and the last 12 months. Every metric is computed strictly inside the range.`, 'observed'],
+        ['Trend', 'Every metric is recomputed over the same months shifted 12 back, with the same formula and the same denominator. Amounts in %, percentages in percentage points. Suppressed when the cube does not cover the whole prior window: a partial baseline would invent growth.', 'observed'],
+        ['Est GMV / Est Buy', 'Annual figure prorated to the selected period (annual × months / 12), a flat split because the cascade emits no monthly series. They carry a trend only when the source is Medido or Piso de red: there the estimate IS our sell cube and inherits its movement. With an ORA, FCS or external source there is no series behind it and no delta is shown.', 'model'],
       ]} />
 
-      <h3 className={styles.h3}>Universo y calidad de datos</h3>
+      <h3 className={styles.h3}>Universe and data quality</h3>
       <DefTable rows={[
-        ['Universo WH', 'Conjunto explícito de sfdc_id: el filtro canónico (Client + Wholesaler + product_tier) unido a la hoja curada de Christine/Facundo. Es un conjunto y no una regla porque la pertenencia involucra criterio humano que ningún combinado de campos codifica.', 'observed'],
-        ['618 · fuera de portafolio', 'Cuentas que solo la investigación externa del universo 618 identifica como wholesalers. Se registran para revisión pero no entran al portafolio ni a sus KPI, y no se les cambia el business_type en Salesforce: el 618 define wholesaler como "vende al por mayor al trade", que en floral incluye legítimamente a los importadores.', 'proxy'],
-        ['Auto-ventas', 'Filas de venta cuyo cliente es la propia empresa: no son ventas, son sus compras por canales Koronet espejadas en la tabla de ventas. Se separan en self_sale_gmv y quedan fuera del Koronet Sell.', 'observed'],
-        ['Motivo de celda vacía', '"$0" y "sin dato" se leen igual pero son decisiones distintas. Gris = el valor es correctamente cero (no vende online, no es comprador K2K). Ámbar con ⚠ = no lo sabemos.', 'observed'],
+        ['WH universe', 'An explicit set of sfdc_ids: the canonical filter (Client + Wholesaler + product_tier) unioned with Christine/Facundo\u2019s curated sheet. It is a set rather than a rule because membership involves human judgement that no combination of fields encodes.', 'observed'],
+        ['618 · outside portfolio', 'Accounts that only the external 618 universe research identifies as wholesalers. Recorded for review but excluded from the portfolio and its KPIs, and their business_type is not changed in Salesforce: the 618 defines a wholesaler as "sells wholesale to the trade", which in floral legitimately includes importers.', 'proxy'],
+        ['Self-sales', 'Sell rows whose customer is the company itself: not sales, but its own purchases through Koronet channels mirrored in the sales table. Split out into self_sale_gmv and kept out of Koronet Sell.', 'observed'],
+        ['Empty-cell reason', '"$0" and "no data" read the same but are very different decisions. Grey = the value is correctly zero (does not sell online, is not a K2K buyer). Amber with ⚠ = we do not know.', 'observed'],
       ]} />
     </div>
   );
@@ -226,7 +226,7 @@ function DefTable({ rows }: { rows: [string, string, string][] }) {
     <div className={styles.tableWrap}>
       <table className={styles.defs}>
         <thead>
-          <tr><th>Métrica</th><th>Cómo se calcula</th><th>Evidencia</th></tr>
+          <tr><th>Metric</th><th>How it is computed</th><th>Evidence</th></tr>
         </thead>
         <tbody>
           {rows.map(([name, how, state]) => (

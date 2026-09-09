@@ -58,7 +58,7 @@ function Metric({ value, qualifier, tone = 'neutral', extra }: { value: ReactNod
  */
 function Trend({ t }: { t: TrendMap[keyof TrendMap] | undefined }) {
   if (!t) return null;
-  if (t.from_zero) return <span className={styles.delta} title="Sin actividad en el período anterior">nuevo</span>;
+  if (t.from_zero) return <span className={styles.delta} title="No activity in the prior period">new</span>;
   const v = t.pct ?? t.pp;
   if (v == null || !Number.isFinite(v)) return null;
   const unit = t.pct != null ? '%' : 'pp';
@@ -68,7 +68,7 @@ function Trend({ t }: { t: TrendMap[keyof TrendMap] | undefined }) {
   }
   const txt = unit === '%' && abs > 999 ? '>999%' : `${abs.toFixed(1)}${unit}`;
   return (
-    <span className={`${styles.delta} ${v < 0 ? styles.deltaNeg : ''}`} title="vs. mismo período del año anterior">
+    <span className={`${styles.delta} ${v < 0 ? styles.deltaNeg : ''}`} title="vs. the same period a year earlier">
       {v > 0 ? '▲' : '▼'}{txt}
     </span>
   );
@@ -209,7 +209,7 @@ export function PortfolioRow({ ev, sfdcTotals, expanded, onToggle }: PortfolioRo
             value={<>{fmtPct(onlinePct)} <Trend t={tr.sell_online_pct} /></>}
             qualifier={onlineS.qualifier}
             tone={onlineS.tone}
-            extra={<>{isSoloDigital(ev) ? <div className={styles.caveat}>(solo digital)</div> : null}<Why r={rs.sell_online_pct} /></>}
+            extra={<>{isSoloDigital(ev) ? <div className={styles.caveat}>(digital only)</div> : null}<Why r={rs.sell_online_pct} /></>}
           />
         </MetricCell>
 
@@ -234,7 +234,7 @@ export function PortfolioRow({ ev, sfdcTotals, expanded, onToggle }: PortfolioRo
         <MetricCell>
           <Metric value={<>{fmtMoney(feesIndirect, true)} <Trend t={tr.fees_indirect} /></>}
                   tone={feesIndirect ? 'neutral' : 'muted'}
-                  qualifier={buyAttributed ? `${fmtMoney(buyAttributed, true)} comprado` : undefined}
+                  qualifier={buyAttributed ? `${fmtMoney(buyAttributed, true)} purchased` : undefined}
                   extra={<Why r={rs.fees_indirect} />} />
         </MetricCell>
 

@@ -57,12 +57,12 @@ export function CoverageWarning({ kpis }: { kpis: PortfolioKpis }) {
     <div className={styles.coverage} role="note">
       <span aria-hidden>{gaps > 0 ? '⚠' : 'ℹ'}</span>
       <span>
-        {sinVentas} cuentas sin ventas en el período
-        {kpis.accountsZeroExplained > 0 && <> · {kpis.accountsZeroExplained} son cero explicado (no venden por Koronet o no están live)</>}
+        {sinVentas} accounts with no sales in the period
+        {kpis.accountsZeroExplained > 0 && <> · {kpis.accountsZeroExplained} are an explained zero (they don't sell through Koronet, or aren't live yet)</>}
         {gaps > 0
-          ? <> · <strong>{gaps} sin explicación</strong> — ahí sí puede faltar dato</>
-          : <> · ninguna sin explicar</>}
-        . Cobertura: {pct}% del portafolio
+          ? <> · <strong>{gaps} unexplained</strong> — those may genuinely be missing data</>
+          : <> · none unexplained</>}
+        . Coverage: {pct}% of the portfolio
       </span>
     </div>
   );
