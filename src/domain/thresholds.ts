@@ -18,6 +18,9 @@ const NEUTRAL: CellStyle = { tone: 'neutral', qualifier: '' };
 export function sellPenetrationStyle(p: Potential | null): CellStyle {
   if (!p) return NEUTRAL;
   if (p.sell_penetration.ev === 'tautological') return { tone: 'muted-italic', qualifier: 'Koronet = primary' };
+  /* El estimado dice ser nuestra medición pero no coincide con el cubo: la
+     penetración es real, no tautológica, y conviene que se vea de dónde viene. */
+  if (p.gmv_reference?.unverified) return { tone: 'amber', qualifier: 'unverified estimate' };
   const v = evValue(p.sell_penetration);
   if (v == null) return NEUTRAL;
   if (v >= 40) return { tone: 'green', qualifier: 'high capture' };

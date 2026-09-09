@@ -211,4 +211,39 @@ describe('exclusiones de calidad de datos', () => {
     expect(ytd / l12m).toBeGreaterThan(0.6)
     expect(ytd / l12m).toBeLessThan(1.7)
   })
+  /* Metropetals: gmv_source dice "Medido" ($1,05M anual) pero el cubo de sell
+     mide $579K en doce meses y $836K en TODO el histórico. La penetración se
+     mostraba como ~100% tautológica sin verificar nunca esa afirmación. */
+  it('does not claim a tautological penetration when the label disagrees with the cube', () => {
+    const p = evidenceAdapter.getAccountEvidence('600558', 'ytd')!.potential!
+    expect(p.gmv_reference.source).toBe('Medido')
+    expect(p.gmv_reference.unverified).toBe(true)
+    expect(p.sell_penetration.ev).not.toBe('tautological')
+    // 458K / 701K ≈ 65%, no 100%
+    expect(p.sell_penetration.value).toBeGreaterThan(55)
+    expect(p.sell_penetration.value).toBeLessThan(75)
+  })
+
+  it('keeps the tautology where the label does agree with the cube', () => {
+    let verificadas = 0, noVerificadas = 0
+    for (const id of evidenceAdapter.getAllAccountIds()) {
+      const p = evidenceAdapter.getAccountEvidence(id, 'ytd')?.potential
+      if (!p || !/^(Medido|Piso)/.test(p.gmv_reference.source ?? '')) continue
+      if (p.gmv_reference.unverified) noVerificadas++
+      else verificadas++
+    }
+    // Ni todo verificado (sería no haber cambiado nada) ni todo lo contrario.
+    expect(verificadas).toBeGreaterThan(0)
+    expect(noVerificadas).toBeGreaterThan(0)
+  })
+
+  it('labels Est Buy by where it actually came from', () => {
+    // Metropetals: accounts_v3 trae $473K (= 45% de $1,05M), pero la compra
+    // medida anualizada da $556K y la regla del piso la reemplaza.
+    const p = evidenceAdapter.getAccountEvidence('600558', 'ytd')!.potential!
+    expect(p.buy_gmv_estimated.source).toBe('floor')
+    expect(p.buy_gmv_estimated.annual).toBeGreaterThan((p.gmv_reference.annual ?? 0) * 0.45)
+    // Y entonces la penetración de compra es una identidad, no un logro.
+    expect(p.buy_penetration.ev).toBe('tautological')
+  })
 })

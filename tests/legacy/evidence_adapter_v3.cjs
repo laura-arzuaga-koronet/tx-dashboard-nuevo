@@ -1049,6 +1049,10 @@
     var gmvSource   = acct.gmv_source || null;
     var gmvIsFloor  = acct.gmv_is_floor || false;
     var buyGmvEst   = _num(acct.buy_gmv_estimated);
+    /* De dónde salió el Est Buy que se muestra: cuando la compra medida supera
+       la estimación del 45%, la regla del piso la reemplaza y el número que se
+       ve es medición, no modelo. */
+    var buyEstSource = buyGmvEst ? 'ratio' : null;
 
     // GMV confidence: derive from source
     var gmvConfidence = null;
@@ -1179,6 +1183,7 @@
       gmvConfidence = 'Alta';
       gmvIsFloor = true;
       buyGmvEst = gmvRef * 0.45;
+      buyEstSource = 'ratio';
     }
 
     var hasReference = gmvRef && gmvRef > 0
@@ -1192,28 +1197,41 @@
       gmvConfidence = 'Alta';
       gmvIsFloor = true;
       buyGmvEst = gmvRef * 0.45;
+      buyEstSource = 'ratio';
     }
     if (hasReference && buyGmvEst && buyGmvEst > 0 && annualizedBuy && annualizedBuy > buyGmvEst) {
       buyGmvEst = annualizedBuy;
+      buyEstSource = 'floor';
     }
 
+    /* Confiar, pero verificar. Una etiqueta de Medido / Piso de red se gana el
+       ~100% tautológico solo si la cifra coincide con el cubo de sell sobre un
+       año completo; si no, calculamos la penetración real y marcamos el origen
+       como no verificado. accounts_v3 se generó sobre otra ventana y antes de
+       que el cubo tuviera el guard R4, la deduplicación por sale_item_id y la
+       separación de auto-ventas: la mediana de las 41 cuentas etiquetadas mide
+       0,83 de su etiqueta, y Ninfa 0,13. */
+    var claimsMeasured = /^(Medido|Piso)/.test(gmvSource || '');
+    var cubeAgrees = (annualizedSell != null && gmvRef > 0
+      && Math.abs(annualizedSell - gmvRef) / gmvRef <= 0.10);
+    var estUnverified = claimsMeasured && !cubeAgrees;
+
     if (gmvRef && gmvRef > 0 && gmvSource !== 'not in Christine cascade' && gmvSource !== 'Sin dato') {
-      /* Medido / Piso de red SON nuestra propia medición, así que la
-         penetración contra ellos es tautológica por construcción y se etiqueta
-         como tal en vez de mostrarse como un ~100% de logro. */
-      var isTautological = /^(Medido|Piso)/.test(gmvSource || '');
+      var isTautological = claimsMeasured && cubeAgrees;
 
       if (koronetSellYtd && koronetSellYtd > 0) {
         sellPenetration = isTautological ? 100 : (koronetSellYtd / (gmvRef * _frac)) * 100;
-        sellPenEv = isTautological ? 'tautological' : (gmvConfidence === 'Alta' ? 'model' : 'proxy');
-        sellPenNote = gmvSource;
+        sellPenEv = isTautological ? 'tautological' : (estUnverified ? 'proxy' : (gmvConfidence === 'Alta' ? 'model' : 'proxy'));
+        sellPenNote = estUnverified ? (gmvSource + ' — no verificado') : gmvSource;
       }
 
       if (buyGmvEst && buyGmvEst > 0 && koronetBuyYtd && koronetBuyYtd > 0) {
-        var buyTaut = isTautological || sellPenEv === 'tautological';
+        /* Si el Est Buy salió del piso medido, la penetración de compra es 100%
+           por construcción: el denominador ES el numerador anualizado. */
+        var buyTaut = isTautological || sellPenEv === 'tautological' || buyEstSource === 'floor';
         buyPenetration = buyTaut ? 100 : (koronetBuyYtd / (buyGmvEst * _frac)) * 100;
-        buyPenEv = buyTaut ? 'tautological' : (gmvConfidence === 'Alta' ? 'model' : 'proxy');
-        buyPenNote = gmvSource;
+        buyPenEv = buyTaut ? 'tautological' : (estUnverified ? 'proxy' : (gmvConfidence === 'Alta' ? 'model' : 'proxy'));
+        buyPenNote = estUnverified ? (gmvSource + ' — no verificado') : gmvSource;
       }
     }
 
@@ -1457,6 +1475,8 @@
         // que segmenta el tamaño de cuenta (bandas de GMV).
         value: gmvRefPeriod,
         annual: gmvRef,
+        unverified: estUnverified,
+        measured_annual: annualizedSell,
         source: gmvSource,
         is_floor: gmvIsFloor,
         confidence: gmvConfidence,
@@ -1465,7 +1485,7 @@
       gmv_pace:     gmvPace,
       gmv_external: gmvExternal,
       gmv_ora:      gmvOra,
-      buy_gmv_estimated: { value: buyGmvEstPeriod, annual: buyGmvEst },
+      buy_gmv_estimated: { value: buyGmvEstPeriod, annual: buyGmvEst, source: buyEstSource },
 
       // Koronet actuals from cubes
       koronet_sell_ytd: _ev(koronetSellYtd, koronetSellYtd ? 'observed' : 'gap', 'sell cube'),

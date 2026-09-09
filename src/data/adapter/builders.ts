@@ -54,6 +54,19 @@ import type {
 export const BUY_TO_SELL_RATIO = 0.45;
 /** Minimum YTD sell for a take rate to be meaningful. */
 export const TAKE_RATE_MIN_SELL = 10_000;
+/**
+ * How far a "Medido" / "Piso de red" estimate may sit from our own annualized
+ * measurement before we stop believing the label.
+ *
+ * Those two sources claim the estimate IS our measurement, which is what makes
+ * penetration against them tautological (~100%). The claim was never checked:
+ * accounts_v3 was generated on an earlier window and before the cube gained the
+ * R4 guard, the sale_item_id dedup and the self-sale split, so many labels no
+ * longer match what we measure — the median of the 41 labelled accounts sits at
+ * 0.83 of its label, and Ninfa at 0.13. Printing "~100% · Koronet = primary"
+ * for those asserts something the data contradicts.
+ */
+export const TAUTOLOGY_TOLERANCE = 0.10;
 
 const str = (v: unknown): string | null => (v == null || v === '' ? null : String(v));
 
@@ -146,6 +159,12 @@ export function buildPotential(companyId: string, period: Period): Potential {
   let gmvSource = (acct.gmv_source as string | null) || null;
   let gmvIsFloor = Boolean(acct.gmv_is_floor);
   let buyGmvEst = num(acct.buy_gmv_estimated);
+  /* De dónde salió el Est Buy que se muestra. La tarjeta lo etiquetaba siempre
+     como "ratio 45%", pero cuando la compra medida supera esa estimación la
+     regla del piso la reemplaza — y entonces el número que se ve es medición,
+     no modelo. Decir lo contrario invita a discutir el 45% cuando el 45% ni
+     siquiera intervino. */
+  let buyEstSource: 'ratio' | 'floor' | null = buyGmvEst ? 'ratio' : null;
 
   let gmvConfidence: GmvReference['confidence'] = null;
   if (gmvSource === 'Medido' || gmvSource === 'Piso de red') gmvConfidence = 'Alta';
@@ -228,7 +247,9 @@ export function buildPotential(companyId: string, period: Period): Potential {
   // Rule D: no GMV reference but Koronet activity → auto Piso de red
   const yearSell = sellYearAgg ? sellYearAgg.total : null;
   const yearMonths = sellYearAgg ? sellYearAgg.months.length : 0;
-  const annualizedSell = yearSell && yearMonths > 0 ? yearSell * annualize(yearMonths) : null;
+  /* 0 medido no es lo mismo que "no medido": si la cuenta tiene filas en el año
+     y suman cero, eso es una medición de cero y así se reporta. */
+  const annualizedSell = sellYearAgg && yearMonths > 0 ? (yearSell ?? 0) * annualize(yearMonths) : null;
 
   if (noReference && annualizedSell && annualizedSell > 0) {
     gmvRef = annualizedSell;
@@ -236,6 +257,7 @@ export function buildPotential(companyId: string, period: Period): Potential {
     gmvConfidence = 'Alta';
     gmvIsFloor = true;
     buyGmvEst = gmvRef * BUY_TO_SELL_RATIO;
+    buyEstSource = 'ratio';
   }
 
   /* Two separate questions, and conflating them was the bug.
@@ -262,28 +284,42 @@ export function buildPotential(companyId: string, period: Period): Potential {
     gmvConfidence = 'Alta';
     gmvIsFloor = true;
     buyGmvEst = gmvRef * BUY_TO_SELL_RATIO;
+    buyEstSource = 'ratio';
   }
   if (hasReference && buyGmvEst && buyGmvEst > 0 && annualizedBuy && annualizedBuy > buyGmvEst) {
     buyGmvEst = annualizedBuy;
+    buyEstSource = 'floor';
   }
 
+  /* Trust, but verify. A label of Medido / Piso de red only earns the
+     tautological ~100% when the figure actually agrees with the sell cube over
+     a full year; otherwise we compute the real penetration and mark the source
+     as unverified, so the disagreement is visible instead of hidden behind a
+     round number. Accounts whose floor WE derived this run match by
+     construction and always pass. */
+  const claimsMeasured = /^(Medido|Piso)/.test(gmvSource ?? '');
+  const cubeAgrees = annualizedSell != null && gmvRef != null && gmvRef > 0
+    && Math.abs(annualizedSell - gmvRef) / gmvRef <= TAUTOLOGY_TOLERANCE;
+  const estUnverified = claimsMeasured && !cubeAgrees;
+
   if (gmvRef && gmvRef > 0 && gmvSource !== 'not in Christine cascade' && gmvSource !== 'Sin dato') {
-    /* Medido / Piso de red ARE our own measurement, so penetration against
-       them is tautological by construction and is labelled as such rather
-       than printed as a ~100% achievement. */
-    const isTautological = /^(Medido|Piso)/.test(gmvSource ?? '');
+    const isTautological = claimsMeasured && cubeAgrees;
 
     if (koronetSell && koronetSell > 0) {
       sellPenetration = isTautological ? 100 : (koronetSell / (gmvRef * frac)) * 100;
-      sellPenEv = isTautological ? 'tautological' : gmvConfidence === 'Alta' ? 'model' : 'proxy';
-      sellPenNote = gmvSource;
+      sellPenEv = isTautological ? 'tautological' : estUnverified ? 'proxy' : gmvConfidence === 'Alta' ? 'model' : 'proxy';
+      sellPenNote = estUnverified ? `${gmvSource} — no verificado` : gmvSource;
     }
 
     if (buyGmvEst && buyGmvEst > 0 && koronetBuy && koronetBuy > 0) {
-      const buyTaut = isTautological || sellPenEv === 'tautological';
+      /* Si el Est Buy salió del piso medido, la penetración de compra es 100%
+         por construcción: el denominador ES el numerador anualizado. Mostrarlo
+         como un 100% "logrado" con evidencia proxy invita a leerlo como un
+         resultado cuando es una identidad. */
+      const buyTaut = isTautological || sellPenEv === 'tautological' || buyEstSource === 'floor';
       buyPenetration = buyTaut ? 100 : (koronetBuy / (buyGmvEst * frac)) * 100;
-      buyPenEv = buyTaut ? 'tautological' : gmvConfidence === 'Alta' ? 'model' : 'proxy';
-      buyPenNote = gmvSource;
+      buyPenEv = buyTaut ? 'tautological' : estUnverified ? 'proxy' : gmvConfidence === 'Alta' ? 'model' : 'proxy';
+      buyPenNote = estUnverified ? `${gmvSource} — no verificado` : gmvSource;
     }
   }
 
@@ -441,11 +477,11 @@ export function buildPotential(companyId: string, period: Period): Potential {
   const daysObserved = paceRec ? num(paceRec.days_observed) : null;
 
   return {
-    gmv_reference: { value: gmvRefPeriod, annual: gmvRef, source: gmvSource, is_floor: gmvIsFloor, confidence: gmvConfidence, days_observed: daysObserved },
+    gmv_reference: { value: gmvRefPeriod, annual: gmvRef, source: gmvSource, is_floor: gmvIsFloor, confidence: gmvConfidence, days_observed: daysObserved, unverified: estUnverified, measured_annual: annualizedSell },
     gmv_pace: gmvPace,
     gmv_external: gmvExternal,
     gmv_ora: gmvOra,
-    buy_gmv_estimated: { value: buyGmvEstPeriod, annual: buyGmvEst },
+    buy_gmv_estimated: { value: buyGmvEstPeriod, annual: buyGmvEst, source: buyEstSource },
 
     koronet_sell_period: ev(koronetSell, koronetSell ? 'observed' : 'gap', 'sell cube'),
     koronet_buy_period: ev(koronetBuy, koronetBuy ? 'observed' : 'gap', 'buy cube'),

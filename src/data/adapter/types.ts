@@ -306,6 +306,14 @@ export interface GmvReference {
   value: number | null;
   /** The un-prorated annual figure. Account SIZE (GMV bands) must not move with the period. */
   annual: number | null;
+  /**
+   * The source claims to be our own measurement (Medido / Piso de red) but the
+   * figure does not match the sell cube over a full year. Penetration against
+   * it is NOT tautological, and the estimate should be re-derived upstream.
+   */
+  unverified: boolean;
+  /** What the sell cube actually measures over a fixed year, annualized. */
+  measured_annual: number | null;
   source: string | null;
   is_floor: boolean;
   confidence: 'Alta' | 'Baja' | null;
@@ -324,7 +332,12 @@ export interface Potential {
   gmv_pace: { value: number | null; daily_rate: number | null; confidence: string | null } | null;
   gmv_external: { value: number | null; methods: string[]; confidence: string | null } | null;
   gmv_ora: { value: number } | null;
-  buy_gmv_estimated: { value: number | null; annual: number | null };
+  buy_gmv_estimated: {
+    value: number | null;
+    annual: number | null;
+    /** 'ratio' = Est GMV × 0,45. 'floor' = lo reemplazó la compra medida, que era mayor. */
+    source: 'ratio' | 'floor' | null;
+  };
 
   /** Koronet sell / buy GMV inside the selected period. */
   koronet_sell_period: Ev<number>;

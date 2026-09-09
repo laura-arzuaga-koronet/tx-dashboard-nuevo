@@ -15,7 +15,7 @@
  *    legacy pipeline, not this account.
  */
 import type { AccountEvidence, Benchmarks, MonthlySellTotal } from '../../../data/adapter/types';
-import { evValue, fmtInt, fmtMoney, fmtMonthKey, fmtPct } from '../../../domain/format';
+import { evValue, fmtInt, fmtMoney, fmtMonthKey, fmtPct, fmtSignedPct } from '../../../domain/format';
 import { CardFocus, CardGap, CardNext, CardRow, CardSection, CardTable, EvidenceCard } from '../EvidenceCard';
 
 /** Fee yield applied to a GMV shift scenario — the network-wide take rate. */
@@ -34,6 +34,16 @@ function numField(src: unknown, key: string): number | null {
 
 function benchmark(bm: Benchmarks | null, metric: string, stat: 'median' | 'p75' | 'p90'): number | null {
   return bm?.per_metric[metric]?.[stat] ?? null;
+}
+
+function DeltaCell({ pct }: { pct: number | null }) {
+  if (pct == null) return <>—</>;
+  return <span className={pct >= 0 ? 'ev-state observed' : 'ev-state gap'}>{fmtSignedPct(pct)}</span>;
+}
+
+function shiftYear(month: string, delta: number): string {
+  const [y, m] = month.split('-');
+  return `${Number(y) + delta}-${m}`;
 }
 
 export function SellCard({ ev }: { ev: AccountEvidence }) {
@@ -82,6 +92,15 @@ export function SellCard({ ev }: { ev: AccountEvidence }) {
 
   const selfSaleTotal = series.reduce((acc, m) => acc + (m.self_sale_gmv || 0), 0);
   const recent: MonthlySellTotal[] = series.slice(-SERIES_MONTHS);
+  /* YoY por mes, igual que la tabla de sourcing de BUY. El índice se arma sobre
+     la serie COMPLETA, no sobre `recent`: el mes espejo de hace un año casi
+     siempre cae fuera de la ventana que se muestra. */
+  const byMonth: Record<string, MonthlySellTotal> = {};
+  for (const m of series) byMonth[m.month] = m;
+  const yoyOf = (month: string, value: number): number | null => {
+    const prior = byMonth[shiftYear(month, -1)];
+    return prior && prior.sell_gmv > 0 ? ((value - prior.sell_gmv) / prior.sell_gmv) * 100 : null;
+  };
   const seriesHasSelfSale = recent.some((m) => m.self_sale_gmv > 0);
 
   // Headline scenario: 10% of the offline buyer base ordering online for a year.
@@ -223,8 +242,8 @@ export function SellCard({ ev }: { ev: AccountEvidence }) {
         <CardSection title="Monthly sell series">
           <CardTable
             head={seriesHasSelfSale
-              ? ['Month', 'Total', 'Online', 'Offline', 'Self-sale']
-              : ['Month', 'Total', 'Online', 'Offline']}
+              ? ['Month', 'Total', 'Online', 'Offline', 'Self-sale', 'YoY']
+              : ['Month', 'Total', 'Online', 'Offline', 'YoY']}
             rows={recent.map((m) => {
               const row = [
                 fmtMonthKey(m.month),
@@ -232,7 +251,8 @@ export function SellCard({ ev }: { ev: AccountEvidence }) {
                 fmtMoney(m.sell_online, true),
                 fmtMoney(m.sell_offline, true),
               ];
-              return seriesHasSelfSale ? [...row, fmtMoney(m.self_sale_gmv, true)] : row;
+              const yoy = <DeltaCell pct={yoyOf(m.month, m.sell_gmv)} />;
+              return seriesHasSelfSale ? [...row, fmtMoney(m.self_sale_gmv, true), yoy] : [...row, yoy];
             })}
           />
         </CardSection>
