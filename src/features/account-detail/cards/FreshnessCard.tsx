@@ -43,15 +43,15 @@ export function FreshnessCard({ ev }: { ev: AccountEvidence }) {
       </CardFocus>
 
       <CardRow
-        label="Cobertura"
-        value={`${f.sources_used} / ${f.sources_total} fuentes (${pct}%)`}
+        label="Coverage"
+        value={`${f.sources_used} / ${f.sources_total} sources (${pct}%)`}
         tone={tone}
       />
-      <CardRow label="Fecha de corte" value={f.as_of} />
-      {missing.length ? <CardRow label="Sin fila" value={missing.join(', ')} tone="muted" /> : null}
+      <CardRow label="As of" value={f.as_of} />
+      {missing.length ? <CardRow label="No row" value={missing.join(', ')} tone="muted" /> : null}
 
       <CardTable
-        head={['Fuente', 'Encontrada', 'Fecha de corte']}
+        head={['Source', 'Found', 'As of']}
         rows={f.sources.map((s) => [
           s.source,
           s.found ? <span className="ev-state observed">Yes</span> : <span className="ev-state gap">No</span>,
