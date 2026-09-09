@@ -17,7 +17,10 @@ export const GMV_BANDS = [
 export type GmvBandLabel = (typeof GMV_BANDS)[number]['label'];
 
 export function getGmvBand(ev: AccountEvidence | null): GmvBandLabel | null {
-  const gmv = ev?.potential?.gmv_reference?.value ?? 0;
+  /* Bands segment account SIZE, so they read the ANNUAL estimate. On the
+     prorated value a $12M account would fall out of ">=10M" the moment you
+     switched to H1 — the account did not change, the window did. */
+  const gmv = ev?.potential?.gmv_reference?.annual ?? 0;
   for (const band of GMV_BANDS) if (band.test(gmv)) return band.label;
   return null;
 }

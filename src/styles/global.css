@@ -66,3 +66,12 @@ input {
 .ev-state.Baja { background: #fef3c7; color: #92400e; }
 .ev-state.gap { background: #fee2e2; color: #991b1b; }
 .ev-state.tautological { background: #e0e7ff; color: #3730a3; }
+
+/* Nota al pie de una celda: el dato de contexto que explica el número de arriba
+   (por ejemplo, la cifra anual detrás de un Est GMV prorrateado). */
+.ev-note {
+  font-size: 9px;
+  color: var(--text-muted, #64748b);
+  font-style: italic;
+  margin-top: 1px;
+}

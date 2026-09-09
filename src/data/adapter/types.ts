@@ -298,7 +298,14 @@ export interface Identity {
 }
 
 export interface GmvReference {
+  /**
+   * Estimated GMV PRORATED TO THE SELECTED PERIOD (annual × months / 12).
+   * Every other figure in the row is period-scoped; leaving the estimate annual
+   * made the comparison — and the take rate built on it — mix units.
+   */
   value: number | null;
+  /** The un-prorated annual figure. Account SIZE (GMV bands) must not move with the period. */
+  annual: number | null;
   source: string | null;
   is_floor: boolean;
   confidence: 'Alta' | 'Baja' | null;
@@ -317,7 +324,7 @@ export interface Potential {
   gmv_pace: { value: number | null; daily_rate: number | null; confidence: string | null } | null;
   gmv_external: { value: number | null; methods: string[]; confidence: string | null } | null;
   gmv_ora: { value: number } | null;
-  buy_gmv_estimated: { value: number | null };
+  buy_gmv_estimated: { value: number | null; annual: number | null };
 
   /** Koronet sell / buy GMV inside the selected period. */
   koronet_sell_period: Ev<number>;

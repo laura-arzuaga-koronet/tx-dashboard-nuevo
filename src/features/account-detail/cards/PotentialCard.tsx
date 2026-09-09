@@ -73,7 +73,9 @@ export function PotentialCard({ ev, sfdcTotals }: { ev: AccountEvidence; sfdcTot
         rows={[
           [
             <strong>SELL</strong>,
-            <>{fmtMoney(estSell, true)}<br /><EvState state={p.gmv_reference?.confidence ?? 'gap'} label={p.gmv_reference?.source ?? 'gap'} /></>,
+            <>{fmtMoney(estSell, true)}<br /><EvState state={p.gmv_reference?.confidence ?? 'gap'} label={p.gmv_reference?.source ?? 'gap'} />
+              {p.gmv_reference?.annual != null && p.gmv_reference.annual !== estSell
+                ? <div className="ev-note">{fmtMoney(p.gmv_reference.annual, true)} anual, prorrateado al período</div> : null}</>,
             fmtMoney(kSell, true),
             sellTautological ? '~100%' : fmtPct(sellPen),
             fmtPct(sellOnline),
@@ -103,8 +105,8 @@ export function PotentialCard({ ev, sfdcTotals }: { ev: AccountEvidence; sfdcTot
           [
             <strong>Take rate</strong>,
             <strong>{fmtPct(takeRate, 2)}</strong>,
-            fmtMoney((estSell ?? 0) + (estBuy ?? 0), true) + ' de flujo estimado',
-            '(Direct + Indirect) / (Est Buy + Est Sell)',
+            fmtMoney((estSell ?? 0) + (estBuy ?? 0), true) + ' de flujo estimado del período',
+            '(Direct + Indirect) / (Est Buy + Est Sell), ambos del período',
           ],
         ]}
       />

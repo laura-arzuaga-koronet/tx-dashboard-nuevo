@@ -358,6 +358,26 @@
     }
   }
 
+  /* Fraction of a year the timeframe covers — the factor that brings the annual
+     Est GMV down to the window every other column is measured over. The estimate
+     has no monthly series behind it (the cascade, ORA and the external model all
+     emit one yearly figure), so this is a flat split: 8/12 for YTD through
+     August, 6/12 for H1, 1 for the two 12-month windows. Even seasonality is an
+     assumption, and a wrong one month to month for flowers — but it is the only
+     split the source supports, and far less wrong than eight months of measured
+     flow over twelve months of estimate. */
+  function _timeframeMonths(timeframe) {
+    var win = _timeframeRange(timeframe);
+    var f = win.from.split('-').map(Number);
+    var t = win.to.split('-').map(Number);
+    return (t[0] - f[0]) * 12 + (t[1] - f[1]) + 1;
+  }
+
+  function _periodFraction(timeframe) {
+    var m = _timeframeMonths(timeframe);
+    return m > 0 ? m / 12 : 1;
+  }
+
   function _filterByTimeframe(rows, timeframe) {
     if (!rows || !rows.length) return [];
 
@@ -1019,6 +1039,7 @@
 
   /** POTENTIAL — GMV + sell/buy/fees from cubes + pacing + external estimates */
   function _buildPotential(companyId, timeframe) {
+    var _frac = _periodFraction(timeframe);
     var id   = _sid(companyId);
     var acct = _state.accountById[id] || {};
     var name = _state.idToName[id];
@@ -1131,70 +1152,77 @@
     var buyPenEv = 'gap';
     var buyPenNote = null;
 
-    // Rule D: No GMV reference but has Koronet activity → auto Piso de red
-    var ytdMonthsSell = sellAgg ? sellAgg.months.length : 0;
+    /* Dos preguntas distintas, y confundirlas era el bug.
+     *
+     * El PISO es anual y es sobre la cuenta: ¿lo que mueve en un año supera el
+     * estimado anual? No puede depender de la ventana elegida — condicionado a
+     * que haya actividad dentro del período, una cuenta sin ventas en el 1er
+     * semestre se quedaba con un estimado viejo y bajaba de banda de GMV con
+     * solo cambiar el selector.
+     *
+     * La PENETRACIÓN es período contra período: lo que capturamos en la
+     * ventana sobre el estimado prorrateado a esa misma ventana. */
+    var sellYearAgg = _aggregateSellCube(sellRows, 'l12m');
+    var buyYearAgg  = _aggregateBuyCube(buyRows, 'l12m');
+    var yearSellMonths = sellYearAgg ? sellYearAgg.months.length : 0;
+    var yearBuyMonths  = buyYearAgg  ? buyYearAgg.months.length  : 0;
+    var annualizedSell = (sellYearAgg && yearSellMonths > 0)
+      ? sellYearAgg.total * (12 / yearSellMonths) : null;
+    var annualizedBuy = (buyYearAgg && yearBuyMonths > 0)
+      ? buyYearAgg.total * (12 / yearBuyMonths) : null;
+
+    // Regla D: sin Est GMV pero con actividad Koronet → Piso de red automático
     if ((!gmvRef || gmvRef <= 0 || gmvSource === 'not in Christine cascade' || gmvSource === 'Sin dato')
-        && koronetSellYtd && koronetSellYtd > 0 && ytdMonthsSell > 0) {
-      gmvRef = koronetSellYtd * (12 / ytdMonthsSell);
+        && annualizedSell && annualizedSell > 0) {
+      gmvRef = annualizedSell;
       gmvSource = 'Piso de red';
       gmvConfidence = 'Alta';
       gmvIsFloor = true;
       buyGmvEst = gmvRef * 0.45;
     }
 
+    var hasReference = gmvRef && gmvRef > 0
+      && gmvSource !== 'not in Christine cascade' && gmvSource !== 'Sin dato';
+
+    if (hasReference && annualizedSell && annualizedSell > gmvRef
+        && !/^(Medido|Piso)/.test(gmvSource || '')) {
+      // El estimado estaba mal: Koronet ya lo supera en un año completo.
+      gmvRef = annualizedSell;
+      gmvSource = 'Piso de red';
+      gmvConfidence = 'Alta';
+      gmvIsFloor = true;
+      buyGmvEst = gmvRef * 0.45;
+    }
+    if (hasReference && buyGmvEst && buyGmvEst > 0 && annualizedBuy && annualizedBuy > buyGmvEst) {
+      buyGmvEst = annualizedBuy;
+    }
+
     if (gmvRef && gmvRef > 0 && gmvSource !== 'not in Christine cascade' && gmvSource !== 'Sin dato') {
+      /* Medido / Piso de red SON nuestra propia medición, así que la
+         penetración contra ellos es tautológica por construcción y se etiqueta
+         como tal en vez de mostrarse como un ~100% de logro. */
       var isTautological = /^(Medido|Piso)/.test(gmvSource || '');
 
-      var ytdMonths = sellAgg ? sellAgg.months.length : 0;
-      if (koronetSellYtd && koronetSellYtd > 0 && ytdMonths > 0) {
-        var annualizedSell = koronetSellYtd * (12 / ytdMonths);
-
-        if (isTautological) {
-          // Medido/Piso: reference IS Koronet → tautological
-          sellPenetration = 100;
-          sellPenEv = 'tautological';
-        } else if (annualizedSell > gmvRef) {
-          // Estimado is wrong — Koronet already exceeds it. Upgrade to Piso.
-          gmvRef = annualizedSell;
-          gmvSource = 'Piso de red';
-          gmvConfidence = 'Alta';
-          gmvIsFloor = true;
-          buyGmvEst = gmvRef * 0.45;
-          sellPenetration = 100;
-          sellPenEv = 'tautological';
-        } else {
-          // Real external estimate > Koronet → meaningful penetration
-          sellPenetration = (annualizedSell / gmvRef) * 100;
-          sellPenEv = gmvConfidence === 'Alta' ? 'model' : 'proxy';
-        }
+      if (koronetSellYtd && koronetSellYtd > 0) {
+        sellPenetration = isTautological ? 100 : (koronetSellYtd / (gmvRef * _frac)) * 100;
+        sellPenEv = isTautological ? 'tautological' : (gmvConfidence === 'Alta' ? 'model' : 'proxy');
         sellPenNote = gmvSource;
       }
 
-      // Buy penetration — same piso logic
       if (buyGmvEst && buyGmvEst > 0 && koronetBuyYtd && koronetBuyYtd > 0) {
-        var buyYtdMonths = buyAgg ? buyAgg.months.length : 0;
-        if (buyYtdMonths > 0) {
-          var annualizedBuy = koronetBuyYtd * (12 / buyYtdMonths);
-
-          if (isTautological || sellPenEv === 'tautological') {
-            buyPenetration = 100;
-            buyPenEv = 'tautological';
-          } else if (annualizedBuy > buyGmvEst) {
-            // Buy estimate wrong — upgrade
-            buyGmvEst = annualizedBuy;
-            buyPenetration = 100;
-            buyPenEv = 'tautological';
-          } else {
-            buyPenetration = (annualizedBuy / buyGmvEst) * 100;
-            buyPenEv = gmvConfidence === 'Alta' ? 'model' : 'proxy';
-          }
-          buyPenNote = gmvSource;
-        }
+        var buyTaut = isTautological || sellPenEv === 'tautological';
+        buyPenetration = buyTaut ? 100 : (koronetBuyYtd / (buyGmvEst * _frac)) * 100;
+        buyPenEv = buyTaut ? 'tautological' : (gmvConfidence === 'Alta' ? 'model' : 'proxy');
+        buyPenNote = gmvSource;
       }
     }
 
-    // ── Online % = ALWAYS annualized online / Est GMV
-    // "What fraction of their TOTAL business is digital through us"
+    // El estimado prorrateado todavía puede quedar debajo de un mes concentrado.
+    if (sellPenetration != null && sellPenetration > 100) sellPenetration = 100;
+    if (buyPenetration  != null && buyPenetration  > 100) buyPenetration  = 100;
+
+    // ── Online % = online in the period / Est GMV prorated to that period
+    // "What fraction of their business in this window is digital through us"
     // Same denominator as penetration → online% ≤ penetration always
     var sellMonthCount = sellAgg ? sellAgg.months.length : 0;
     var buyMonthCount  = buyAgg  ? buyAgg.months.length  : 0;
@@ -1202,8 +1230,7 @@
     var sellOnlinePct = null;
     if (koronetSellYtd && koronetSellYtd > 0 && gmvRef && gmvRef > 0) {
       if (onlineSellYtd > 0 && sellMonthCount > 0) {
-        var annOnlineSell = onlineSellYtd * (12 / sellMonthCount);
-        sellOnlinePct = (annOnlineSell / gmvRef) * 100;
+        sellOnlinePct = (onlineSellYtd / (gmvRef * _frac)) * 100;
       } else {
         sellOnlinePct = 0;  // has sell but no online → 0%, not null
       }
@@ -1211,8 +1238,7 @@
     var buyOnlinePct = null;
     if (koronetBuyYtd && koronetBuyYtd > 0 && buyGmvEst && buyGmvEst > 0) {
       if (onlineBuyYtd > 0 && buyMonthCount > 0) {
-        var annOnlineBuy = onlineBuyYtd * (12 / buyMonthCount);
-        buyOnlinePct = (annOnlineBuy / buyGmvEst) * 100;
+        buyOnlinePct = (onlineBuyYtd / (buyGmvEst * _frac)) * 100;
       } else {
         buyOnlinePct = 0;
       }
@@ -1245,8 +1271,14 @@
      * Guard: needs a real denominator. Below $10K of estimated flow the ratio
      * is noise. */
     var takeRate = null;
-    var estFlow = (gmvRef || 0) + (buyGmvEst || 0);
-    if (feesTotal && estFlow > 10000) {
+    var gmvRefPeriod    = (gmvRef    != null) ? gmvRef * _frac    : null;
+    var buyGmvEstPeriod = (buyGmvEst != null) ? buyGmvEst * _frac : null;
+    /* Both sides now span the same months: fees billed in the window over the
+       flow estimated for that window. Against the annual denominator the YTD
+       take rate came out 12/8 too low purely from the unit mismatch. */
+    var estIsMeasured = gmvIsFloor || /^(Medido|Piso)/.test(gmvSource || '');
+    var estFlow = (gmvRefPeriod || 0) + (buyGmvEstPeriod || 0);
+    if (feesTotal && estFlow > 10000 * _frac) {
       takeRate = (feesTotal / estFlow) * 100;
     }
 
@@ -1292,14 +1324,18 @@
     var priorSellMonths = sellPriorWin ? _monthSpan(sellPriorWin) : 0;
     var priorBuyMonths  = buyPriorWin  ? _monthSpan(buyPriorWin)  : 0;
 
-    function _pen(amount, months, denom) {
-      if (amount == null || !(denom > 0) || !(months > 0)) return null;
-      return ((amount * (12 / months)) / denom) * 100;
+    /* La ventana anterior es el mismo rango corrido un año, así que abarca la
+       misma cantidad de meses y lleva el mismo denominador prorrateado. Usar el
+       estimado anual de un lado y el prorrateado del otro mostraría un
+       crecimiento que no es más que el cambio de unidad. */
+    function _pen(amount, denomAnnual) {
+      if (amount == null || !(denomAnnual > 0)) return null;
+      return (amount / (denomAnnual * _frac)) * 100;
     }
-    var priorSellPen    = _pen(sellYtd2025, priorSellMonths, gmvRef);
-    var priorSellOnPct  = _pen(priorSellOnline, priorSellMonths, gmvRef);
-    var priorBuyPen     = _pen(buyYtd2025, priorBuyMonths, buyGmvEst);
-    var priorBuyOnPct   = _pen(priorBuyOnline, priorBuyMonths, buyGmvEst);
+    var priorSellPen    = _pen(sellYtd2025, gmvRef);
+    var priorSellOnPct  = _pen(priorSellOnline, gmvRef);
+    var priorBuyPen     = _pen(buyYtd2025, buyGmvEst);
+    var priorBuyOnPct   = _pen(priorBuyOnline, buyGmvEst);
     // Same ceiling rule as the current period, or the pp delta compares a
     // capped number against an uncapped one.
     if (priorSellOnPct != null && priorSellPen != null && priorSellOnPct > priorSellPen) priorSellOnPct = priorSellPen;
@@ -1307,7 +1343,7 @@
 
     var priorFeesTotal = (feesYtd2025 || 0) + (priorIndirectFees || 0);
     if (!feesYtd2025 && !priorIndirectFees) priorFeesTotal = null;
-    var priorTakeRate = (priorFeesTotal && estFlow > 10000) ? (priorFeesTotal / estFlow) * 100 : null;
+    var priorTakeRate = (priorFeesTotal && estFlow > 10000 * _frac) ? (priorFeesTotal / estFlow) * 100 : null;
 
     /* ── POR QUÉ una métrica está vacía ────────────────────────────────────
      *
@@ -1372,13 +1408,18 @@
       ]),
       take_rate: _why(takeRate, [
         [!feesTotal, 'cero', 'sin fees en el período'],
-        [estFlow <= 10000, 'gap', 'Est Buy + Est Sell menor a $10K: el ratio sería ruido']
+        [estFlow <= 10000 * _frac, 'gap', 'Est Buy + Est Sell del período demasiado chico: el ratio sería ruido']
       ])
     };
 
     var trends = {
-      gmv_reference:     null,   // sin serie temporal
-      buy_gmv_estimated: null,   // derivado de Est GMV
+      /* El estimado se mueve YoY solo cuando ES nuestra medición: 'Medido' y
+         'Piso de red' salen del cubo de sell y heredan su variación. Un ORA /
+         FCS / externo es una cifra anual sin nada detrás; prorratearla a dos
+         ventanas iguales imprimiría +0,0% y disfrazaría de estabilidad la
+         ausencia de serie. */
+      gmv_reference:     estIsMeasured ? _pctChange(koronetSellYtd, sellYtd2025) : null,
+      buy_gmv_estimated: estIsMeasured ? _pctChange(koronetSellYtd, sellYtd2025) : null,
       koronet_sell:      _pctChange(koronetSellYtd, sellYtd2025),
       sell_penetration:  _ppChange(sellPenetration, priorSellPen),
       sell_online_pct:   _ppChange(sellOnlinePct, priorSellOnPct),
@@ -1408,7 +1449,10 @@
     return {
       // GMV reference
       gmv_reference: {
-        value: gmvRef,
+        // Prorrateado al período; `annual` conserva la cifra anual, que es la
+        // que segmenta el tamaño de cuenta (bandas de GMV).
+        value: gmvRefPeriod,
+        annual: gmvRef,
         source: gmvSource,
         is_floor: gmvIsFloor,
         confidence: gmvConfidence,
@@ -1417,7 +1461,7 @@
       gmv_pace:     gmvPace,
       gmv_external: gmvExternal,
       gmv_ora:      gmvOra,
-      buy_gmv_estimated: { value: buyGmvEst },
+      buy_gmv_estimated: { value: buyGmvEstPeriod, annual: buyGmvEst },
 
       // Koronet actuals from cubes
       koronet_sell_ytd: _ev(koronetSellYtd, koronetSellYtd ? 'observed' : 'gap', 'sell cube'),

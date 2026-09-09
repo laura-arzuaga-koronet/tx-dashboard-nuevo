@@ -7,9 +7,10 @@
  * applied — the point of the view is to go from "where is the opportunity" to
  * "which accounts", without retyping filters.
  *
- * Annualization comes from the selected period (12 / months), not a constant:
- * the legacy hardcoded 7 months and silently understated every cell the moment
- * the cubes gained an eighth.
+ * Both sides of every cell are scoped to the selected period: the adapter
+ * prorates Est GMV to it, and the Koronet figures are measured inside it.
+ * Nothing is annualized here — the legacy hardcoded a 7-month factor and
+ * silently understated every cell the moment the cubes gained an eighth.
  */
 import type { AccountEvidence } from '../../../data/adapter/types';
 import type { Period } from '../../../domain/period';
@@ -31,10 +32,9 @@ interface Cell {
 
 const emptyCell = (): Cell => ({ n: 0, estFlow: 0, koronet: 0, online: 0 });
 
-function buildMatrix(all: readonly AccountEvidence[], period: Period) {
-  // 12 / months of the selected period — the same factor the adapter uses.
-  const annualize = period.months > 0 ? 12 / period.months : 1;
-
+function buildMatrix(all: readonly AccountEvidence[]) {
+  /* No annualization here any more: the adapter now prorates Est GMV to the
+     period, so both sides of the ratio already span the same months. */
   const cells: Record<string, Record<string, Cell>> = {};
   for (const b of GMV_BANDS) {
     cells[b.label] = {};
@@ -55,8 +55,8 @@ function buildMatrix(all: readonly AccountEvidence[], period: Period) {
     const estBuy = p?.buy_gmv_estimated?.value ?? 0;
     c.estFlow += estSell + estBuy;
 
-    const sell = (p?.koronet_sell_period?.value ?? 0) * annualize;
-    const buy = (p?.koronet_buy_period?.value ?? 0) * annualize;
+    const sell = p?.koronet_sell_period?.value ?? 0;
+    const buy = p?.koronet_buy_period?.value ?? 0;
     c.koronet += sell + buy;
     c.online += (sell * (p?.sell_online_pct?.value ?? 0)) / 100
       + (buy * (p?.buy_online_pct?.value ?? 0)) / 100;
@@ -90,7 +90,7 @@ interface Props {
 }
 
 export function DefinitionsMatrix({ all, period, dispatch, onClose }: Props) {
-  const cells = buildMatrix(all, period);
+  const cells = buildMatrix(all);
 
   /* La matriz cuenta sobre el universo completo, que ya codifica la
      pertenencia: dejar puesto el filtro de clase haría que la celda diga 6 y la
@@ -111,8 +111,8 @@ export function DefinitionsMatrix({ all, period, dispatch, onClose }: Props) {
     <div className={styles.wrap}>
       <h2 className={styles.h2}>Matriz Est GMV × Product Tier</h2>
       <p className={styles.intro}>
-        Sobre el portafolio de wholesalers. La penetración es lo que movemos anualizado sobre el flujo
-        estimado (sell + buy) de esas cuentas; el online % es cuánto de lo que movemos pasa por canales
+        Sobre el portafolio de wholesalers. La penetración es lo que movemos en el período sobre el flujo
+        estimado (sell + buy) de esas cuentas prorrateado a ese mismo período; el online % es cuánto de lo que movemos pasa por canales
         digitales. Hacé clic en una celda para ver esas cuentas en la tabla.
       </p>
 
@@ -120,7 +120,7 @@ export function DefinitionsMatrix({ all, period, dispatch, onClose }: Props) {
         <table className={styles.matrix}>
           <thead>
             <tr>
-              <th>Est GMV</th>
+              <th title="Banda por Est GMV anual — no cambia con el período">Est GMV (anual)</th>
               {PRODUCT_TIERS.map((t) => <th key={t}>{t}</th>)}
               <th className={styles.totalCol}>TOTAL</th>
             </tr>
@@ -192,14 +192,14 @@ export function DefinitionsMatrix({ all, period, dispatch, onClose }: Props) {
       <DefTable rows={[
         ['Direct Fees', 'Fees cobrados del lado de venta, del cubo TRANSACTION_FEES (billed, ks_flag=TRUE, mes por transaction_date).', 'observed'],
         ['Indirect Fees', 'Lo que pagan los proveedores de esta cuenta cuando ella compra por canales con fee (eCommerce/K2K/API; Offline excluido). El comprador se identifica vía K2K_CONNECTIONS —un join determinístico por id, no por nombre— y se aplica la tasa REAL de cada vendedor: fees que Koronet le facturó dividido las ventas que le medimos en ese canal. La mediana de esas tasas es 1,495%, pero API cae a ~0% y ahí el 1,5% plano sobreestimaba.', 'model'],
-        ['Take Rate', '(Direct + Indirect) / (Est Buy + Est Sell). Antes era fees / koronet_sell, que medía ejecución sobre el volumen que ya movemos y estaba acotado por la propia tasa de fee. El denominador ahora es todo el flujo direccionable, así que el número se lee mucho más bajo: eso es el punto, no una regresión. Requiere Est Buy + Est Sell > $10K.', 'model'],
+        ['Take Rate', '(Direct + Indirect) / (Est Buy + Est Sell). Antes era fees / koronet_sell, que medía ejecución sobre el volumen que ya movemos y estaba acotado por la propia tasa de fee. El denominador ahora es todo el flujo direccionable, así que el número se lee mucho más bajo: eso es el punto, no una regresión. Ambos lados abarcan los mismos meses: fees facturadas en el período sobre el flujo estimado de ese período. Contra el denominador anual, el take rate de YTD salía 12/8 más bajo por puro desajuste de unidades.', 'model'],
       ]} />
 
       <h3 className={styles.h3}>Penetración y online</h3>
       <DefTable rows={[
-        ['Sell Penetration', 'Koronet sell anualizado / Est GMV. Cuando el Est GMV es Medido o Piso de red, la penetración es tautológica (~100%) y se marca como tal.', 'model'],
-        ['Buy Penetration', 'Koronet buy anualizado / Est Buy GMV (Est GMV × 0,45, ratio de Christine).', 'model'],
-        ['Online %', 'Online anualizado / Est GMV. Online = eCommerce + K2K + API (Regla 6): el cubo cambió de etiquetas a mitad de serie y los meses previos a ago-2025 usan los nombres por canal.', 'model'],
+        ['Sell Penetration', 'Koronet sell del período / Est GMV prorrateado al mismo período. Cuando el Est GMV es Medido o Piso de red, la penetración es tautológica (~100%) y se marca como tal.', 'model'],
+        ['Buy Penetration', 'Koronet buy del período / Est Buy GMV prorrateado (Est GMV × 0,45, ratio de Christine).', 'model'],
+        ['Online %', 'Online del período / Est GMV prorrateado. Online = eCommerce + K2K + API (Regla 6): el cubo cambió de etiquetas a mitad de serie y los meses previos a ago-2025 usan los nombres por canal.', 'model'],
         ['Piso de red', 'Si el Koronet anualizado supera el Estimado, el estimado estaba mal: se reemplaza por el medido. Evita penetraciones por encima de 100%.', 'observed'],
       ]} />
 
@@ -207,7 +207,7 @@ export function DefinitionsMatrix({ all, period, dispatch, onClose }: Props) {
       <DefTable rows={[
         ['Períodos', `Cuatro rangos explícitos anclados en el último mes cerrado del cubo de sell (hoy ${period.to}): YTD, 1er semestre, todo el año anterior y últimos 12 meses. Todas las métricas se calculan estrictamente dentro del rango.`, 'observed'],
         ['Tendencia', 'Cada métrica se recalcula sobre los mismos meses corridos 12 atrás, con la misma fórmula y el mismo denominador. Los montos van en %, los porcentajes en puntos porcentuales. Se suprime cuando el cubo no cubre la ventana anterior completa: un baseline parcial inventaría crecimiento.', 'observed'],
-        ['Est GMV / Est Buy', 'No llevan tendencia: son una cifra anual única sin serie temporal detrás, así que cualquier delta reflejaría que se revisó el estimado, no que la cuenta cambió.', 'gap'],
+        ['Est GMV / Est Buy', 'Cifra anual prorrateada al período seleccionado (anual × meses / 12), un reparto plano porque la cascada no entrega serie mensual. Solo llevan tendencia cuando el origen es Medido o Piso de red: ahí el estimado ES nuestro cubo de sell y hereda su variación. Con origen ORA, FCS o externo no hay serie detrás y no se muestra delta.', 'model'],
       ]} />
 
       <h3 className={styles.h3}>Universo y calidad de datos</h3>

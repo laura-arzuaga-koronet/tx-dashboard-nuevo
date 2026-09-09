@@ -9,6 +9,7 @@ import { beforeAll, describe, expect, it } from 'vitest'
 import { __resetForTests, evidenceAdapter } from '../src/data/adapter'
 import { EXCLUDED_COMPANY_IDS, isBadCubeRow } from '../src/data/adapter/files'
 import type { PeriodId } from '../src/data/adapter/period'
+import { getGmvBand } from '../src/domain/metrics'
 import { diskFetcher } from './helpers/diskFetcher'
 
 interface Row { company_id: string | number; month: string; [k: string]: unknown }
@@ -155,5 +156,59 @@ describe('exclusiones de calidad de datos', () => {
     // La tasa efectiva queda claramente por debajo del 1,5% plano.
     expect(fees / attributed).toBeLessThan(0.014)
     expect(fees / attributed).toBeGreaterThan(0.005)
+  })
+  /* El bug: el Est GMV salía anual en los cuatro períodos, así que la columna
+     no se movía con el selector y el take rate mezclaba unidades — fees de 8
+     meses sobre flujo de 12. */
+  it('prorates Est GMV to the period and keeps the annual figure alongside', () => {
+    const ids = evidenceAdapter.getAllAccountIds()
+    const sum = (period: PeriodId, pick: 'value' | 'annual') => {
+      let t = 0
+      for (const id of ids) {
+        const g = evidenceAdapter.getAccountEvidence(id, period)?.potential?.gmv_reference
+        t += g?.[pick] ?? 0
+      }
+      return t
+    }
+    const annual = sum('l12m', 'annual')
+    expect(annual).toBeGreaterThan(0)
+
+    // 12-month windows: factor 1. YTD through August: 8/12. H1: 6/12.
+    expect(sum('l12m', 'value')).toBeCloseTo(annual, -3)
+    expect(sum('ytd', 'value') / annual).toBeCloseTo(8 / 12, 3)
+    expect(sum('h1', 'value') / annual).toBeCloseTo(6 / 12, 3)
+
+    // El anual NO se mueve con el período: es lo que segmenta el tamaño.
+    expect(sum('ytd', 'annual')).toBeCloseTo(annual, -3)
+    expect(sum('h1', 'annual')).toBeCloseTo(annual, -3)
+  })
+
+  it('keeps GMV bands stable across periods', () => {
+    // Una cuenta no puede cambiar de banda por cambiar la ventana.
+    for (const id of evidenceAdapter.getAllAccountIds().slice(0, 300)) {
+      const a = getGmvBand(evidenceAdapter.getAccountEvidence(id, 'l12m'))
+      const b = getGmvBand(evidenceAdapter.getAccountEvidence(id, 'h1'))
+      expect(b).toBe(a)
+    }
+  })
+
+  it('take rate no longer shrinks purely because the window is shorter', () => {
+    // Con denominador anual, el take rate de YTD salía 12/8 más bajo que el de
+    // un período completo por puro desajuste de unidades.
+    const tr = (period: PeriodId) => {
+      let fees = 0, flow = 0
+      for (const id of evidenceAdapter.getAllAccountIds()) {
+        const p = evidenceAdapter.getAccountEvidence(id, period)?.potential
+        fees += (p?.fees_direct.value ?? 0) + (p?.fees_indirect.value ?? 0)
+        flow += (p?.gmv_reference.value ?? 0) + (p?.buy_gmv_estimated.value ?? 0)
+      }
+      return flow > 0 ? fees / flow : 0
+    }
+    const ytd = tr('ytd')
+    const l12m = tr('l12m')
+    expect(ytd).toBeGreaterThan(0)
+    // Mismo orden de magnitud: el ratio ya no depende del largo de la ventana.
+    expect(ytd / l12m).toBeGreaterThan(0.6)
+    expect(ytd / l12m).toBeLessThan(1.7)
   })
 })
