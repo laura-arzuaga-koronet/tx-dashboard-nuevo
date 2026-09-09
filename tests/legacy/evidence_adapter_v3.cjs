@@ -1375,6 +1375,10 @@
       ]),
       koronet_sell_ytd: _why(koronetSellYtd, [
         [!estaLive, 'cero', 'todavía no está live'],
+        /* Sus filas de venta existen, pero el cliente es la propia empresa: son
+           compras suyas espejadas en la tabla de ventas. Cero real, no hueco —
+           sin este caso, 37 cuentas del portafolio se leían como "falta dato". */
+        [(sellAgg && sellAgg.self_sale > 0), 'cero', 'sus «ventas» son compras suyas espejadas (auto-venta): no vende por Koronet'],
         [true, 'gap', 'live pero sin ventas en el período']
       ]),
       koronet_buy_ytd: _why(koronetBuyYtd, [

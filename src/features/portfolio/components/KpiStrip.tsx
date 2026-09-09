@@ -44,15 +44,25 @@ export function KpiStrip({ kpis, loading, period }: { kpis: PortfolioKpis; loadi
   );
 }
 
+/* Antes esto decía "N cuentas sin datos de sell" y metía en la misma bolsa dos
+   cosas distintas: la cuenta que no vende por Koronet (cero real, explicado) y
+   la que debería tener ventas y no las tiene (hueco). Solo la segunda vuelve
+   incompleta la vista. */
 export function CoverageWarning({ kpis }: { kpis: PortfolioKpis }) {
-  const noData = kpis.total - kpis.accountsWithData;
-  if (noData <= 0 || kpis.total === 0) return null;
-  const pct = Math.round((kpis.accountsWithData / kpis.total) * 100);
+  const sinVentas = kpis.total - kpis.accountsWithData;
+  const gaps = sinVentas - kpis.accountsZeroExplained;
+  if (sinVentas <= 0 || kpis.total === 0) return null;
+  const pct = Math.round(((kpis.accountsWithData + kpis.accountsZeroExplained) / kpis.total) * 100);
   return (
     <div className={styles.coverage} role="note">
-      <span aria-hidden>⚠</span>
+      <span aria-hidden>{gaps > 0 ? '⚠' : 'ℹ'}</span>
       <span>
-        {noData} accounts without sell data — decisions on this view may be incomplete. Coverage: {pct}% of portfolio
+        {sinVentas} cuentas sin ventas en el período
+        {kpis.accountsZeroExplained > 0 && <> · {kpis.accountsZeroExplained} son cero explicado (no venden por Koronet o no están live)</>}
+        {gaps > 0
+          ? <> · <strong>{gaps} sin explicación</strong> — ahí sí puede faltar dato</>
+          : <> · ninguna sin explicar</>}
+        . Cobertura: {pct}% del portafolio
       </span>
     </div>
   );

@@ -396,6 +396,10 @@ export function buildPotential(companyId: string, period: Period): Potential {
     ]),
     koronet_sell_period: why(koronetSell, [
       [!isLive, 'cero', 'todavía no está live'],
+      /* Sus filas de venta existen, pero el cliente es la propia empresa: son
+         compras suyas espejadas en la tabla de ventas. Cero real, no hueco —
+         sin este caso, 37 cuentas del portafolio se leían como "falta dato". */
+      [(sellAgg?.selfSale ?? 0) > 0, 'cero', 'sus «ventas» son compras suyas espejadas (auto-venta): no vende por Koronet'],
       [true, 'gap', 'live pero sin ventas en el período'],
     ]),
     koronet_buy_period: why(koronetBuy, [

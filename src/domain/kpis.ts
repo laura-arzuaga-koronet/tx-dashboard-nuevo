@@ -13,6 +13,8 @@ export interface PortfolioKpis {
   avgOnlinePctSimple: number | null;
   avgTakeRate: number | null;
   accountsWithData: number;
+  /** Sin ventas, pero con un motivo conocido (auto-venta espejada, todavía no live). */
+  accountsZeroExplained: number;
   total: number;
 }
 
@@ -20,7 +22,7 @@ export function computeKpis(list: readonly AccountEvidence[]): PortfolioKpis {
   let totalSell = 0, totalFees = 0, totalOnlinePct = 0, totalTakeRate = 0;
   let totalOnlineGmv = 0, totalSellForOnline = 0;
   let totalSell2025 = 0, totalFees2025 = 0;
-  let onlineCount = 0, trCount = 0, accountsWithData = 0;
+  let onlineCount = 0, trCount = 0, accountsWithData = 0, accountsZeroExplained = 0;
   let hasSell2025 = false, hasFees2025 = false;
 
   for (const ev of list) {
@@ -29,6 +31,10 @@ export function computeKpis(list: readonly AccountEvidence[]): PortfolioKpis {
 
     const ks = evValue(p.koronet_sell_period);
     if (ks != null && ks > 0) { totalSell += ks; accountsWithData++; }
+    /* Un cero con motivo no es un hueco de datos: la cuenta no vende por
+       Koronet (sus filas de venta son compras suyas espejadas) o todavía no
+       está live. Contarlos como cobertura faltante exagera la incertidumbre. */
+    else if (p.reasons?.koronet_sell_period?.kind === 'cero') accountsZeroExplained++;
 
     const ks25 = evValue(p.sell_prior_period);
     if (ks25 != null && ks25 > 0) { totalSell2025 += ks25; hasSell2025 = true; }
@@ -56,6 +62,7 @@ export function computeKpis(list: readonly AccountEvidence[]): PortfolioKpis {
     avgOnlinePctSimple: onlineCount > 0 ? totalOnlinePct / onlineCount : null,
     avgTakeRate: trCount > 0 ? totalTakeRate / trCount : null,
     accountsWithData,
+    accountsZeroExplained,
     total: list.length,
   };
 }
