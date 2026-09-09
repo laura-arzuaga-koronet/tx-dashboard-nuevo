@@ -32,13 +32,18 @@
 }
 .sourceFound { color: var(--green); border-color: var(--green-border); background: var(--green-bg); }
 
-/* Las seis tarjetas de evidencia ocupan todo el ancho del panel y se acomodan
-   en dos o tres columnas según el espacio: cada una se lee sola, así que el
-   orden importa menos que que entren sin scroll horizontal. */
+/* Las seis tarjetas van una debajo de la otra, en el orden en que cuentan la
+   historia: POTENTIAL abre con el hueco, OPPORTUNITIES dice qué hacer, BUY /
+   LIST / SELL lo sustentan y FRESHNESS cierra con qué tan viejo es el dato.
+   En columnas ese hilo se rompía — se leía en zigzag y el "→ continúa en" de
+   cada pie apuntaba a una tarjeta que estaba al costado, no abajo.
+
+   El ancho se topa porque las tablas son de 4 o 5 columnas: estiradas a 1.700px
+   quedan un número en cada punta y un desierto en el medio. */
 .cards {
   grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: 12px;
-  align-items: start;
+  max-width: 1040px;
 }

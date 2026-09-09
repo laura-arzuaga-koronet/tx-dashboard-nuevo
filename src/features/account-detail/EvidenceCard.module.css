@@ -125,6 +125,17 @@
   vertical-align: top;
 }
 
+/* Apiladas, las tarjetas son anchas y una tabla de cuatro columnas repartía el
+   sobrante en partes iguales: el encabezado quedaba a media pantalla de su
+   propio número. Que el sobrante se lo lleve la última columna, que siempre es
+   la nota o el detalle en prosa — el único contenido que gana con el espacio. */
+.table th:not(:last-child),
+.table td:not(:last-child) {
+  width: 1%;
+  white-space: nowrap;
+}
+.table td:not(:last-child) { padding-right: 18px; }
+
 .gap {
   font-size: 11px;
   color: var(--text-muted, #64748b);
