@@ -4,7 +4,7 @@
  * semantics as the legacy IIFE) so the evidence for ~4k accounts is computed
  * from in-memory indexes rather than re-scanning arrays per account.
  */
-import { DATA_FILES, EXCLUDED_COMPANY_IDS, fetchJson } from './files';
+import { DATA_FILES, EXCLUDED_COMPANY_IDS, fetchJson, isBadCubeRow } from './files';
 import { sid } from './helpers';
 import type {
   Benchmark,
@@ -27,6 +27,8 @@ import type {
   TemporalFile,
   TemporalRow,
   VendorsFile,
+  IndirectCubeRow,
+  WholesalerUniverseFile,
 } from './types';
 
 export interface MonthBounds { from: string; to: string }
@@ -39,6 +41,10 @@ export interface AdapterStore {
   sellCube: SellCubeRow[];
   buyCube: BuyCubeRow[];
   feesCube: FeesCubeRow[];
+  indirectCube: IndirectCubeRow[];
+  /** Portfolio universe and the 618-only set, as explicit sfdc_id sets. */
+  whPortfolio: Set<string> | null;
+  wh618: Set<string> | null;
   gmvPacing: PacingRecord[];
   gmvExternal: ExternalEstimateRecord[];
   buyers: Record<string, LooseRecord>;
@@ -53,7 +59,7 @@ export interface AdapterStore {
   // Cube metadata (used by the UI to derive the data period instead of hardcoding it)
   cubeMeta: { sell: CubeMeta | null; buy: CubeMeta | null; fees: CubeMeta | null };
   /** First/last month actually present in each cube — bounds for "is this range fully covered?" */
-  coverage: { sell: MonthBounds | null; buy: MonthBounds | null; fees: MonthBounds | null };
+  coverage: { sell: MonthBounds | null; buy: MonthBounds | null; fees: MonthBounds | null; indirect: MonthBounds | null };
 
   // Derived lookups
   accountById: Record<string, RawAccount>;
@@ -62,6 +68,8 @@ export interface AdapterStore {
   sellCubeById: Record<string, SellCubeRow[]>;
   buyCubeById: Record<string, BuyCubeRow[]>;
   feesCubeById: Record<string, FeesCubeRow[]>;
+  /** Keyed by the BUYER's company_id. */
+  indirectCubeById: Record<string, IndirectCubeRow[]>;
   pacingById: Record<string, PacingRecord>;
   externalById: Record<string, ExternalEstimateRecord>;
   vendorsByName: Record<string, LooseRecord>;
@@ -83,9 +91,10 @@ function emptyStore(): AdapterStore {
     accountsV3: [], sellCube: [], buyCube: [], feesCube: [], gmvPacing: [], gmvExternal: [],
     buyers: {}, vendors: [], temporal: {}, inventory: {}, benchmarks: {}, config: {}, hardgoods: [], skusOnlineOffline: {},
     cubeMeta: { sell: null, buy: null, fees: null },
-    coverage: { sell: null, buy: null, fees: null },
+    coverage: { sell: null, buy: null, fees: null, indirect: null },
     accountById: {}, idToName: {}, nameToId: {},
-    sellCubeById: {}, buyCubeById: {}, feesCubeById: {}, pacingById: {}, externalById: {},
+    indirectCube: [], whPortfolio: null, wh618: null,
+    sellCubeById: {}, buyCubeById: {}, feesCubeById: {}, indirectCubeById: {}, pacingById: {}, externalById: {},
     vendorsByName: {}, vendorsById: {}, hardgoodsByName: {}, skusById: {}, buyersById: {},
     temporalSAByName: {}, temporalVFByName: {}, temporalFIByName: {},
     temporalSAById: {}, temporalVFById: {}, temporalFIById: {},
@@ -105,13 +114,15 @@ export function loadAll(fetcher: JsonFetcher = fetchJson): Promise<void> {
 
   loadPromise = (async () => {
     const [
-      accounts, sell, buy, fees, pacing, external,
+      accounts, sell, buy, fees, indirect, whUni, pacing, external,
       buyers, vendors, temporal, inventory, benchmarks, config, hardgoods, skus,
     ] = await Promise.all([
       fetcher<RawAccountsFile>(DATA_FILES.accountsV3),
       fetcher<CubeFile<SellCubeRow>>(DATA_FILES.sellCube),
       fetcher<CubeFile<BuyCubeRow>>(DATA_FILES.buyCube),
       fetcher<CubeFile<FeesCubeRow>>(DATA_FILES.feesCube),
+      fetcher<CubeFile<IndirectCubeRow>>(DATA_FILES.indirectCube),
+      fetcher<WholesalerUniverseFile>(DATA_FILES.whUniverse),
       fetcher<PacingFile>(DATA_FILES.gmvPacing),
       fetcher<ExternalEstimatesFile>(DATA_FILES.gmvExternal),
       fetcher<BuyersFile>(DATA_FILES.buyers),
@@ -128,6 +139,15 @@ export function loadAll(fetcher: JsonFetcher = fetchJson): Promise<void> {
     store.sellCube = Array.isArray(sell?.data) ? sell.data : [];
     store.buyCube = Array.isArray(buy?.data) ? buy.data : [];
     store.feesCube = Array.isArray(fees?.data) ? fees.data : [];
+    store.indirectCube = Array.isArray(indirect?.data) ? indirect.data : [];
+    /* The wholesaler universe is an explicit set of sfdc_ids, not a rule:
+       membership involves human judgement no combination of fields encodes.
+       When the file is missing both sets stay null and isClientWholesaler
+       falls back to the old Client + Wholesaler + product_tier rule. */
+    store.whPortfolio = Array.isArray(whUni?.portfolio_sfdc_ids)
+      ? new Set(whUni.portfolio_sfdc_ids.map(String)) : null;
+    store.wh618 = Array.isArray(whUni?.only_618_sfdc_ids)
+      ? new Set(whUni.only_618_sfdc_ids.map(String)) : null;
     store.gmvPacing = Array.isArray(pacing?.pacing) ? pacing.pacing : [];
     store.gmvExternal = Array.isArray(external?.estimates) ? external.estimates : [];
     store.buyers = buyers?.companies ?? {};
@@ -145,6 +165,7 @@ export function loadAll(fetcher: JsonFetcher = fetchJson): Promise<void> {
       sell: monthBounds(store.sellCube),
       buy: monthBounds(store.buyCube),
       fees: monthBounds(store.feesCube),
+      indirect: monthBounds(store.indirectCube),
     };
     store.loaded = true;
   })();
@@ -192,8 +213,12 @@ function buildLookups(): void {
     }
   }
 
+  // Known-bad company-months are dropped here so nothing downstream sees them.
+  store.sellCube = store.sellCube.filter((r) => !isBadCubeRow('sell', String(r.company_id), r.month));
+  store.buyCube = store.buyCube.filter((r) => !isBadCubeRow('buy', String(r.company_id), r.month));
   for (const row of store.sellCube) { const id = sid(row.company_id); if (id) pushTo(store.sellCubeById, id, row); }
   for (const row of store.buyCube) { const id = sid(row.company_id); if (id) pushTo(store.buyCubeById, id, row); }
+  for (const row of store.indirectCube) { const id = sid(row.buyer_company_id); if (id) pushTo(store.indirectCubeById, id, row); }
   for (const row of store.feesCube) { const id = sid(row.company_id); if (id) pushTo(store.feesCubeById, id, row); }
   for (const rec of store.gmvPacing) { const id = sid(rec.company_id); if (id) store.pacingById[id] = rec; }
   for (const rec of store.gmvExternal) { const id = sid(rec.company_id); if (id) store.externalById[id] = rec; }

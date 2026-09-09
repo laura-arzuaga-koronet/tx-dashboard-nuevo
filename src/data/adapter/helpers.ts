@@ -11,10 +11,12 @@ import type {
   Ev,
   EvidenceState,
   FeesByChannel,
+  FeesCubeRow,
   MomDelta,
   MonthlyBuyTotal,
   MonthlySellTotal,
   SellCubeRow,
+  IndirectCubeRow,
 } from './types';
 import { inRange, type MonthRange } from './period';
 
@@ -98,6 +100,8 @@ export function filterByRange<R extends MonthRow>(rows: R[], range: MonthRange):
 }
 
 export interface CubeAggregate {
+  /** Sell cube only: rows whose customer is the company itself. */
+  selfSale?: number;
   total: number;
   online: number;
   offline: number;
@@ -109,14 +113,21 @@ export function aggregateSellCube(rows: SellCubeRow[], range: MonthRange): CubeA
   const filtered = filterByRange(rows, range);
   if (!filtered.length) return null;
 
-  let total = 0, online = 0, offline = 0;
+  let total = 0, online = 0, offline = 0, selfSale = 0;
   for (const r of filtered) {
     const v = num(r.sell_gmv) ?? 0;
     total += v;
     if (isOnlineChannel(r.channel)) online += v;
     else offline += v;
+    /* self_sale_gmv are SALE_DETAILS rows whose customer_name is the company
+       itself: not sales, but its own purchases through Koronet channels
+       mirrored into the sales table. The cube already keeps them out of
+       sell_gmv; they are surfaced separately because the amount is the signal
+       of how much the account buys, and cross-checks against the purchases
+       attributed by the indirect-fees cube. */
+    selfSale += num(r.self_sale_gmv) ?? 0;
   }
-  return { total, online, offline, months: uniqueMonths(filtered) };
+  return { total, online, offline, selfSale, months: uniqueMonths(filtered) };
 }
 
 export function aggregateBuyCube(rows: BuyCubeRow[], range: MonthRange): CubeAggregate | null {
@@ -154,15 +165,98 @@ export function aggregateFeesCube(
   return { total, byChannel, months: uniqueMonths(filtered) };
 }
 
+/**
+ * Indirect fees — 1.5% is NOT assumed. The cube ships `indirect_fee` already
+ * computed with each seller's realised rate (fees Koronet actually billed that
+ * seller on that channel ÷ that seller's sales we measure). The flat rate
+ * survives only as a fallback if the field were ever missing.
+ *
+ * Connection status is filtered here so the included set can change without
+ * re-querying Snowflake. Default Active + Suspended: a connection suspended
+ * today does not invalidate purchases that already happened in the period.
+ */
+export const INDIRECT_FEE_RATE = 0.015;
+export const INDIRECT_STATUSES: ReadonlySet<string> = new Set(['Active', 'Suspended']);
+
+export interface IndirectAggregate {
+  attributed: number;
+  fees: number;
+  effectiveRate: number | null;
+  byChannel: { ecom: number; k2k: number; api: number };
+}
+
+export function aggregateIndirectCube(rows: IndirectCubeRow[], range: MonthRange): IndirectAggregate | null {
+  if (!rows || !rows.length) return null;
+  const filtered = filterByRange(rows, range);
+  if (!filtered.length) return null;
+
+  let attributed = 0, fees = 0, counted = false;
+  const byChannel = { ecom: 0, k2k: 0, api: 0 };
+  for (const r of filtered) {
+    if (!INDIRECT_STATUSES.has(r.connection_status)) continue;
+    const v = num(r.buy_online_attributed) ?? 0;
+    attributed += v;
+    fees += r.indirect_fee != null ? (num(r.indirect_fee) ?? 0) : v * INDIRECT_FEE_RATE;
+    counted = true;
+    const ch = (r.fee_channel ?? '').toLowerCase() as keyof typeof byChannel;
+    if (ch in byChannel) byChannel[ch] += v;
+  }
+  if (!counted) return null;
+  return { attributed, fees, effectiveRate: attributed > 0 ? fees / attributed : null, byChannel };
+}
+
+/** Percent change; `fromZero` when the account went from nothing to something,
+ *  because a percentage off a near-zero baseline is a four-digit number that
+ *  says less than the word "new" would. */
+export interface TrendPct { pct?: number; pp?: number; from_zero?: true }
+export const TREND_BASELINE_FLOOR = 1000;
+
+export function pctChange(current: number | null, prior: number | null): TrendPct | null {
+  if (current == null || prior == null) return null;
+  if (prior < TREND_BASELINE_FLOOR) {
+    return current >= TREND_BASELINE_FLOOR ? { from_zero: true } : null;
+  }
+  return { pct: ((current - prior) / prior) * 100 };
+}
+
+/** Difference in percentage points, for metrics that are already percentages. */
+export function ppChange(current: number | null, prior: number | null): TrendPct | null {
+  if (current == null || prior == null) return null;
+  return { pp: current - prior };
+}
+
+/** Sum one field over a range, but only across rows the predicate accepts. */
+export function sumRangeWhere<R extends MonthRow>(
+  rows: R[], key: keyof R, range: MonthRange, pred: (r: R) => boolean,
+): number | null {
+  if (!rows?.length) return 0;
+  let t = 0;
+  for (const r of rows) if (inRange(r.month, range) && pred(r)) t += num(r[key]) ?? 0;
+  return t;
+}
+
+/** Monthly fee totals — real monthly grain since the cube was regenerated. */
+export function feesMonthlyTotals(rows: FeesCubeRow[]): { month: string; fee_amount: number }[] {
+  if (!rows?.length) return [];
+  const byMonth: Record<string, { month: string; fee_amount: number }> = {};
+  for (const r of rows) {
+    if (!r.month) continue;
+    byMonth[r.month] ??= { month: r.month, fee_amount: 0 };
+    byMonth[r.month].fee_amount += num(r.fee_amount) ?? 0;
+  }
+  return Object.keys(byMonth).sort().map((k) => byMonth[k]);
+}
+
 export function sellMonthlyTotals(rows: SellCubeRow[]): MonthlySellTotal[] {
   if (!rows || !rows.length) return [];
   const byMonth: Record<string, MonthlySellTotal> = {};
   for (const r of rows) {
     const m = r.month;
     if (!m) continue;
-    byMonth[m] ??= { month: m, sell_gmv: 0, sell_online: 0, sell_offline: 0 };
+    byMonth[m] ??= { month: m, sell_gmv: 0, sell_online: 0, sell_offline: 0, self_sale_gmv: 0 };
     const v = num(r.sell_gmv) ?? 0;
     byMonth[m].sell_gmv += v;
+    byMonth[m].self_sale_gmv += num(r.self_sale_gmv) ?? 0;
     if (isOnlineChannel(r.channel)) byMonth[m].sell_online += v;
     else byMonth[m].sell_offline += v;
   }

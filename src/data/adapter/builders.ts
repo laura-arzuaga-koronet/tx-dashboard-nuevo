@@ -16,10 +16,20 @@ import {
   sellMonthlyTotals,
   sid,
   sumRange,
+  aggregateIndirectCube,
+  isOnlineChannel,
+  sumRangeWhere,
+  feesMonthlyTotals,
+  pctChange,
+  ppChange,
+  INDIRECT_STATUSES,
 } from './helpers';
 import { covers, type Period } from './period';
 import { store } from './store';
 import type {
+  TrendMap,
+  ReasonMap,
+  MetricReason,
   Benchmarks,
   BucketSummary,
   BuyDomain,
@@ -129,20 +139,40 @@ export function buildPotential(companyId: string, period: Period): Potential {
   const sellRows = store.sellCubeById[companyId] ?? [];
   const sellAgg = aggregateSellCube(sellRows, period);
   const sellPriorCovered = covers(store.coverage.sell, period.prior);
-  const sellPrior = sellPriorCovered ? sumRange(sellRows, 'sell_gmv', period.prior) : null;
+  // Cubierto pero sin filas de esta compañía = 0, no "sin dato": la ausencia
+  // de ventas en un mes cubierto es un cero real.
+  const sellPrior = sellPriorCovered ? (sumRange(sellRows, 'sell_gmv', period.prior) ?? 0) : null;
 
   const buyRows = store.buyCubeById[companyId] ?? [];
   const buyAgg = aggregateBuyCube(buyRows, period);
   const buyPriorCovered = covers(store.coverage.buy, period.prior);
-  const buyPrior = buyPriorCovered ? sumRange(buyRows, 'buy_gmv', period.prior) : null;
+  const buyPrior = buyPriorCovered ? (sumRange(buyRows, 'buy_gmv', period.prior) ?? 0) : null;
 
   const feesRows = store.feesCubeById[companyId] ?? [];
   const feesAgg = aggregateFeesCube(feesRows, period);
   const feesPeriod = feesAgg ? feesAgg.total : null;
   const feesByChannel = feesAgg ? feesAgg.byChannel : null;
   const feesPriorCovered = covers(store.coverage.fees, period.prior);
-  const feesPrior = feesPriorCovered ? sumRange(feesRows, 'fee_amount', period.prior) : null;
+  const feesPrior = feesPriorCovered ? (sumRange(feesRows, 'fee_amount', period.prior) ?? 0) : null;
   const notCovered = 'prior period not fully covered by data';
+
+  /* Indirect fees — what this account's SUPPLIERS pay when it buys through
+     fee-carrying channels. Koronet bills the seller, so that value never shows
+     up against the buyer. The buyer is identified through K2K_CONNECTIONS
+     (a deterministic id join, not name matching), and the fee already carries
+     each seller's realised rate. */
+  const indirectRows = store.indirectCubeById[companyId] ?? [];
+  const indirectAgg = aggregateIndirectCube(indirectRows, period);
+  const feesIndirect = indirectAgg ? indirectAgg.fees : null;
+  const buyAttributed = indirectAgg ? indirectAgg.attributed : null;
+  const indirectPriorCovered = covers(store.coverage.indirect, period.prior);
+  const indirectPrior = indirectPriorCovered
+    ? (sumRangeWhere(indirectRows, 'indirect_fee', period.prior, (r) => INDIRECT_STATUSES.has(r.connection_status)) ?? 0)
+    : null;
+
+  const feesDirect = feesPeriod;
+  let feesTotal: number | null = (feesDirect ?? 0) + (feesIndirect ?? 0);
+  if (!feesDirect && !feesIndirect) feesTotal = null;
 
   const sellOffline = sellAgg && sellAgg.offline > 0 ? sellAgg.offline : null;
   const buyOffline = buyAgg && buyAgg.offline > 0 ? buyAgg.offline : null;
@@ -226,11 +256,117 @@ export function buildPotential(companyId: string, period: Period): Potential {
   if (sellOnlinePct != null && sellPenetration != null && sellOnlinePct > sellPenetration) sellOnlinePct = sellPenetration;
   if (buyOnlinePct != null && buyPenetration != null && buyOnlinePct > buyPenetration) buyOnlinePct = buyPenetration;
 
-  // Take rate = fees / sell, both inside the period
+  /* Take rate = (Direct + Indirect Fees) / (Estimated Buy + Estimated Sell).
+     Was fees / koronet_sell: that measured execution over the volume we already
+     move and was bounded by the fee rate itself. The denominator is now the
+     account's whole addressable flow, so the number reads much lower — that is
+     the point, not a regression. */
+  const estFlow = (gmvRef ?? 0) + (buyGmvEst ?? 0);
   let takeRate: number | null = null;
-  if (feesPeriod && koronetSell && koronetSell > TAKE_RATE_MIN_SELL) {
-    takeRate = (feesPeriod / koronetSell) * 100;
+  if (feesTotal && estFlow > TAKE_RATE_MIN_SELL) {
+    takeRate = (feesTotal / estFlow) * 100;
   }
+
+  /* Trends — every metric recomputed over period.prior with the SAME formula
+     and denominator, so the delta reflects the metric moving and not the method
+     changing. Amounts in %, percentages in percentage points. Est GMV and Est
+     Buy get none: a single annual figure with no time series behind it. */
+  const priorSellOnline = sellPriorCovered
+    ? sumRangeWhere(sellRows, 'sell_gmv', period.prior, (r) => isOnlineChannel(r.channel)) : null;
+  /* buy_online does not exist before 2024-11: the first ten months of 2024 carry
+     real buy_gmv and buy_offline but zero online, because sales_channel did not
+     yet emit Web/Procurement/API. Comparing against that window would invent a
+     jump from 0%. */
+  const BUY_ONLINE_FROM = '2024-11';
+  const buyOnlineCovered = buyPriorCovered && period.prior.from >= BUY_ONLINE_FROM;
+  const priorBuyOnline = buyOnlineCovered ? (sumRange(buyRows, 'buy_online', period.prior) ?? 0) : null;
+
+  const priorMonths = period.months;
+  const pen = (amount: number | null, denom: number | null): number | null =>
+    amount == null || !denom || denom <= 0 || priorMonths <= 0
+      ? null : ((amount * (12 / priorMonths)) / denom) * 100;
+  const priorSellPen = pen(sellPrior, gmvRef);
+  let priorSellOnPct = pen(priorSellOnline, gmvRef);
+  const priorBuyPen = pen(buyPrior, buyGmvEst);
+  let priorBuyOnPct = pen(priorBuyOnline, buyGmvEst);
+  // Same ceiling as the current period, or the pp delta compares capped against uncapped.
+  if (priorSellOnPct != null && priorSellPen != null && priorSellOnPct > priorSellPen) priorSellOnPct = priorSellPen;
+  if (priorBuyOnPct != null && priorBuyPen != null && priorBuyOnPct > priorBuyPen) priorBuyOnPct = priorBuyPen;
+
+  let priorFeesTotal: number | null = (feesPrior ?? 0) + (indirectPrior ?? 0);
+  if (!feesPrior && !indirectPrior) priorFeesTotal = null;
+  const priorTakeRate = priorFeesTotal && estFlow > TAKE_RATE_MIN_SELL
+    ? (priorFeesTotal / estFlow) * 100 : null;
+
+  const trends: TrendMap = {
+    gmv_reference: null,      // sin serie temporal
+    buy_gmv_estimated: null,  // derivado de Est GMV
+    koronet_sell: pctChange(koronetSell, sellPrior),
+    sell_penetration: ppChange(sellPenetration, priorSellPen),
+    sell_online_pct: ppChange(sellOnlinePct, priorSellOnPct),
+    koronet_buy: pctChange(koronetBuy, buyPrior),
+    buy_penetration: ppChange(buyPenetration, priorBuyPen),
+    buy_online_pct: ppChange(buyOnlinePct, priorBuyOnPct),
+    fees_direct: pctChange(feesDirect, feesPrior),
+    fees_indirect: pctChange(feesIndirect, indirectPrior),
+    take_rate: ppChange(takeRate, priorTakeRate),
+  };
+
+  /* Why a metric is empty. "$0" and "no data" read the same in a table and are
+     very different decisions: an account with no online sales genuinely earns
+     no fee, and that is not a gap. */
+  const cfgConf = (store.config[companyId]?.config ?? {}) as Record<string, unknown>;
+  const feesAllOff = cfgConf.ecommerce_fee === false && cfgConf.k2k_fee === false && cfgConf.api_fee === false;
+  const isK2kBuyer = indirectRows.length > 0;
+  const isLive = acct.komet_status === 'Production - Live';
+  const why = (value: number | null, cases: Array<[boolean, 'cero' | 'gap', string]>): MetricReason | null => {
+    if (value != null && value !== 0) return null;
+    for (const [cond, kind, note] of cases) if (cond) return { kind, note };
+    return { kind: 'gap', note: 'sin dato' };
+  };
+  const reasons: ReasonMap = {
+    gmv_reference: why(gmvRef, [
+      [gmvSource === 'No vende (Koronet)', 'cero', 'no vende por Koronet'],
+      [gmvSource === 'Sin dato' || !gmvSource, 'gap', 'fuera de la cascada de Est GMV'],
+    ]),
+    koronet_sell_period: why(koronetSell, [
+      [!isLive, 'cero', 'todavía no está live'],
+      [true, 'gap', 'live pero sin ventas en el período'],
+    ]),
+    koronet_buy_period: why(koronetBuy, [
+      [!isLive, 'cero', 'todavía no está live'],
+      [true, 'cero', 'no compra por Koronet en el período'],
+    ]),
+    sell_penetration: why(sellPenetration, [
+      [!gmvRef, 'gap', 'sin Est GMV para comparar'],
+      [!koronetSell, 'cero', 'sin ventas en el período'],
+    ]),
+    sell_online_pct: why(sellOnlinePct, [
+      [!koronetSell, 'cero', 'sin ventas en el período'],
+      [true, 'cero', 'vende, pero nada online'],
+    ]),
+    buy_penetration: why(buyPenetration, [
+      [!buyGmvEst, 'gap', 'sin Est Buy para comparar'],
+      [!koronetBuy, 'cero', 'sin compras en el período'],
+    ]),
+    buy_online_pct: why(buyOnlinePct, [
+      [!koronetBuy, 'cero', 'sin compras en el período'],
+      [true, 'cero', 'compra, pero todo offline'],
+    ]),
+    fees_direct: why(feesDirect, [
+      [feesAllOff, 'cero', 'fees deshabilitados en su configuración'],
+      [!sellOnlinePct, 'cero', 'sin ventas online: no genera fee'],
+      [true, 'gap', 'vende online pero no registra fee — revisar'],
+    ]),
+    fees_indirect: why(feesIndirect, [
+      [!isK2kBuyer, 'cero', 'no es comprador en ninguna conexión K2K'],
+      [true, 'gap', 'es comprador K2K pero sin compras atribuidas'],
+    ]),
+    take_rate: why(takeRate, [
+      [!feesTotal, 'cero', 'sin fees en el período'],
+      [estFlow <= TAKE_RATE_MIN_SELL, 'gap', 'Est Buy + Est Sell menor a $10K: el ratio sería ruido'],
+    ]),
+  };
 
   const feesYoy = feesPeriod && feesPrior ? delta(feesPeriod, feesPrior) : null;
   const daysObserved = paceRec ? num(paceRec.days_observed) : null;
@@ -259,13 +395,26 @@ export function buildPotential(companyId: string, period: Period): Potential {
     fees_prior_period: ev(feesPrior, feesPrior ? 'observed' : 'gap', feesPriorCovered ? 'fees cube' : notCovered),
     fees_by_channel: { value: feesByChannel },
     fees_yoy_pct: ev(feesYoy ? feesYoy.pct : null, feesYoy ? 'observed' : 'gap'),
-    take_rate: ev(takeRate, feesPeriod && koronetSell ? 'model' : 'gap'),
+    fees_direct: ev(feesDirect, feesDirect ? 'observed' : 'gap', 'fees cube'),
+    fees_indirect: ev(feesIndirect, feesIndirect ? 'model' : 'gap', 'K2K attribution × seller realised rate'),
+    fees_total: ev(feesTotal, feesTotal ? 'model' : 'gap'),
+    buy_attributed: ev(buyAttributed, buyAttributed ? 'observed' : 'gap', 'K2K attribution'),
+    indirect_by_channel: { value: indirectAgg ? indirectAgg.byChannel : null },
+    indirect_rate: ev(indirectAgg?.effectiveRate != null ? indirectAgg.effectiveRate * 100 : null,
+                      indirectAgg?.effectiveRate != null ? 'observed' : 'gap',
+                      'tasa real de los vendedores de esta cuenta'),
+    self_sale_gmv: ev(sellAgg?.selfSale ? sellAgg.selfSale : null,
+                      sellAgg?.selfSale ? 'observed' : 'gap',
+                      'sell cube · customer_name = la propia compañía'),
+    take_rate: ev(takeRate, takeRate != null ? 'model' : 'gap', '(direct+indirect fees) / (est buy + est sell)'),
+    trends,
+    reasons,
 
     sell_yoy_delta: koronetSell && sellPrior ? delta(koronetSell, sellPrior) : null,
     buy_yoy_delta: koronetBuy && buyPrior ? delta(koronetBuy, buyPrior) : null,
     sell_mom_delta: computeMomDelta(sellMonthlyTotals(filterUpTo(sellRows, period.to)), 'sell_gmv'),
     buy_mom_delta: computeMomDelta(buyMonthlyTotals(filterUpTo(buyRows, period.to)), 'buy_gmv'),
-    fees_mom_delta: null,
+    fees_mom_delta: computeMomDelta(feesMonthlyTotals(feesRows), 'fee_amount'),
   };
 }
 
@@ -296,7 +445,7 @@ export function buildBuy(companyId: string, period: Period): BuyDomain {
   const buyRows = store.buyCubeById[companyId] ?? [];
   const monthly = buyMonthlyTotals(buyRows);
   const buyAgg = aggregateBuyCube(buyRows, period);
-  const buyPrior = covers(store.coverage.buy, period.prior) ? sumRange(buyRows, 'buy_gmv', period.prior) : null;
+  const buyPrior = covers(store.coverage.buy, period.prior) ? (sumRange(buyRows, 'buy_gmv', period.prior) ?? 0) : null;
 
   let sourcingTable: SourcingTable | null = null;
   if (monthly.length) {

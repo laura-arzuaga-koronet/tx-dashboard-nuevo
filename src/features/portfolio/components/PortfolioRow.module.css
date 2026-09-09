@@ -59,3 +59,10 @@
   background: var(--blue-bg);
   border-top: 1px solid var(--blue-border);
 }
+
+/* Indicador de tendencia y motivo de una métrica vacía. */
+.deltaFlat { color: var(--text-muted); font-weight: 500; }
+
+.why { font-size: 9px; line-height: 1.25; margin-top: 2px; }
+.whyCero { color: var(--text-muted); }
+.whyGap { color: #b45309; font-style: italic; }

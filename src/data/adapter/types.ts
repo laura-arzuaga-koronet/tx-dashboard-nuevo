@@ -88,6 +88,9 @@ export interface SellCubeRow {
   month: string; // YYYY-MM
   channel: string; // 'Online' | 'Offline' | 'K2K' | 'API'
   sell_gmv: number | string;
+  /** Rows whose customer_name is the company itself — its own purchases
+   *  mirrored into the sales table, already excluded from sell_gmv. */
+  self_sale_gmv?: number | string;
   order_count?: number;
 }
 
@@ -99,6 +102,41 @@ export interface BuyCubeRow {
   buy_online?: number | string;
   buy_offline?: number | string;
 }
+
+export interface IndirectCubeRow {
+  month: string;
+  buyer_company_id: string | number;
+  fee_channel: string;      // 'ecom' | 'k2k' | 'api'
+  connection_status: string; // 'Active' | 'Suspended' | 'Vendor Approval' | 'Rejected'
+  buy_online_attributed: number | string;
+  /** Already computed with the seller's realised rate; see helpers. */
+  indirect_fee?: number | string;
+}
+
+export interface WholesalerUniverseFile {
+  portfolio_sfdc_ids: string[];
+  sfdc_ids: string[];
+  only_618_sfdc_ids: string[];
+}
+
+/** Why a metric is empty: 'cero' = the value is correctly zero, 'gap' = unknown. */
+export interface MetricReason {
+  kind: 'cero' | 'gap';
+  note: string;
+}
+
+export type TrendMap = Partial<Record<
+  'gmv_reference' | 'buy_gmv_estimated' | 'koronet_sell' | 'sell_penetration' | 'sell_online_pct' | 'koronet_buy'
+  | 'buy_penetration' | 'buy_online_pct' | 'fees_direct' | 'fees_indirect' | 'take_rate',
+  { pct?: number; pp?: number; from_zero?: true } | null
+>>;
+
+export type ReasonMap = Partial<Record<
+  'gmv_reference' | 'koronet_sell_period' | 'koronet_buy_period' | 'sell_penetration'
+  | 'sell_online_pct' | 'buy_penetration' | 'buy_online_pct' | 'fees_direct'
+  | 'fees_indirect' | 'take_rate',
+  MetricReason | null
+>>;
 
 export interface FeesCubeRow {
   company_id: string | number;
@@ -301,7 +339,23 @@ export interface Potential {
   fees_prior_period: Ev<number>;
   fees_by_channel: { value: FeesByChannel | null };
   fees_yoy_pct: Ev<number>;
+
+  /** Direct = billed on the sell side. Indirect = what the account's suppliers
+   *  pay when it buys through fee-carrying channels, at each seller's realised
+   *  rate. Take rate = (direct + indirect) / (est buy + est sell). */
+  fees_direct: Ev<number>;
+  fees_indirect: Ev<number>;
+  fees_total: Ev<number>;
+  buy_attributed: Ev<number>;
+  indirect_by_channel: { value: { ecom: number; k2k: number; api: number } | null };
+  indirect_rate: Ev<number>;
+  self_sale_gmv: Ev<number>;
   take_rate: Ev<number>;
+
+  /** Movement vs the same range one year earlier. Amounts in %, percentages in pp. */
+  trends: TrendMap;
+  /** Why a metric is empty, when it is. */
+  reasons: ReasonMap;
 
   sell_yoy_delta: Delta | null;
   buy_yoy_delta: Delta | null;
@@ -315,6 +369,7 @@ export interface MonthlySellTotal {
   sell_gmv: number;
   sell_online: number;
   sell_offline: number;
+  self_sale_gmv: number;
 }
 
 export interface MonthlyBuyTotal {

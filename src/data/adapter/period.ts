@@ -1,10 +1,11 @@
 /**
  * Period model — every metric is computed over an explicit month range.
  *
- * Three periods are offered, all anchored on the last closed month of the
- * sell cube (`_meta.period_to`, e.g. 2026-07) so sell, buy and fees line up:
+ * Four periods are offered, all anchored on the last closed month of the
+ * sell cube (`_meta.period_to`, e.g. 2026-08) so sell, buy and fees line up:
  *
  *   ytd        Jan of anchor year → anchor            (annualized: 12 / months)
+ *   h1         Jan → Jun of the anchor year           (6 months)
  *   prev_year  Jan → Dec of the year before the anchor (12 months, factor 1)
  *   l12m       anchor-11 → anchor                     (12 months, factor 1)
  *
@@ -12,7 +13,7 @@
  * so YoY deltas are always like-for-like.
  */
 
-export type PeriodId = 'ytd' | 'prev_year' | 'l12m';
+export type PeriodId = 'ytd' | 'h1' | 'prev_year' | 'l12m';
 
 export interface MonthRange {
   /** inclusive, 'YYYY-MM' */
@@ -30,9 +31,9 @@ export interface Period extends MonthRange {
   prior: MonthRange;
 }
 
-export const PERIOD_IDS: readonly PeriodId[] = ['ytd', 'prev_year', 'l12m'];
+export const PERIOD_IDS: readonly PeriodId[] = ['ytd', 'h1', 'prev_year', 'l12m'];
 
-export const DEFAULT_ANCHOR = '2026-07';
+export const DEFAULT_ANCHOR = '2026-08';
 
 export function monthKey(year: number, month1to12: number): string {
   return `${year}-${String(month1to12).padStart(2, '0')}`;
@@ -63,11 +64,12 @@ export function covers(bounds: MonthRange | null, r: MonthRange): boolean {
   return !!bounds && bounds.from <= r.from && bounds.to >= r.to;
 }
 
-/** Build the three periods for a given anchor month ('YYYY-MM'). */
+/** Build the four periods for a given anchor month ('YYYY-MM'). */
 export function buildPeriods(anchor: string = DEFAULT_ANCHOR): Record<PeriodId, Period> {
   const year = Number(anchor.slice(0, 4));
 
   const ytd: MonthRange = { from: monthKey(year, 1), to: anchor };
+  const h1: MonthRange = { from: monthKey(year, 1), to: monthKey(year, 6) };
   const prevYear: MonthRange = { from: monthKey(year - 1, 1), to: monthKey(year - 1, 12) };
   const l12m: MonthRange = { from: shiftMonth(anchor, -11), to: anchor };
 
@@ -81,8 +83,9 @@ export function buildPeriods(anchor: string = DEFAULT_ANCHOR): Record<PeriodId, 
 
   return {
     ytd: make('ytd', `YTD ${year}`, ytd),
-    prev_year: make('prev_year', `Full year ${year - 1}`, prevYear),
-    l12m: make('l12m', 'Last 12 months', l12m),
+    h1: make('h1', `1er semestre ${year}`, h1),
+    prev_year: make('prev_year', `Todo ${year - 1}`, prevYear),
+    l12m: make('l12m', 'Últimos 12 meses', l12m),
   };
 }
 

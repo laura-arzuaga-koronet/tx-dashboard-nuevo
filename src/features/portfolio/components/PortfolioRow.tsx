@@ -5,7 +5,7 @@
 import { Fragment, type ReactNode } from 'react';
 import { Badge } from '../../../components/ui/Badge';
 import { Sparkline } from '../../../components/ui/Sparkline';
-import type { AccountEvidence, Delta } from '../../../data/adapter/types';
+import type { AccountEvidence, MetricReason, TrendMap } from '../../../data/adapter/types';
 import type { SfdcOppTotals } from '../../../data/sfdc/openOpportunities';
 import { evValue, fmtMoney, fmtPct, fmtSignedPct } from '../../../domain/format';
 import { buildDiagnosis, buildSparkline, calcAtStake, countInterventions, sellMomPct } from '../../../domain/metrics';
@@ -50,15 +50,46 @@ function Metric({ value, qualifier, tone = 'neutral', extra }: { value: ReactNod
   );
 }
 
-function YoyDelta({ delta }: { delta: Delta | null }) {
-  if (!delta) return null;
-  const arrow = delta.direction === 'up' ? '▲' : delta.direction === 'down' ? '▼' : '';
+/**
+ * Movimiento contra el mismo rango un año atrás. Los montos van en %, los
+ * porcentajes en puntos porcentuales: una penetración de 4% a 6% es +2pp, y
+ * "+50%" sería cierto y a la vez inútil en una celda. Un % mayor a 999 se
+ * recorta y una cuenta que arrancó de cero muestra "nuevo".
+ */
+function Trend({ t }: { t: TrendMap[keyof TrendMap] | undefined }) {
+  if (!t) return null;
+  if (t.from_zero) return <span className={styles.delta} title="Sin actividad en el período anterior">nuevo</span>;
+  const v = t.pct ?? t.pp;
+  if (v == null || !Number.isFinite(v)) return null;
+  const unit = t.pct != null ? '%' : 'pp';
+  const abs = Math.abs(v);
+  if (abs < (unit === 'pp' ? 0.1 : 0.5)) {
+    return <span className={`${styles.delta} ${styles.deltaFlat}`} title="Sin cambio relevante">=</span>;
+  }
+  const txt = unit === '%' && abs > 999 ? '>999%' : `${abs.toFixed(1)}${unit}`;
   return (
-    <span className={`${styles.delta} ${delta.direction === 'down' ? styles.deltaNeg : ''}`}>
-      {arrow}{fmtPct(Math.abs(delta.pct), 1)}
+    <span className={`${styles.delta} ${v < 0 ? styles.deltaNeg : ''}`} title="vs. mismo período del año anterior">
+      {v > 0 ? '▲' : '▼'}{txt}
     </span>
   );
 }
+
+/**
+ * Por qué una métrica está vacía. "$0" y "sin dato" se leen igual en una tabla
+ * y son decisiones distintas: una cuenta que no vende online genuinamente no
+ * genera fee, y eso no es un hueco.
+ */
+function Why({ r }: { r: MetricReason | null | undefined }) {
+  if (!r) return null;
+  const cero = r.kind === 'cero';
+  return (
+    <div className={`${styles.why} ${cero ? styles.whyCero : styles.whyGap}`}
+         title={cero ? 'El valor es correctamente cero, no es un dato faltante' : 'Dato faltante: no lo sabemos'}>
+      {cero ? '' : '⚠ '}{r.note}
+    </div>
+  );
+}
+
 
 function priorityClass(level: string): string {
   if (level === 'P1') return styles.red;
@@ -88,8 +119,12 @@ export function PortfolioRow({ ev, sfdcTotals, expanded, onToggle }: PortfolioRo
   const koronetBuy = p ? evValue(p.koronet_buy_period) : null;
   const buyPen = p ? evValue(p.buy_penetration) : null;
   const buyOnlinePct = p ? evValue(p.buy_online_pct) : null;
-  const fees = p ? evValue(p.fees_period) : null;
+  const feesDirect = p ? evValue(p.fees_direct) : null;
+  const feesIndirect = p ? evValue(p.fees_indirect) : null;
+  const buyAttributed = p ? evValue(p.buy_attributed) : null;
   const takeRate = p ? evValue(p.take_rate) : null;
+  const tr = p?.trends ?? {};
+  const rs = p?.reasons ?? {};
 
   const sellPenS = sellPenetrationStyle(p);
   const buyPenS = buyPenetrationStyle(p);
@@ -154,43 +189,60 @@ export function PortfolioRow({ ev, sfdcTotals, expanded, onToggle }: PortfolioRo
           </div>
         </td>
 
-        <MetricCell><Metric value={gmv.value} qualifier={gmv.qualifier} tone={gmv.tone} /></MetricCell>
+        <MetricCell><Metric value={gmv.value} qualifier={gmv.qualifier} tone={gmv.tone} extra={<Why r={rs.gmv_reference} />} /></MetricCell>
 
         <MetricCell>
           <Metric
-            value={<>{fmtMoney(koronetSell, true)} <YoyDelta delta={p?.sell_yoy_delta ?? null} /></>}
+            value={<>{fmtMoney(koronetSell, true)} <Trend t={tr.koronet_sell} /></>}
             qualifier={sellGrowthQualifier(p)}
+            extra={<Why r={rs.koronet_sell_period} />}
           />
         </MetricCell>
 
         <MetricCell>
-          <Metric value={sellTautological ? '~100%' : fmtPct(sellPen)} qualifier={sellPenS.qualifier} tone={sellPenS.tone} />
+          <Metric value={<>{sellTautological ? '~100%' : fmtPct(sellPen)} {sellTautological ? null : <Trend t={tr.sell_penetration} />}</>}
+                  qualifier={sellPenS.qualifier} tone={sellPenS.tone} extra={<Why r={rs.sell_penetration} />} />
         </MetricCell>
 
         <MetricCell>
           <Metric
-            value={fmtPct(onlinePct)}
+            value={<>{fmtPct(onlinePct)} <Trend t={tr.sell_online_pct} /></>}
             qualifier={onlineS.qualifier}
             tone={onlineS.tone}
-            extra={isSoloDigital(ev) ? <div className={styles.caveat}>(solo digital)</div> : null}
+            extra={<>{isSoloDigital(ev) ? <div className={styles.caveat}>(solo digital)</div> : null}<Why r={rs.sell_online_pct} /></>}
           />
         </MetricCell>
 
         <MetricCell><Metric value={fmtMoney(estBuy, true)} /></MetricCell>
-        <MetricCell><Metric value={fmtMoney(koronetBuy, true)} /></MetricCell>
+        <MetricCell><Metric value={<>{fmtMoney(koronetBuy, true)} <Trend t={tr.koronet_buy} /></>} extra={<Why r={rs.koronet_buy_period} />} /></MetricCell>
 
         <MetricCell>
-          <Metric value={buyTautological ? '~100%' : fmtPct(buyPen)} tone={buyPenS.tone} />
+          <Metric value={<>{buyTautological ? '~100%' : fmtPct(buyPen)} {buyTautological ? null : <Trend t={tr.buy_penetration} />}</>}
+                  tone={buyPenS.tone} extra={<Why r={rs.buy_penetration} />} />
         </MetricCell>
 
         <MetricCell>
-          <Metric value={fmtPct(buyOnlinePct)} qualifier={buyOnlineS.qualifier} tone={buyOnlineS.tone} />
+          <Metric value={<>{fmtPct(buyOnlinePct)} <Trend t={tr.buy_online_pct} /></>}
+                  qualifier={buyOnlineS.qualifier} tone={buyOnlineS.tone} extra={<Why r={rs.buy_online_pct} />} />
         </MetricCell>
 
-        <MetricCell><Metric value={fmtMoney(fees, true)} tone={feesTone(fees)} /></MetricCell>
+        <MetricCell>
+          <Metric value={<>{fmtMoney(feesDirect, true)} <Trend t={tr.fees_direct} /></>}
+                  tone={feesTone(feesDirect)} extra={<Why r={rs.fees_direct} />} />
+        </MetricCell>
 
         <MetricCell>
-          <div className={`${styles.value} ${styles.small} ${toneClass[takeRateTone(takeRate)]}`}>{fmtPct(takeRate, 2)}</div>
+          <Metric value={<>{fmtMoney(feesIndirect, true)} <Trend t={tr.fees_indirect} /></>}
+                  tone={feesIndirect ? 'neutral' : 'muted'}
+                  qualifier={buyAttributed ? `${fmtMoney(buyAttributed, true)} comprado` : undefined}
+                  extra={<Why r={rs.fees_indirect} />} />
+        </MetricCell>
+
+        <MetricCell>
+          <div className={`${styles.value} ${styles.small} ${toneClass[takeRateTone(takeRate)]}`}>
+            {fmtPct(takeRate, 2)} <Trend t={tr.take_rate} />
+          </div>
+          <Why r={rs.take_rate} />
         </MetricCell>
 
         <MetricCell>

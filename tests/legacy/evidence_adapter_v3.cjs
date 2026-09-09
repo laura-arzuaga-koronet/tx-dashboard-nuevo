@@ -36,9 +36,13 @@
 
     // ── V3 new data ──
     accountsV3: [],           // accounts_v3.json .accounts (list)
+    anchorMonth: null,        // last closed month of the sell cube (set on first use)
     sellCube: [],             // sell_monthly.json .data (list)
     buyCube: [],              // buy_monthly.json .data (list)
     feesCube: [],             // fees_monthly.json .data (list)
+    indirectCube: [],         // indirect_fees_monthly.json .data (list)
+    whUniverse: null,         // portfolio set → { sfdc_id: true } or null
+    wh618: null,              // 618-only set (registered, NOT in the portfolio)
     gmvPacing: [],            // gmv_pacing.json .pacing (list)
     gmvExternal: [],          // gmv_estimates_external.json .estimates (list)
 
@@ -59,6 +63,7 @@
     sellCubeById: {},         // company_id → [ rows ]
     buyCubeById: {},          // company_id → [ rows ]
     feesCubeById: {},         // company_id → [ rows ]
+    indirectCubeById: {},     // buyer company_id → [ rows ]
     pacingById: {},           // company_id → pacing record
     externalById: {},         // company_id → external estimate record
     vendorsByName: {},        // company_name → vendor record
@@ -87,8 +92,10 @@
     sellCube:       DATA_BASE + 'current/sell_monthly.json',
     buyCube:        DATA_BASE + 'current/buy_monthly.json',
     feesCube:       DATA_BASE + 'current/fees_monthly.json',
+    indirectCube:   DATA_BASE + 'current/indirect_fees_monthly.json',
     gmvPacing:      DATA_BASE + 'gmv_pacing.json',
     gmvExternal:    DATA_BASE + 'gmv_estimates_external.json',
+    whUniverse:     DATA_BASE + 'wholesaler_universe.json',
     // V2 legacy files
     buyers:            DATA_BASE + 'buyers_evidence_v2.json',
     vendors:           DATA_BASE + 'vendors_evidence_v2.json',
@@ -206,6 +213,20 @@
   ───────────────────────────────────────────────────────────────────────── */
 
   /**
+   * Rule 6 of the model: online = eCommerce + K2K + API.
+   * The sell cube changed its channel labels mid-series: months 2024-08 through
+   * 2025-07 use 'eCommerce' / 'K2K' / 'API' / 'Offline', and from 2025-08
+   * onwards they collapse to 'Online' / 'Offline'. Matching only 'Online' —
+   * which is what this adapter used to do — silently counted every online sale
+   * before Aug-2025 as offline, deflating online % for any timeframe that
+   * reaches back that far.
+   */
+  var ONLINE_CHANNELS = { 'online': 1, 'ecommerce': 1, 'k2k': 1, 'api': 1 };
+  function _isOnlineChannel(channel) {
+    return ONLINE_CHANNELS[String(channel || '').toLowerCase()] === 1;
+  }
+
+  /**
    * From a list of cube rows for one company, aggregate by timeframe.
    * Sell cube rows: { month, channel, sell_gmv }
    * Returns { total, online, offline, months: [sorted unique months] }
@@ -216,16 +237,25 @@
     var filtered = _filterByTimeframe(rows, timeframe);
     if (!filtered.length) return null;
 
-    var total = 0, online = 0, offline = 0;
+    var total = 0, online = 0, offline = 0, selfSale = 0, selfOnline = 0;
     filtered.forEach(function (r) {
       var v = _num(r.sell_gmv) || 0;
       total += v;
-      if (r.channel === 'Online') online += v;
+      if (_isOnlineChannel(r.channel)) online += v;
       else offline += v;
+      /* self_sale_gmv son filas de SALE_DETAILS cuyo customer_name es la propia
+         compañía: no son ventas, son sus compras por canales Koronet espejadas
+         en la tabla de ventas. Quedan fuera de total/online/offline (el cubo ya
+         las separa) y se exponen aparte porque el monto es la señal de cuánto
+         compra la cuenta — cruza contra las compras atribuidas de indirect fees. */
+      var sv = _num(r.self_sale_gmv) || 0;
+      selfSale += sv;
+      if (_isOnlineChannel(r.channel)) selfOnline += sv;
     });
 
     var months = _uniqueMonths(filtered);
-    return { total: total, online: online, offline: offline, months: months };
+    return { total: total, online: online, offline: offline, months: months,
+             self_sale: selfSale, self_sale_online: selfOnline };
   }
 
   /**
@@ -252,10 +282,18 @@
   /**
    * From a list of fees cube rows for one company, aggregate.
    * Fees cube rows: { company_id, period, fee_channel, fee_amount }
-   * Note: fees cube is YTD-only (no monthly grain), so timeframe filtering is limited.
+   * The fees cube now has real monthly grain (2025-01 → 2026-08), so it is
+   * filtered by timeframe exactly like the sell and buy cubes. Before this fix
+   * every fee row of the company was summed regardless of month, and the old
+   * cube stored prior-year YTD as a single row with month '2025-01' and
+   * fee_channel 'total' — so "Fees YTD" reported 2026 + 2025 ($2.51M instead of
+   * $1.47M at network level).
    */
-  function _aggregateFeesCube(rows) {
+  function _aggregateFeesCube(rows, timeframe) {
     if (!rows || !rows.length) return null;
+
+    rows = _filterByTimeframe(rows, timeframe);
+    if (!rows.length) return null;
 
     var total = 0;
     var byChannel = { ecom: 0, k2k: 0, api: 0, indirect: 0 };
@@ -276,18 +314,54 @@
    * Filter cube rows by timeframe.
    * Each row has a .month field ('YYYY-MM').
    */
+  /**
+   * Anchor month for relative periods: the last closed month of the sell cube.
+   * Set once at load. Using each cube's own last month instead would put every
+   * metric on a slightly different 12-month window.
+   */
+  function _anchorMonth() {
+    if (_state.anchorMonth) return _state.anchorMonth;
+    var max = null;
+    (_state.sellCube || []).forEach(function (r) {
+      if (r.month && (max === null || r.month > max)) max = r.month;
+    });
+    _state.anchorMonth = max || '2026-07';
+    return _state.anchorMonth;
+  }
+
+  function _shiftMonth(m, n) {
+    var y = parseInt(m.slice(0, 4), 10);
+    var mo = parseInt(m.slice(5, 7), 10) + n;
+    y += Math.floor((mo - 1) / 12);
+    mo = ((mo - 1) % 12 + 12) % 12 + 1;
+    return y + '-' + (mo < 10 ? '0' + mo : String(mo));
+  }
+
+  /**
+   * Explicit month range for each timeframe token. Every period is a real
+   * [from, to] window, so a metric can never silently include months outside
+   * the period the user selected.
+   *
+   *   ytd        2026 year to date        (Jan 2026 → anchor)
+   *   h1_2026    first half of 2026       (Jan → Jun 2026)
+   *   full_2025  all of 2025              (Jan → Dec 2025)
+   *   l12m       last 12 months           (anchor-11 → anchor)
+   */
+  function _timeframeRange(timeframe) {
+    var anchor = _anchorMonth();
+    switch (timeframe) {
+      case 'h1_2026':   return { from: '2026-01', to: '2026-06' };
+      case 'full_2025': return { from: '2025-01', to: '2025-12' };
+      case 'l12m':      return { from: _shiftMonth(anchor, -11), to: anchor };
+      case 'ytd':
+      default:          return { from: anchor.slice(0, 4) + '-01', to: anchor };
+    }
+  }
+
   function _filterByTimeframe(rows, timeframe) {
     if (!rows || !rows.length) return [];
 
-    // Get all unique months sorted
     var allMonths = _uniqueMonths(rows);
-
-    if (timeframe === 'ytd' || !timeframe) {
-      // Sum all months in 2026 (Jan-Jul)
-      return rows.filter(function (r) {
-        return r.month && r.month >= '2026-01' && r.month <= '2026-12';
-      });
-    }
 
     if (timeframe === 'current_month') {
       var latest = allMonths[allMonths.length - 1];
@@ -299,15 +373,269 @@
       return prior ? rows.filter(function (r) { return r.month === prior; }) : [];
     }
 
-    if (timeframe === 'l12m') {
-      // All rows (the cubes already contain 12 months of data)
-      return rows;
-    }
-
-    // Default to ytd
+    var win = _timeframeRange(timeframe);
     return rows.filter(function (r) {
-      return r.month && r.month >= '2026-01';
+      return r.month && r.month >= win.from && r.month <= win.to;
     });
+  }
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     INDIRECT FEES
+  ─────────────────────────────────────────────────────────────────────────
+
+     Koronet charges the transaction fee to the SELLER. So when one of our
+     accounts *buys* through a Koronet channel, the fee is paid by its
+     supplier and never shows up against the buyer. Indirect fees estimate
+     that buy-side value: 1.5% of what the account bought through channels
+     that carry a fee (eCommerce, K2K, API — Offline is excluded).
+
+     The buyer is identified through K2K_CONNECTIONS, not by matching names:
+     SALE_DETAILS (company_id = seller, customer_id) → k2k_customer_id = the
+     buyer's real company_id. It is a deterministic join on ids. An earlier
+     attempt matched customer_name with Jaro-Winkler ≥ 0.93 and could not
+     discriminate in floral naming — "Flowers By Dick & Son" scored the same
+     against "Flowers By Cindy" as the true "Mayesh Wholesale" match.
+
+     Connection status is kept per row so the included set can change without
+     re-querying Snowflake. Default is Active + Suspended: a connection that
+     is suspended today does not invalidate purchases that already happened
+     inside the period — the status is a current state, not a historical one.
+
+     THE RATE IS NOT A FLAT 1.5%. It is each seller's REALISED rate — the fees
+     Koronet actually billed that seller on that channel, divided by that
+     seller's sales we measure on the same channel and window. The cube ships
+     `indirect_fee` already computed that way; `fee_rates_by_seller.json` holds
+     the 280 rates and their inputs.
+
+     Why realised and not the configured rate: the configuration does not
+     predict what gets billed. Kennicott has 0.75% configured on eCommerce and
+     realises 0.068%; Rosaprima has 1.5% on API and realises 0.003%.
+
+     Why this is self-consistent: numerator (billed fees) and denominator (our
+     measured sales) come from the same window, and the attributed purchases we
+     multiply by come from the same table with the same filters — so any gap
+     between Koronet's billing base and ours cancels out.
+
+     Effect vs the flat 1.5%: K2K barely moves (−0.3%, so 1.5% really is the
+     K2K rate), eCommerce drops 33.9% and API drops 99.3%. 89% of the total
+     change comes from five seller × channel pairs whose suppliers demonstrably
+     pay near zero on those channels. Overall $3.75M → $2.62M.
+
+     Below $100K of seller sales on a channel the ratio is noise, so the cube
+     falls back to that channel's network rate.
+  */
+  var INDIRECT_FEE_RATE = 0.015;   // solo fallback si el cubo no trae indirect_fee
+  var INDIRECT_STATUSES = { 'Active': 1, 'Suspended': 1 };
+
+  function _aggregateIndirectCube(rows, timeframe) {
+    if (!rows || !rows.length) return null;
+    rows = _filterByTimeframe(rows, timeframe);
+    if (!rows.length) return null;
+
+    var attributed = 0, fees = 0;
+    var byChannel = { ecom: 0, k2k: 0, api: 0 };
+    var counted = false;
+    rows.forEach(function (r) {
+      if (INDIRECT_STATUSES[r.connection_status] !== 1) return;
+      var v = _num(r.buy_online_attributed) || 0;
+      attributed += v;
+      // El cubo trae el fee con la tasa real del vendedor; el 1,5% queda solo
+      // como red de seguridad si algún día el campo faltara.
+      var f = r.indirect_fee != null ? (_num(r.indirect_fee) || 0) : v * INDIRECT_FEE_RATE;
+      fees += f;
+      counted = true;
+      var ch = (r.fee_channel || '').toLowerCase();
+      if (byChannel[ch] !== undefined) byChannel[ch] += v;
+    });
+    if (!counted) return null;
+
+    return {
+      attributed: attributed,
+      fees: fees,
+      effective_rate: attributed > 0 ? fees / attributed : null,
+      byChannel: byChannel
+    };
+  }
+
+  function _indirectMonthlyTotals(rows) {
+    if (!rows || !rows.length) return [];
+    var byMonth = {};
+    rows.forEach(function (r) {
+      if (!r.month || INDIRECT_STATUSES[r.connection_status] !== 1) return;
+      if (!byMonth[r.month]) byMonth[r.month] = { month: r.month, fee_amount: 0 };
+      byMonth[r.month].fee_amount += (r.indirect_fee != null
+        ? (_num(r.indirect_fee) || 0)
+        : (_num(r.buy_online_attributed) || 0) * INDIRECT_FEE_RATE);
+    });
+    return Object.keys(byMonth).sort().map(function (k) { return byMonth[k]; });
+  }
+
+  /**
+   * Prior-year window for a like-for-like comparison.
+   * Given the months actually present in the current period, returns the same
+   * window shifted back 12 months. Before this, the prior windows were
+   * hardcoded to '2025-01'..'2025-07', which stopped being like-for-like the
+   * moment a cube gained an eighth month (comparing 8 months against 7 invents
+   * growth).
+   */
+  function _priorYearWindow(months) {
+    if (!months || !months.length) return null;
+    function shift(m) {
+      var y = parseInt(m.slice(0, 4), 10);
+      return (y - 1) + m.slice(4);
+    }
+    return { from: shift(months[0]), to: shift(months[months.length - 1]) };
+  }
+
+  /**
+   * Earliest month present anywhere in a whole cube (not in one company's
+   * rows). Coverage is a property of the cube: a company with no fee rows in
+   * January simply earned no fees that month — that is a zero, not a gap.
+   * Checking per-company rows instead would drop legitimate baselines.
+   */
+  /**
+   * The months a timeframe covers, derived from the WHOLE cube rather than
+   * from one company's rows. A period is a property of the data, not of the
+   * account: if each account defined its own window, an account that only
+   * traded in March would compare Mar–Aug against Mar–Aug while its neighbour
+   * compared Jan–Aug, and the portfolio total would stop meaning anything.
+   */
+  var _periodMonthsCache = {};
+  function _periodMonths(cubeName, allRows, timeframe) {
+    var key = cubeName + '|' + (timeframe || 'ytd');
+    if (_periodMonthsCache[key] !== undefined) return _periodMonthsCache[key];
+    var months = _uniqueMonths(_filterByTimeframe(allRows || [], timeframe));
+    _periodMonthsCache[key] = months;
+    return months;
+  }
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     DATA QUALITY — known-bad cube rows
+  ─────────────────────────────────────────────────────────────────────────
+
+     Ninfa Flowers (640977) reports Apr–Oct 2025 at three orders of magnitude
+     above its own baseline: $268,182,503 in April 2025 alone, against months
+     of $6K–$627K before and after. In the source, that April has 16 lines over
+     $100K including a single line of $31,239,146, and June jumps to 22,930
+     lines against 1,429 in March — so it is not a handful of bad rows but a
+     whole period, most likely an unconverted currency or a duplicated import.
+     Left in, it is 20% of the entire buy cube. From Nov-2025 the account runs
+     at ~$500K a month, an order of magnitude above its 2024 baseline: that
+     looks like genuine growth and is kept.
+
+     PROCUREMENT_DETAILS has no equivalent of the sales < 100000 guard, so
+     nothing upstream filters this. It needs a fix at the source.
+
+     Note on CONNECTION FLOWERS SAS (617226): the cube generated on 2026-08-13
+     showed $10.4B for April 2025 — 64% of that whole cube — and used to be
+     excluded here. The regenerated sell cube applies the model's
+     `sales < 100000` guard, which drops the offending lines on its own: that
+     window now sums $143,353 across 17 orders, a plausible figure. The
+     exclusion was removed rather than kept "just in case", because it would
+     now delete real sales. The underlying rows are still wrong in the source
+     (April 2025 has 9 lines over $100K, the largest $6.2M), so loosening that
+     threshold would let the account contaminate the cube again.
+  */
+  var BAD_CUBE_ROWS = {
+    buy: [
+      { company_id: '640977', from: '2025-04', to: '2025-10',
+        reason: 'Valores 3 órdenes de magnitud sobre su propia línea base (verificado 2026-09-08)' }
+    ],
+    sell: []
+  };
+
+  function _isBadCubeRow(cube, row) {
+    if (!row) return false;
+    var rules = BAD_CUBE_ROWS[cube];
+    if (!rules || !rules.length) return false;
+    var id = _sid(row.company_id);
+    var m = row.month;
+    if (!id || !m) return false;
+    for (var i = 0; i < rules.length; i++) {
+      var b = rules[i];
+      if (b.company_id === id && m >= b.from && m <= b.to) return true;
+    }
+    return false;
+  }
+
+  var _cubeStartCache = {};
+  function _cubeStart(cubeName, allRows) {
+    if (_cubeStartCache[cubeName] !== undefined) return _cubeStartCache[cubeName];
+    var min = null;
+    (allRows || []).forEach(function (r) {
+      if (r.month && (min === null || r.month < min)) min = r.month;
+    });
+    _cubeStartCache[cubeName] = min;
+    return min;
+  }
+
+  /**
+   * Sum one field of the cube rows inside an explicit [from, to] month window.
+   * Returns null when the CUBE does not reach back far enough to cover the
+   * window, so a partial baseline never masquerades as a real prior-period
+   * figure (the sell cube starts 2024-08 and the fees cube 2025-01, so e.g.
+   * "Full year 2025" has no sell YoY and "Last 12 months" has no fees YoY).
+   */
+  /**
+   * Same as _sumWindow but only over rows the predicate accepts — used for the
+   * online slice of the sell/buy cubes and for the indirect cube's status
+   * filter, where the prior-period figure needs the same subset as the current
+   * one or the comparison is meaningless.
+   */
+  function _sumWindowWhere(rows, field, win, cubeName, allRows, pred) {
+    if (!win) return null;
+    var start = _cubeStart(cubeName, allRows);
+    if (start === null || start > win.from) return null;
+    if (!rows || !rows.length) return 0;
+    var t = 0;
+    rows.forEach(function (r) {
+      if (r.month && r.month >= win.from && r.month <= win.to && pred(r)) t += _num(r[field]) || 0;
+    });
+    return t;
+  }
+
+  /** Number of calendar months in an inclusive [from, to] window. */
+  function _monthSpan(win) {
+    if (!win) return 0;
+    var y1 = parseInt(win.from.slice(0, 4), 10), m1 = parseInt(win.from.slice(5, 7), 10);
+    var y2 = parseInt(win.to.slice(0, 4), 10),   m2 = parseInt(win.to.slice(5, 7), 10);
+    return (y2 - y1) * 12 + (m2 - m1) + 1;
+  }
+
+  /**
+   * Percent change against the prior period.
+   * Returns { pct } normally; { from_zero: true } when the account went from
+   * nothing to something, because a percentage off a zero (or near-zero)
+   * baseline is either infinite or a four-digit number that tells the reader
+   * less than the words "new" would. Kennicott's buy really did go from $980K
+   * to $35.9M after onboarding procurement — +3,561% is accurate and unreadable.
+   */
+  var TREND_BASELINE_FLOOR = 1000;
+  function _pctChange(curr, prior) {
+    if (curr == null) return null;
+    if (prior == null) return null;
+    if (prior < TREND_BASELINE_FLOOR) {
+      return (curr >= TREND_BASELINE_FLOOR) ? { from_zero: true } : null;
+    }
+    return { pct: ((curr - prior) / prior) * 100 };
+  }
+
+  /** Difference in percentage points, for metrics that are already percentages. */
+  function _ppChange(curr, prior) {
+    if (curr == null || prior == null) return null;
+    return { pp: curr - prior };
+  }
+
+  function _sumWindow(rows, field, win, cubeName, allRows) {
+    if (!win) return null;
+    var start = _cubeStart(cubeName, allRows);
+    if (start === null || start > win.from) return null;   // cube starts too late
+    if (!rows || !rows.length) return 0;                   // covered, but nothing happened
+    var t = 0;
+    rows.forEach(function (r) {
+      if (r.month && r.month >= win.from && r.month <= win.to) t += _num(r[field]) || 0;
+    });
+    return t;
   }
 
   function _uniqueMonths(rows) {
@@ -329,7 +657,8 @@
       if (!byMonth[m]) byMonth[m] = { month: m, sell_gmv: 0, sell_online: 0, sell_offline: 0 };
       var v = _num(r.sell_gmv) || 0;
       byMonth[m].sell_gmv += v;
-      if (r.channel === 'Online') byMonth[m].sell_online += v;
+      byMonth[m].self_sale_gmv = (byMonth[m].self_sale_gmv || 0) + (_num(r.self_sale_gmv) || 0);
+      if (_isOnlineChannel(r.channel)) byMonth[m].sell_online += v;
       else byMonth[m].sell_offline += v;
     });
     return Object.keys(byMonth).sort().map(function (k) { return byMonth[k]; });
@@ -349,6 +678,26 @@
       byMonth[m].buy_gmv    += _num(r.buy_gmv) || 0;
       byMonth[m].buy_online += _num(r.buy_online) || 0;
       byMonth[m].buy_offline += _num(r.buy_offline) || 0;
+    });
+    return Object.keys(byMonth).sort().map(function (k) { return byMonth[k]; });
+  }
+
+  /**
+   * Get monthly totals for fees cube rows (all fee channels summed per month).
+   * Returns sorted array of { month, fee_amount, ecom, k2k, api }.
+   * Only meaningful since the cube was regenerated with real monthly grain.
+   */
+  function _feesMonthlyTotals(rows) {
+    if (!rows || !rows.length) return [];
+    var byMonth = {};
+    rows.forEach(function (r) {
+      var m = r.month;
+      if (!m) return;
+      if (!byMonth[m]) byMonth[m] = { month: m, fee_amount: 0, ecom: 0, k2k: 0, api: 0 };
+      var v = _num(r.fee_amount) || 0;
+      byMonth[m].fee_amount += v;
+      var ch = (r.fee_channel || '').toLowerCase();
+      if (ch === 'ecom' || ch === 'k2k' || ch === 'api') byMonth[m][ch] += v;
     });
     return Object.keys(byMonth).sort().map(function (k) { return byMonth[k]; });
   }
@@ -382,8 +731,11 @@
       });
     }
 
-    // sell cube → sellCubeById
+    // sell cube → sellCubeById (dropping known-bad company-months first)
     if (Array.isArray(_state.sellCube)) {
+      _state.sellCube = _state.sellCube.filter(function (row) {
+        return !_isBadCubeRow('sell', row);
+      });
       _state.sellCube.forEach(function (row) {
         var id = _sid(row.company_id);
         if (!id) return;
@@ -392,8 +744,21 @@
       });
     }
 
-    // buy cube → buyCubeById
+    // indirect fees cube → indirectCubeById (keyed by the BUYER's company_id)
+    if (Array.isArray(_state.indirectCube)) {
+      _state.indirectCube.forEach(function (row) {
+        var id = _sid(row.buyer_company_id);
+        if (!id) return;
+        if (!_state.indirectCubeById[id]) _state.indirectCubeById[id] = [];
+        _state.indirectCubeById[id].push(row);
+      });
+    }
+
+    // buy cube → buyCubeById (dropping known-bad company-months first)
     if (Array.isArray(_state.buyCube)) {
+      _state.buyCube = _state.buyCube.filter(function (row) {
+        return !_isBadCubeRow('buy', row);
+      });
       _state.buyCube.forEach(function (row) {
         var id = _sid(row.company_id);
         if (!id) return;
@@ -543,12 +908,29 @@
           case 'buyCube':
             _state.buyCube = (r.data && Array.isArray(r.data.data)) ? r.data.data : [];
             break;
+          case 'indirectCube':
+            _state.indirectCube = (r.data && Array.isArray(r.data.data)) ? r.data.data : [];
+            break;
           case 'feesCube':
             _state.feesCube = (r.data && Array.isArray(r.data.data)) ? r.data.data : [];
             break;
           case 'gmvPacing':
             _state.gmvPacing = (r.data && Array.isArray(r.data.pacing)) ? r.data.pacing : [];
             break;
+          case 'whUniverse': {
+            var _pids = (r.data && Array.isArray(r.data.portfolio_sfdc_ids)) ? r.data.portfolio_sfdc_ids : null;
+            if (_pids) {
+              _state.whUniverse = {};
+              _pids.forEach(function (x) { if (x) _state.whUniverse[String(x)] = true; });
+            }
+            var _oids = (r.data && Array.isArray(r.data.only_618_sfdc_ids)) ? r.data.only_618_sfdc_ids : null;
+            if (_oids) {
+              _state.wh618 = {};
+              _oids.forEach(function (x) { if (x) _state.wh618[String(x)] = true; });
+            }
+            break;
+          }
+
           case 'gmvExternal':
             _state.gmvExternal = (r.data && Array.isArray(r.data.estimates)) ? r.data.estimates : [];
             break;
@@ -688,14 +1070,9 @@
     var sellAggYtd = _aggregateSellCube(sellRows, 'ytd');
 
     // ── Sell YTD 2025 (from cube — sum months 2025-01 to 2025-07)
-    var sell2025Rows = sellRows.filter(function (r) {
-      return r.month && r.month >= '2025-01' && r.month <= '2025-07';
-    });
-    var sellYtd2025 = null;
-    if (sell2025Rows.length) {
-      sellYtd2025 = 0;
-      sell2025Rows.forEach(function (r) { sellYtd2025 += _num(r.sell_gmv) || 0; });
-    }
+    // Like-for-like: mirror the months actually present in the current period.
+    var sellPeriodMonths = _periodMonths('sell', _state.sellCube, timeframe);
+    var sellYtd2025 = _sumWindow(sellRows, 'sell_gmv', _priorYearWindow(sellPeriodMonths), 'sell', _state.sellCube);
 
     // ── Buy cube aggregation
     var buyRows  = _state.buyCubeById[id] || [];
@@ -703,36 +1080,45 @@
     var buyAggYtd = _aggregateBuyCube(buyRows, 'ytd');
 
     // ── Buy YTD 2025
-    var buy2025Rows = buyRows.filter(function (r) {
-      return r.month && r.month >= '2025-01' && r.month <= '2025-07';
-    });
-    var buyYtd2025 = null;
-    if (buy2025Rows.length) {
-      buyYtd2025 = 0;
-      buy2025Rows.forEach(function (r) { buyYtd2025 += _num(r.buy_gmv) || 0; });
-    }
+    // Like-for-like: mirror the months actually present in the current period.
+    var buyPeriodMonths = _periodMonths('buy', _state.buyCube, timeframe);
+    var buyYtd2025 = _sumWindow(buyRows, 'buy_gmv', _priorYearWindow(buyPeriodMonths), 'buy', _state.buyCube);
 
     // ── Fees cube aggregation
     var feesRows = _state.feesCubeById[id] || [];
-    var feesAgg  = _aggregateFeesCube(feesRows);
+    var feesAgg  = _aggregateFeesCube(feesRows, timeframe);
     var feesYtd2026 = feesAgg ? feesAgg.total : null;
     var feesByChannel = feesAgg ? feesAgg.byChannel : null;
 
-    // ── Fees YTD 2025 — not in fees cube (cube is 2026 only)
-    // Will be null unless we load it from V2 fees_domain
-    var feesYtd2025 = null;
+    // ── Prior-period fees — now available: the cube has real monthly grain
+    // from 2025-01, so the same window shifted back 12 months can be summed
+    // directly. This enables the fees YoY that was always null before.
+    var feesMonths = _periodMonths('fees', _state.feesCube, timeframe);
+    var feesYtd2025 = _sumWindow(feesRows, 'fee_amount', _priorYearWindow(feesMonths), 'fees', _state.feesCube);
+
+    // ── Indirect fees (buy side) — 1.5% of what this account bought through
+    // fee-carrying channels, attributed via K2K_CONNECTIONS.
+    var indirectRows = _state.indirectCubeById[id] || [];
+    var indirectAgg  = _aggregateIndirectCube(indirectRows, timeframe);
+    var feesIndirect = indirectAgg ? indirectAgg.fees : null;
+    var buyAttributed = indirectAgg ? indirectAgg.attributed : null;
+
+    // Direct fees are what the fees cube already measures (the sell side).
+    var feesDirect = feesYtd2026;
+    var feesTotal = (feesDirect || 0) + (feesIndirect || 0);
+    if (!feesDirect && !feesIndirect) feesTotal = null;
 
     // Offline amounts
-    var sellOfflineYtd = sellAggYtd ? (sellAggYtd.offline > 0 ? sellAggYtd.offline : null) : null;
-    var buyOfflineYtd  = buyAggYtd  ? (buyAggYtd.offline  > 0 ? buyAggYtd.offline  : null) : null;
+    var sellOfflineYtd = sellAgg ? (sellAgg.offline > 0 ? sellAgg.offline : null) : null;
+    var buyOfflineYtd  = buyAgg  ? (buyAgg.offline  > 0 ? buyAgg.offline  : null) : null;
 
     // ── Koronet YTD totals
-    var koronetSellYtd = sellAggYtd ? sellAggYtd.total : null;
-    var koronetBuyYtd  = buyAggYtd  ? buyAggYtd.total  : null;
+    var koronetSellYtd = sellAgg ? sellAgg.total : null;
+    var koronetBuyYtd  = buyAgg  ? buyAgg.total  : null;
 
     // ── Online amounts (for online % calculation below)
-    var onlineSellYtd = sellAggYtd ? sellAggYtd.online : 0;
-    var onlineBuyYtd  = buyAggYtd  ? buyAggYtd.online  : 0;
+    var onlineSellYtd = sellAgg ? sellAgg.online : 0;
+    var onlineBuyYtd  = buyAgg  ? buyAgg.online  : 0;
 
     // ── Penetration + Piso logic
     // Rule: Est GMV can never be less than what we already measure.
@@ -746,7 +1132,7 @@
     var buyPenNote = null;
 
     // Rule D: No GMV reference but has Koronet activity → auto Piso de red
-    var ytdMonthsSell = sellAggYtd ? sellAggYtd.months.length : 0;
+    var ytdMonthsSell = sellAgg ? sellAgg.months.length : 0;
     if ((!gmvRef || gmvRef <= 0 || gmvSource === 'not in Christine cascade' || gmvSource === 'Sin dato')
         && koronetSellYtd && koronetSellYtd > 0 && ytdMonthsSell > 0) {
       gmvRef = koronetSellYtd * (12 / ytdMonthsSell);
@@ -759,7 +1145,7 @@
     if (gmvRef && gmvRef > 0 && gmvSource !== 'not in Christine cascade' && gmvSource !== 'Sin dato') {
       var isTautological = /^(Medido|Piso)/.test(gmvSource || '');
 
-      var ytdMonths = sellAggYtd ? sellAggYtd.months.length : 0;
+      var ytdMonths = sellAgg ? sellAgg.months.length : 0;
       if (koronetSellYtd && koronetSellYtd > 0 && ytdMonths > 0) {
         var annualizedSell = koronetSellYtd * (12 / ytdMonths);
 
@@ -786,7 +1172,7 @@
 
       // Buy penetration — same piso logic
       if (buyGmvEst && buyGmvEst > 0 && koronetBuyYtd && koronetBuyYtd > 0) {
-        var buyYtdMonths = buyAggYtd ? buyAggYtd.months.length : 0;
+        var buyYtdMonths = buyAgg ? buyAgg.months.length : 0;
         if (buyYtdMonths > 0) {
           var annualizedBuy = koronetBuyYtd * (12 / buyYtdMonths);
 
@@ -810,8 +1196,8 @@
     // ── Online % = ALWAYS annualized online / Est GMV
     // "What fraction of their TOTAL business is digital through us"
     // Same denominator as penetration → online% ≤ penetration always
-    var sellMonthCount = sellAggYtd ? sellAggYtd.months.length : 0;
-    var buyMonthCount  = buyAggYtd  ? buyAggYtd.months.length  : 0;
+    var sellMonthCount = sellAgg ? sellAgg.months.length : 0;
+    var buyMonthCount  = buyAgg  ? buyAgg.months.length  : 0;
 
     var sellOnlinePct = null;
     if (koronetSellYtd && koronetSellYtd > 0 && gmvRef && gmvRef > 0) {
@@ -843,23 +1229,178 @@
 
     // ── Take rate = fees_ytd / koronet_sell_ytd
     // Only meaningful with sufficient sell volume (> $10K YTD)
+    /* Take rate = (Direct Fees + Indirect Fees) / (Estimated Buy + Estimated Sell)
+     *
+     * Was: fees / koronet_sell — fees actually captured over the volume we
+     * already move. That measures execution on the business we have, and is
+     * tautologically bounded by the fee rate itself.
+     *
+     * The new denominator is the account's whole addressable flow (what it
+     * sells plus what it buys, estimated), and the numerator now includes the
+     * buy side. So take rate answers "how much of everything this account
+     * moves do we monetize", which is the question the team is actually
+     * asking. It reads much lower than the old one — that is the point, not a
+     * regression.
+     *
+     * Guard: needs a real denominator. Below $10K of estimated flow the ratio
+     * is noise. */
     var takeRate = null;
-    if (feesYtd2026 && koronetSellYtd && koronetSellYtd > 10000) {
-      takeRate = (feesYtd2026 / koronetSellYtd) * 100;
+    var estFlow = (gmvRef || 0) + (buyGmvEst || 0);
+    if (feesTotal && estFlow > 10000) {
+      takeRate = (feesTotal / estFlow) * 100;
     }
+
+    /* ── TREND on every column ───────────────────────────────────────────────
+     *
+     * Each metric is recomputed over the prior-year window — the same months
+     * shifted back 12 — with the SAME formula and the same denominator, so the
+     * delta reflects the metric moving and not the method changing. Amounts
+     * trend in %, percentages trend in percentage points (pp): a penetration
+     * going 4% → 6% is +2pp, and calling that "+50%" would be true but useless
+     * on a dashboard.
+     *
+     * Est GMV and Est Buy get no trend: they are a single annual figure with no
+     * time series behind them, so any delta would be an artifact of the
+     * estimate being revised, not of the account changing. Shown as "—".
+     */
+    var sellPriorWin = _priorYearWindow(sellPeriodMonths);
+    var buyPriorWin  = _priorYearWindow(buyPeriodMonths);
+    var feesPriorWin = _priorYearWindow(feesMonths);
+    var indPeriodMonths = _periodMonths('indirect', _state.indirectCube, timeframe);
+    var indPriorWin  = _priorYearWindow(indPeriodMonths);
+
+    /* El split online/offline del cubo de buy no existe antes de nov-2024: los
+       10 primeros meses de 2024 traen buy_gmv y buy_offline reales pero
+       buy_online en cero, porque sales_channel no traía Web/Procurement/API.
+       Comparar contra esa ventana daría un salto inventado del 0% a lo que
+       sea, así que la tendencia de buy online % se suprime cuando el período
+       anterior la toca. El valor del período actual no se ve afectado: ningún
+       período seleccionable empieza antes de 2025. */
+    var BUY_ONLINE_FROM = '2024-11';
+
+    var priorSellOnline = _sumWindowWhere(sellRows, 'sell_gmv', sellPriorWin, 'sell', _state.sellCube,
+      function (r) { return _isOnlineChannel(r.channel); });
+    var buyOnlineCovered = !!buyPriorWin && buyPriorWin.from >= BUY_ONLINE_FROM;
+    var priorBuyOnline  = buyOnlineCovered
+      ? _sumWindow(buyRows, 'buy_online', buyPriorWin, 'buy', _state.buyCube)
+      : null;
+    var priorIndirectBuy = _sumWindowWhere(indirectRows, 'buy_online_attributed', indPriorWin, 'indirect', _state.indirectCube,
+      function (r) { return INDIRECT_STATUSES[r.connection_status] === 1; });
+    var priorIndirectFees = _sumWindowWhere(indirectRows, 'indirect_fee', indPriorWin, 'indirect', _state.indirectCube,
+      function (r) { return INDIRECT_STATUSES[r.connection_status] === 1; });
+
+    var priorSellMonths = sellPriorWin ? _monthSpan(sellPriorWin) : 0;
+    var priorBuyMonths  = buyPriorWin  ? _monthSpan(buyPriorWin)  : 0;
+
+    function _pen(amount, months, denom) {
+      if (amount == null || !(denom > 0) || !(months > 0)) return null;
+      return ((amount * (12 / months)) / denom) * 100;
+    }
+    var priorSellPen    = _pen(sellYtd2025, priorSellMonths, gmvRef);
+    var priorSellOnPct  = _pen(priorSellOnline, priorSellMonths, gmvRef);
+    var priorBuyPen     = _pen(buyYtd2025, priorBuyMonths, buyGmvEst);
+    var priorBuyOnPct   = _pen(priorBuyOnline, priorBuyMonths, buyGmvEst);
+    // Same ceiling rule as the current period, or the pp delta compares a
+    // capped number against an uncapped one.
+    if (priorSellOnPct != null && priorSellPen != null && priorSellOnPct > priorSellPen) priorSellOnPct = priorSellPen;
+    if (priorBuyOnPct  != null && priorBuyPen  != null && priorBuyOnPct  > priorBuyPen)  priorBuyOnPct  = priorBuyPen;
+
+    var priorFeesTotal = (feesYtd2025 || 0) + (priorIndirectFees || 0);
+    if (!feesYtd2025 && !priorIndirectFees) priorFeesTotal = null;
+    var priorTakeRate = (priorFeesTotal && estFlow > 10000) ? (priorFeesTotal / estFlow) * 100 : null;
+
+    /* ── POR QUÉ una métrica está vacía ────────────────────────────────────
+     *
+     * "$0" y "sin dato" se leen igual en una tabla y son decisiones muy
+     * distintas: una cuenta que no vende online genuinamente no genera fee, y
+     * eso no es un hueco de datos. El adapter emite el motivo para que la UI
+     * pueda distinguirlos en la celda en vez de dejar al lector adivinando.
+     *
+     * Cada motivo es 'cero' (el valor es correcto y es cero) o 'gap' (no
+     * sabemos). Solo se emite cuando la métrica está vacía.
+     */
+    var cfgConf = (_state.config[id] || {}).config || {};
+    var feeTodoApagado = (cfgConf.ecommerce_fee === false && cfgConf.k2k_fee === false && cfgConf.api_fee === false);
+    var esCompradorK2K = !!(_state.indirectCubeById[id] && _state.indirectCubeById[id].length);
+    var estaLive = (acct.komet_status === 'Production - Live');
+
+    function _why(value, cases) {
+      if (value != null && value !== 0) return null;
+      for (var i = 0; i < cases.length; i++) {
+        if (cases[i][0]) return { kind: cases[i][1], note: cases[i][2] };
+      }
+      return { kind: 'gap', note: 'sin dato' };
+    }
+
+    var reasons = {
+      gmv_reference: _why(gmvRef, [
+        [gmvSource === 'No vende (Koronet)', 'cero', 'no vende por Koronet'],
+        [gmvSource === 'Sin dato' || !gmvSource, 'gap', 'fuera de la cascada de Est GMV']
+      ]),
+      koronet_sell_ytd: _why(koronetSellYtd, [
+        [!estaLive, 'cero', 'todavía no está live'],
+        [true, 'gap', 'live pero sin ventas en el período']
+      ]),
+      koronet_buy_ytd: _why(koronetBuyYtd, [
+        [!estaLive, 'cero', 'todavía no está live'],
+        [true, 'cero', 'no compra por Koronet en el período']
+      ]),
+      sell_penetration: _why(sellPenetration, [
+        [!gmvRef, 'gap', 'sin Est GMV para comparar'],
+        [!koronetSellYtd, 'cero', 'sin ventas en el período']
+      ]),
+      sell_online_pct: _why(sellOnlinePct, [
+        [!koronetSellYtd, 'cero', 'sin ventas en el período'],
+        [true, 'cero', 'vende, pero nada online']
+      ]),
+      buy_penetration: _why(buyPenetration, [
+        [!buyGmvEst, 'gap', 'sin Est Buy para comparar'],
+        [!koronetBuyYtd, 'cero', 'sin compras en el período']
+      ]),
+      buy_online_pct: _why(buyOnlinePct, [
+        [!koronetBuyYtd, 'cero', 'sin compras en el período'],
+        [true, 'cero', 'compra, pero todo offline']
+      ]),
+      fees_direct: _why(feesDirect, [
+        [feeTodoApagado, 'cero', 'fees deshabilitados en su configuración'],
+        [!sellOnlinePct, 'cero', 'sin ventas online: no genera fee'],
+        [true, 'gap', 'vende online pero no registra fee — revisar']
+      ]),
+      fees_indirect: _why(feesIndirect, [
+        [!esCompradorK2K, 'cero', 'no es comprador en ninguna conexión K2K'],
+        [true, 'gap', 'es comprador K2K pero sin compras atribuidas']
+      ]),
+      take_rate: _why(takeRate, [
+        [!feesTotal, 'cero', 'sin fees en el período'],
+        [estFlow <= 10000, 'gap', 'Est Buy + Est Sell menor a $10K: el ratio sería ruido']
+      ])
+    };
+
+    var trends = {
+      gmv_reference:     null,   // sin serie temporal
+      buy_gmv_estimated: null,   // derivado de Est GMV
+      koronet_sell:      _pctChange(koronetSellYtd, sellYtd2025),
+      sell_penetration:  _ppChange(sellPenetration, priorSellPen),
+      sell_online_pct:   _ppChange(sellOnlinePct, priorSellOnPct),
+      koronet_buy:       _pctChange(koronetBuyYtd, buyYtd2025),
+      buy_penetration:   _ppChange(buyPenetration, priorBuyPen),
+      buy_online_pct:    _ppChange(buyOnlinePct, priorBuyOnPct),
+      fees_direct:       _pctChange(feesDirect, feesYtd2025),
+      fees_indirect:     _pctChange(feesIndirect, priorIndirectFees),
+      take_rate:         _ppChange(takeRate, priorTakeRate)
+    };
 
     // ── YoY sell delta (YTD 2026 vs YTD 2025)
     var sellYoyDelta = (koronetSellYtd && sellYtd2025) ? _delta(koronetSellYtd, sellYtd2025) : null;
 
-    // ── Fees YoY
-    var feesYoyPct = null;
-    // feesYtd2025 not available from cube — will stay null
+    // ── Fees YoY — available now that the cube has monthly grain from 2025-01
+    var feesYoyPct = (feesYtd2026 && feesYtd2025) ? _delta(feesYtd2026, feesYtd2025) : null;
 
     // ── MoM deltas (from cubes)
     var sellMomDelta = _computeMomDelta(_sellMonthlyTotals(sellRows), 'sell_gmv');
     var buyMomDelta  = _computeMomDelta(_buyMonthlyTotals(buyRows), 'buy_gmv');
-    // Fees MoM — cube is YTD only, no monthly grain
-    var feesMomDelta = null;
+    // Fees MoM — also available now (real monthly grain)
+    var feesMomDelta = _computeMomDelta(_feesMonthlyTotals(feesRows), 'fee_amount');
 
     // ── Days observed (from pacing)
     var daysObserved = paceRec ? _num(paceRec.days_observed) : null;
@@ -899,7 +1440,28 @@
       fees_ytd_2025:  _ev(feesYtd2025, feesYtd2025 ? 'observed' : 'gap', null),
       fees_by_channel: { value: feesByChannel },
       fees_yoy_pct:   _ev(feesYoyPct, feesYoyPct != null ? 'observed' : 'gap', null),
-      take_rate:      _ev(takeRate, (feesYtd2026 && koronetSellYtd) ? 'model' : 'gap', null),
+
+      // Direct (sell side, measured) vs indirect (buy side, modelled at 1.5%)
+      fees_direct:    _ev(feesDirect, feesDirect ? 'observed' : 'gap', 'fees cube'),
+      fees_indirect:  _ev(feesIndirect, feesIndirect ? 'model' : 'gap', 'K2K attribution × seller realised rate'),
+      fees_total:     _ev(feesTotal, feesTotal ? 'model' : 'gap', null),
+      buy_attributed: _ev(buyAttributed, buyAttributed ? 'observed' : 'gap', 'K2K attribution'),
+      indirect_by_channel: { value: indirectAgg ? indirectAgg.byChannel : null },
+      indirect_rate: _ev(indirectAgg && indirectAgg.effective_rate != null ? indirectAgg.effective_rate * 100 : null,
+                         indirectAgg && indirectAgg.effective_rate != null ? 'observed' : 'gap',
+                         'tasa real de los vendedores de esta cuenta'),
+
+      trends:         trends,
+      reasons:        reasons,
+
+      /* Auto-ventas: filas de venta cuyo cliente es la propia compañía. Ya están
+         fuera de koronet_sell; se exponen para poder cruzarlas contra las compras
+         atribuidas de indirect fees (en las cuentas afectadas los dos montos
+         coinciden al 91-98%, porque son el mismo flujo visto de los dos lados). */
+      self_sale_gmv:  _ev(sellAgg && sellAgg.self_sale ? sellAgg.self_sale : null,
+                          sellAgg && sellAgg.self_sale ? 'observed' : 'gap',
+                          'sell cube · customer_name = la propia compañía'),
+      take_rate:      _ev(takeRate, takeRate != null ? 'model' : 'gap', '(direct+indirect fees) / (est buy + est sell)'),
 
       // Sell trend
       sell_yoy_delta: sellYoyDelta,
@@ -947,15 +1509,10 @@
     // ── Monthly sourcing from buy cube
     var buyRows = _state.buyCubeById[id] || [];
     var buyMonthlyTotals = _buyMonthlyTotals(buyRows);
-    var buyAggYtd = _aggregateBuyCube(buyRows, 'ytd');
-    var buy2025Rows = buyRows.filter(function (r) {
-      return r.month && r.month >= '2025-01' && r.month <= '2025-07';
-    });
-    var buyYtd2025 = null;
-    if (buy2025Rows.length) {
-      buyYtd2025 = 0;
-      buy2025Rows.forEach(function (r) { buyYtd2025 += _num(r.buy_gmv) || 0; });
-    }
+    var buyAggYtd = _aggregateBuyCube(buyRows, timeframe);
+    // Like-for-like against the window actually covered by the cube.
+    var buyYtdMonths = _periodMonths('buy', _state.buyCube, timeframe);
+    var buyYtd2025 = _sumWindow(buyRows, 'buy_gmv', _priorYearWindow(buyYtdMonths), 'buy', _state.buyCube);
 
     var sourcingTable = null;
     if (buyMonthlyTotals.length) {
@@ -1178,7 +1735,7 @@
     }
 
     // ── Sell monthly — from cube
-    var sellAggYtd = _aggregateSellCube(sellRows, 'ytd');
+    var sellAggYtd = _aggregateSellCube(sellRows, timeframe);
     var sellOnlineYtd  = sellAggYtd ? (sellAggYtd.online  > 0 ? sellAggYtd.online  : null) : null;
     var sellOfflineYtd = sellAggYtd ? (sellAggYtd.offline > 0 ? sellAggYtd.offline : null) : null;
     var sellTotalYtd   = sellAggYtd ? (sellAggYtd.total   > 0 ? sellAggYtd.total   : null) : null;
@@ -1387,13 +1944,52 @@
    * EVERY view that prioritizes wholesalers MUST use this function.
    * Pre-live, Prospect, Unknown tier, non-Wholesaler → excluded.
    */
+  /**
+   * Canonical wholesaler universe.
+   *
+   * Was: Client + business_type Wholesaler + known product_tier → 127 accounts.
+   * That rule dropped 19 accounts hand-curated in Christine/Facundo's sheet,
+   * 18 of them excluded only for being Pre-live or Prospect — $77.1M of Est
+   * GMV, with Alpha Fern and Baystate alone worth $40M. The portfolio universe
+   * is therefore the union of the canonical filter and that sheet: **145
+   * accounts**, an explicit set of sfdc_ids in data/wholesaler_universe.json
+   * rather than a rule, because membership involves human judgement that no
+   * combination of fields encodes.
+   *
+   * The external 618-profile research identifies a further 208 accounts as
+   * wholesalers (69 of them already Clients booked in Salesforce as Importer,
+   * Grower or Retailer). Those are **registered but deliberately kept out of
+   * the portfolio and its KPIs** — see isOnly618() — because the 618 defines
+   * "wholesaler" as selling wholesale to the trade, which in floral legitimately
+   * includes importers. No business_type is changed in Salesforce; the team
+   * validates the classification first.
+   *
+   * If the file is missing the old rule still applies, so the dashboard degrades
+   * to its previous behaviour instead of showing an empty table.
+   */
   function isClientWholesaler(ev) {
     if (!ev || !ev.identity) return false;
     var id = ev.identity;
+
+    if (_state.whUniverse) {
+      var sfdc = id.sfdc_id || (_state.accountById[_sid(id.company_id)] || {}).sfdc_id;
+      if (sfdc) return _state.whUniverse[String(sfdc)] === true;
+    }
+
     return id.account_class === 'Client'
       && id.business_type === 'Wholesaler'
       && id.product_tier
       && id.product_tier !== 'Unknown';
+  }
+
+  /**
+   * Identified as a wholesaler ONLY by the 618-profile research: registered,
+   * reviewable, and outside the portfolio until the team validates it.
+   */
+  function isOnly618(ev) {
+    if (!ev || !ev.identity || !_state.wh618) return false;
+    var sfdc = ev.identity.sfdc_id;
+    return !!sfdc && _state.wh618[String(sfdc)] === true;
   }
 
   var EvidenceAdapter = {
@@ -1403,6 +1999,7 @@
     getAllAccountIds:    getAllAccountIds,
     getLoadedState:     getLoadedState,
     isClientWholesaler: isClientWholesaler,
+    isOnly618:          isOnly618,
   };
 
   if (typeof module !== 'undefined' && module.exports) {

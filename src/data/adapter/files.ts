@@ -12,6 +12,8 @@ export const DATA_FILES = {
   sellCube: `${DATA_BASE}current/sell_monthly.json`,
   buyCube: `${DATA_BASE}current/buy_monthly.json`,
   feesCube: `${DATA_BASE}current/fees_monthly.json`,
+  indirectCube: `${DATA_BASE}current/indirect_fees_monthly.json`,
+  whUniverse: `${DATA_BASE}wholesaler_universe.json`,
   gmvPacing: `${DATA_BASE}gmv_pacing.json`,
   gmvExternal: `${DATA_BASE}gmv_estimates_external.json`,
 
@@ -30,6 +32,30 @@ export const DATA_FILES = {
 } as const;
 
 export type DataFileKey = keyof typeof DATA_FILES;
+
+/**
+ * Known-bad company-months, dropped when the cubes are indexed.
+ *
+ * Ninfa Flowers reports Apr–Oct 2025 three orders of magnitude above its own
+ * baseline — $268,182,503 in April 2025 against months of $6K–$627K, with a
+ * single source line of $31,239,146. Left in, it is 20% of the buy cube.
+ * PROCUREMENT_DETAILS has no equivalent of the model's `sales < 100000` guard,
+ * so nothing upstream filters it; it needs a fix at the source.
+ */
+export const BAD_CUBE_ROWS: Readonly<Record<'sell' | 'buy', ReadonlyArray<{
+  companyId: string; from: string; to: string; reason: string;
+}>>> = {
+  buy: [
+    { companyId: '640977', from: '2025-04', to: '2025-10',
+      reason: 'Valores 3 órdenes de magnitud sobre su propia línea base (verificado 2026-09-08)' },
+  ],
+  sell: [],
+};
+
+export function isBadCubeRow(cube: 'sell' | 'buy', companyId: string, month: string | undefined): boolean {
+  if (!month) return false;
+  return BAD_CUBE_ROWS[cube].some((b) => b.companyId === companyId && month >= b.from && month <= b.to);
+}
 
 /** Training / sandbox / demo accounts excluded from every view. */
 export const EXCLUDED_COMPANY_IDS: ReadonlySet<string> = new Set([

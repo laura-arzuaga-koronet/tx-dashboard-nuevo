@@ -7,7 +7,7 @@ import { calcAtStake } from './metrics';
 export type SortKey =
   | 'name' | 'est_sell' | 'koronet_sell' | 'sell_pen' | 'online_pct'
   | 'est_buy' | 'koronet_buy' | 'buy_pen' | 'buy_online_pct'
-  | 'fees' | 'take_rate' | 'at_stake';
+  | 'fees' | 'fees_indirect' | 'take_rate' | 'at_stake';
 
 export type SortDir = 'asc' | 'desc';
 
@@ -30,7 +30,8 @@ export function getSortValue(ev: AccountEvidence, key: SortKey, sfdc: SfdcOppTot
     case 'koronet_buy': return p ? evValue(p.koronet_buy_period) : null;
     case 'buy_pen': return p ? evValue(p.buy_penetration) : null;
     case 'buy_online_pct': return p ? evValue(p.buy_online_pct) : null;
-    case 'fees': return p ? evValue(p.fees_period) : null;
+    case 'fees': return p ? evValue(p.fees_direct) : null;
+    case 'fees_indirect': return p ? evValue(p.fees_indirect) : null;
     case 'take_rate': return p ? evValue(p.take_rate) : null;
     case 'at_stake': return calcAtStake(ev, sfdc)?.amount ?? null;
   }
@@ -59,8 +60,8 @@ export function sortEvidence(list: readonly AccountEvidence[], sort: SortState, 
 /** Default ordering when data loads: fees desc, then name. */
 export function defaultOrder(list: readonly AccountEvidence[]): AccountEvidence[] {
   return [...list].sort((a, b) => {
-    const fa = a.potential?.fees_period?.value ?? 0;
-    const fb = b.potential?.fees_period?.value ?? 0;
+    const fa = a.potential?.fees_direct?.value ?? 0;
+    const fb = b.potential?.fees_direct?.value ?? 0;
     if (fb !== fa) return fb - fa;
     return (a._company_name ?? '').localeCompare(b._company_name ?? '');
   });

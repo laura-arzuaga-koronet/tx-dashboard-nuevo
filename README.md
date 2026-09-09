@@ -10,7 +10,8 @@ de datos tipado y verificado contra el original, y la lógica de negocio separad
 | Fase | Alcance | Estado |
 |---|---|---|
 | **1 · Base** | Estructura del proyecto, tokens de estilo, adapter en TS con test de paridad, topbar con filtros, KPI strip, tabs, tabla de portafolio con sort/paginación, fila expandible con Identity / Key figures / Source coverage | ✅ |
-| **1b · Períodos** | Modelo `Period` (YTD · Full year · Last 12 months) con rangos explícitos y baseline YoY like-for-like; fees filtrados por período (corrige el KPI inflado del legacy); cubo de fees regenerado con grano mensual real desde Snowflake | ✅ Esta entrega |
+| **1b · Períodos** | Modelo `Period` con rangos explícitos y baseline YoY like-for-like; fees filtrados por período (corrige el KPI inflado del legacy); cubo de fees regenerado con grano mensual real desde Snowflake | ✅ |
+| **1c · Paridad con el legacy corregido** | Los cuatro períodos de la reunión; Direct/Indirect Fees y nuevo Take Rate; tendencia en todas las columnas; motivo por celda cuando una métrica está vacía; universo de wholesalers + tab del 618; exclusión de datos corruptos; auto-ventas separadas del sell GMV | ✅ Esta entrega |
 | 2 · Tarjetas | Las 6 tarjetas de evidencia (Potential, Opportunities, BUY, LIST, SELL, Freshness) dentro de la fila expandida | Pendiente |
 | 3 · Definitions & Matrix | Matriz Est GMV × Product Tier con drill-down, tablas de metodología | Pendiente |
 | 4 · Datos | Script de build que compacta los 15 JSON (~9.6 MB) en un bundle por vista; derivar el período desde `_meta` en todos lados | Pendiente |
@@ -100,9 +101,14 @@ anclan en el último mes cerrado del cubo de sell (`_meta.period_to`, hoy 2026-0
 
 | Período | Rango | Baseline YoY | Anualización |
 |---|---|---|---|
-| YTD 2026 | ene–jul 2026 | ene–jul 2025 | 12 / meses con datos |
-| Full year 2025 | ene–dic 2025 | ene–dic 2024 | 1 (12 meses) |
-| Last 12 months | ago 2025–jul 2026 | ago 2024–jul 2025 | 1 (12 meses) |
+| YTD 2026 | ene–ago 2026 | ene–ago 2025 | 12 / meses con datos |
+| 1er semestre 2026 | ene–jun 2026 | ene–jun 2025 | 12 / 6 |
+| Todo 2025 | ene–dic 2025 | ene–dic 2024 | 1 (12 meses) |
+| Últimos 12 meses | sep 2025–ago 2026 | sep 2024–ago 2025 | 1 (12 meses) |
+
+Los cuatro cubos (sell, buy, fees, indirect fees) se regeneraron a la misma ventana **ene-2024 →
+ago-2026**, así que todos los períodos tienen baseline YoY. Antes cada cubo empezaba en un mes
+distinto y "Todo 2025" quedaba sin ninguna comparación.
 
 Sell, buy y fees pasan por el mismo filtro (`filterByRange`); penetración, online % y take rate se
 calculan con los valores del rango. El YoY solo se reporta cuando el cubo cubre el rango anterior
@@ -111,10 +117,11 @@ tiene YoY de sell y "Last 12 months" no tiene YoY de fees): un baseline parcial 
 
 ## Verificación
 
-`tests/adapter.parity.test.ts` ejecuta el adapter original (JS) y el nuevo (TS) sobre los mismos JSON
-y exige salida idéntica para **todas** las cuentas (~4k) en YTD, salvo tres desviaciones deliberadas
-que el test documenta: fees filtrados por período, canales online según Regla 6, y "mes actual" =
-último mes dentro del período. `tests/adapter.periods.test.ts` cruza fees / sell / buy de cada período
+`tests/adapter.parity.test.ts` ejecuta el adapter legacy (JS, en su versión **ya corregida**) y el
+nuevo (TS) sobre los mismos JSON y exige salida idéntica para **todas** las cuentas (~4k) en YTD,
+salvo tres desviaciones deliberadas que el test documenta: fees filtrados por período, canales
+online según Regla 6, y "mes actual" = último mes dentro del período. Esa paridad es la
+verificación más fuerte del port: las dos implementaciones calculan lo mismo, campo por campo. `tests/adapter.periods.test.ts` cruza fees / sell / buy de cada período
 contra sumas crudas de los JSON. La UI se verificó además comparando KPIs, conteos de tabs y orden de
 filas contra el HTML original: coinciden en todo menos en fees (ver abajo).
 

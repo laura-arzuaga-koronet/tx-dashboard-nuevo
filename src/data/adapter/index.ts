@@ -116,10 +116,36 @@ export function getLoadedState(): LoadedState {
 export function isClientWholesaler(ev: AccountEvidence | null): boolean {
   if (!ev?.identity) return false;
   const id = ev.identity;
+
+  /* The portfolio universe is an explicit set of sfdc_ids, not a rule: the old
+     Client + Wholesaler + product_tier filter gave 127 accounts and dropped 19
+     hand-curated in Christine/Facundo's sheet, 18 of them only for being
+     Pre-live or Prospect — $77.1M of Est GMV. Membership involves human
+     judgement no combination of fields encodes. Falls back to the old rule when
+     the file is missing, so the app degrades instead of blanking. */
+  if (store.whPortfolio) {
+    const sfdc = id.sfdc_id ?? store.accountById[String(id.company_id)]?.sfdc_id;
+    if (sfdc) return store.whPortfolio.has(String(sfdc));
+  }
+
   return id.account_class === 'Client'
     && id.business_type === 'Wholesaler'
     && !!id.product_tier
     && id.product_tier !== 'Unknown';
+}
+
+/**
+ * Identified as a wholesaler ONLY by the external 618-profile research:
+ * registered and reviewable, but deliberately OUTSIDE the portfolio and its
+ * KPIs until the team validates the classification. The 618 defines
+ * "wholesaler" as selling wholesale to the trade, which in floral legitimately
+ * includes importers — 69 of these are Clients booked in Salesforce as
+ * Importer, Grower or Retailer. No business_type is changed in Salesforce.
+ */
+export function isOnly618(ev: AccountEvidence | null): boolean {
+  if (!ev?.identity || !store.wh618) return false;
+  const sfdc = ev.identity.sfdc_id;
+  return !!sfdc && store.wh618.has(String(sfdc));
 }
 
 /** Test-only: forget everything so the next init() reloads. */
@@ -136,6 +162,7 @@ export const evidenceAdapter = {
   getPeriods,
   getLoadedState,
   isClientWholesaler,
+  isOnly618,
 };
 
 export type { AccountEvidence } from './types';

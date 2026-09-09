@@ -7,14 +7,17 @@ interface TabButtonProps {
   count?: number | string | null;
   children: ReactNode;
   className?: string;
+  /** Tooltip — used by the universe tabs to explain what the set is. */
+  title?: string;
 }
 
-export function TabButton({ active, onClick, count, children, className }: TabButtonProps) {
+export function TabButton({ active, onClick, count, children, className, title }: TabButtonProps) {
   return (
     <button
       type="button"
       className={[styles.tab, active ? styles.active : '', className].filter(Boolean).join(' ')}
       onClick={onClick}
+      title={title}
       aria-pressed={active}
     >
       {children}

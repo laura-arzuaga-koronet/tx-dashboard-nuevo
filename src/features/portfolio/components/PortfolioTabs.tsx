@@ -4,7 +4,7 @@
  *  2. Action (Portfolio / BUY / LIST / SELL / CONFIG / Declining) — narrows by opportunity flag.
  */
 import { TabButton, TabsNav, TabsSpacer } from '../../../components/ui/TabButton';
-import type { ActionTab, ActionTabCounts, BusinessTypeCounts } from '../../../domain/filters';
+import { ONLY_618_TAB, UNIVERSE_TAB, type ActionTab, type ActionTabCounts, type BusinessTypeCounts } from '../../../domain/filters';
 import type { FiltersAction } from '../../../state/filtersReducer';
 import { BUSINESS_TYPES } from '../filterOptions';
 
@@ -33,6 +33,22 @@ export function BusinessTypeTabs({ value, counts, dispatch, onToggleDefinitions,
         </TabButton>
       ))}
       <TabButton active={value === ''} count={counts.all} onClick={() => select('')}>All</TabButton>
+      <TabButton
+        active={value === UNIVERSE_TAB}
+        count={counts.universe}
+        onClick={() => select(UNIVERSE_TAB)}
+        title="Portafolio de wholesalers: filtro canónico + hoja de Christine/Facundo"
+      >
+        Universo WH
+      </TabButton>
+      <TabButton
+        active={value === ONLY_618_TAB}
+        count={counts.only618}
+        onClick={() => select(ONLY_618_TAB)}
+        title="Cuentas que solo la investigación del universo 618 identifica como wholesalers. Se registran para revisión pero NO entran al portafolio ni a sus KPI, y no se les cambia el business_type en Salesforce."
+      >
+        618 · fuera de portafolio
+      </TabButton>
       {onToggleDefinitions && (
         <>
           <TabsSpacer />

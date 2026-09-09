@@ -1,0 +1,2816 @@
+{
+ "_meta": {
+  "generated_at": "2026-09-09",
+  "min_base_usd": 100000,
+  "network_rates": {
+   "ecom": 0.008253,
+   "k2k": 0.023676,
+   "api": 0.001559
+  },
+  "method": "rate = fees facturados / ventas medidas, por vendedor y canal, sobre 2024-01 \u2192 2026-08",
+  "note": "Numerador y denominador salen de la misma ventana y las compras atribuidas se miden con los mismos filtros, as\u00ed que cualquier diferencia entre la base de facturaci\u00f3n de Koronet y la nuestra se cancela.",
+  "rows": 280
+ },
+ "rates": [
+  {
+   "seller_company_id": "12941",
+   "seller_name": "Rosaprima International, LLC",
+   "fee_channel": "api",
+   "seller_sell_gmv": 97330706.1,
+   "seller_fees_billed": 6235.23,
+   "rate": 6.4e-05,
+   "rate_source": "vendedor",
+   "attributed_purchases": 28724406.1
+  },
+  {
+   "seller_company_id": "25489",
+   "seller_name": "Sole Farms",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 27423717.12,
+   "seller_fees_billed": 142516.06,
+   "rate": 0.005197,
+   "rate_source": "vendedor",
+   "attributed_purchases": 17024042.77
+  },
+  {
+   "seller_company_id": "103112",
+   "seller_name": "Fresca Farms",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 25734253.92,
+   "seller_fees_billed": 62515.09,
+   "rate": 0.002429,
+   "rate_source": "vendedor",
+   "attributed_purchases": 15414799.61
+  },
+  {
+   "seller_company_id": "12941",
+   "seller_name": "Rosaprima International, LLC",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 18359575.0,
+   "seller_fees_billed": 41747.95,
+   "rate": 0.002274,
+   "rate_source": "vendedor",
+   "attributed_purchases": 12145459.14
+  },
+  {
+   "seller_company_id": "25489",
+   "seller_name": "Sole Farms",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 10314251.51,
+   "seller_fees_billed": 154647.46,
+   "rate": 0.014994,
+   "rate_source": "vendedor",
+   "attributed_purchases": 10326225.71
+  },
+  {
+   "seller_company_id": "341499",
+   "seller_name": "Choice Farms",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 12376202.78,
+   "seller_fees_billed": 178603.36,
+   "rate": 0.014431,
+   "rate_source": "vendedor",
+   "attributed_purchases": 8590348.71
+  },
+  {
+   "seller_company_id": "18322",
+   "seller_name": "Jet Fresh Flower Distributors Inc.",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 19333940.04,
+   "seller_fees_billed": 132457.71,
+   "rate": 0.006851,
+   "rate_source": "vendedor",
+   "attributed_purchases": 7445797.45
+  },
+  {
+   "seller_company_id": "146846",
+   "seller_name": "Continental Flowers",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 11192454.17,
+   "seller_fees_billed": 168403.75,
+   "rate": 0.015046,
+   "rate_source": "vendedor",
+   "attributed_purchases": 7022021.53
+  },
+  {
+   "seller_company_id": "17789",
+   "seller_name": "Bella Blossom LLC",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 9686063.92,
+   "seller_fees_billed": 85839.68,
+   "rate": 0.008862,
+   "rate_source": "vendedor",
+   "attributed_purchases": 6856081.55
+  },
+  {
+   "seller_company_id": "18322",
+   "seller_name": "Jet Fresh Flower Distributors Inc.",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 6529652.22,
+   "seller_fees_billed": 101201.7,
+   "rate": 0.015499,
+   "rate_source": "vendedor",
+   "attributed_purchases": 6543007.83
+  },
+  {
+   "seller_company_id": "22143",
+   "seller_name": "Royal Flowers Inc., Domestic",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 11418272.44,
+   "seller_fees_billed": 171399.55,
+   "rate": 0.015011,
+   "rate_source": "vendedor",
+   "attributed_purchases": 6513257.76
+  },
+  {
+   "seller_company_id": "103112",
+   "seller_name": "Fresca Farms",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 5719664.42,
+   "seller_fees_billed": 85955.3,
+   "rate": 0.015028,
+   "rate_source": "vendedor",
+   "attributed_purchases": 5705188.95
+  },
+  {
+   "seller_company_id": "22143",
+   "seller_name": "Royal Flowers Inc., Domestic",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 4807723.54,
+   "seller_fees_billed": 72049.32,
+   "rate": 0.014986,
+   "rate_source": "vendedor",
+   "attributed_purchases": 4779997.93
+  },
+  {
+   "seller_company_id": "146846",
+   "seller_name": "Continental Flowers",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 4530811.76,
+   "seller_fees_billed": 68282.27,
+   "rate": 0.015071,
+   "rate_source": "vendedor",
+   "attributed_purchases": 4520046.98
+  },
+  {
+   "seller_company_id": "341499",
+   "seller_name": "Choice Farms",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 4432192.37,
+   "seller_fees_billed": 63898.77,
+   "rate": 0.014417,
+   "rate_source": "vendedor",
+   "attributed_purchases": 4438089.88
+  },
+  {
+   "seller_company_id": "498842",
+   "seller_name": "SUNRITE FARMS COLLECTIONS CORP",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 6106229.52,
+   "seller_fees_billed": 91878.04,
+   "rate": 0.015047,
+   "rate_source": "vendedor",
+   "attributed_purchases": 4166013.36
+  },
+  {
+   "seller_company_id": "453081",
+   "seller_name": "Welyflor / Profile Flowers",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 5927395.71,
+   "seller_fees_billed": 88990.95,
+   "rate": 0.015013,
+   "rate_source": "vendedor",
+   "attributed_purchases": 3733273.71
+  },
+  {
+   "seller_company_id": "12941",
+   "seller_name": "Rosaprima International, LLC",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 3519293.23,
+   "seller_fees_billed": 53015.39,
+   "rate": 0.015064,
+   "rate_source": "vendedor",
+   "attributed_purchases": 3531316.89
+  },
+  {
+   "seller_company_id": "7631",
+   "seller_name": "A Trilogy Floral - Zamba Flowers",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 5280622.06,
+   "seller_fees_billed": 78734.21,
+   "rate": 0.01491,
+   "rate_source": "vendedor",
+   "attributed_purchases": 3301208.55
+  },
+  {
+   "seller_company_id": "412951",
+   "seller_name": "KBC Cooler Account",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 3103557.06,
+   "seller_fees_billed": 16644.73,
+   "rate": 0.005363,
+   "rate_source": "vendedor",
+   "attributed_purchases": 3112967.11
+  },
+  {
+   "seller_company_id": "22218",
+   "seller_name": "Sunburst Farms",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 6723611.77,
+   "seller_fees_billed": 79319.26,
+   "rate": 0.011797,
+   "rate_source": "vendedor",
+   "attributed_purchases": 3041655.54
+  },
+  {
+   "seller_company_id": "315007",
+   "seller_name": "The Queens Flowers Corp",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 2966653.46,
+   "seller_fees_billed": 44670.18,
+   "rate": 0.015057,
+   "rate_source": "vendedor",
+   "attributed_purchases": 2966802.42
+  },
+  {
+   "seller_company_id": "17789",
+   "seller_name": "Bella Blossom LLC",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 2851178.04,
+   "seller_fees_billed": 42626.87,
+   "rate": 0.014951,
+   "rate_source": "vendedor",
+   "attributed_purchases": 2832182.44
+  },
+  {
+   "seller_company_id": "73730",
+   "seller_name": "Allure Farms",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 7523028.44,
+   "seller_fees_billed": 80717.42,
+   "rate": 0.010729,
+   "rate_source": "vendedor",
+   "attributed_purchases": 2766247.43
+  },
+  {
+   "seller_company_id": "468041",
+   "seller_name": "U.S. Greens Corp",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 4781122.51,
+   "seller_fees_billed": 71886.04,
+   "rate": 0.015035,
+   "rate_source": "vendedor",
+   "attributed_purchases": 2734575.36
+  },
+  {
+   "seller_company_id": "453081",
+   "seller_name": "Welyflor / Profile Flowers",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 2609425.33,
+   "seller_fees_billed": 39198.72,
+   "rate": 0.015022,
+   "rate_source": "vendedor",
+   "attributed_purchases": 2589610.42
+  },
+  {
+   "seller_company_id": "498842",
+   "seller_name": "SUNRITE FARMS COLLECTIONS CORP",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 2430982.51,
+   "seller_fees_billed": 36622.65,
+   "rate": 0.015065,
+   "rate_source": "vendedor",
+   "attributed_purchases": 2425774.98
+  },
+  {
+   "seller_company_id": "38582",
+   "seller_name": "Gala Roses",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 3303217.6,
+   "seller_fees_billed": 27437.86,
+   "rate": 0.008306,
+   "rate_source": "vendedor",
+   "attributed_purchases": 2256807.56
+  },
+  {
+   "seller_company_id": "139851",
+   "seller_name": "Floral Chain Direct",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 2974897.26,
+   "seller_fees_billed": 43118.47,
+   "rate": 0.014494,
+   "rate_source": "vendedor",
+   "attributed_purchases": 2076207.27
+  },
+  {
+   "seller_company_id": "7631",
+   "seller_name": "A Trilogy Floral - Zamba Flowers",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 1995914.29,
+   "seller_fees_billed": 29876.04,
+   "rate": 0.014969,
+   "rate_source": "vendedor",
+   "attributed_purchases": 1991946.61
+  },
+  {
+   "seller_company_id": "375054",
+   "seller_name": "Miaflora Farms",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 1817382.78,
+   "seller_fees_billed": 27440.31,
+   "rate": 0.015099,
+   "rate_source": "vendedor",
+   "attributed_purchases": 1822514.25
+  },
+  {
+   "seller_company_id": "198117",
+   "seller_name": "Continental Farms",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 3549566.0,
+   "seller_fees_billed": 53588.5,
+   "rate": 0.015097,
+   "rate_source": "vendedor",
+   "attributed_purchases": 1786703.13
+  },
+  {
+   "seller_company_id": "315007",
+   "seller_name": "The Queens Flowers Corp",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 2034402.03,
+   "seller_fees_billed": 30570.28,
+   "rate": 0.015027,
+   "rate_source": "vendedor",
+   "attributed_purchases": 1768853.69
+  },
+  {
+   "seller_company_id": "77300",
+   "seller_name": "Golden Flowers",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 2416332.48,
+   "seller_fees_billed": 36414.4,
+   "rate": 0.01507,
+   "rate_source": "vendedor",
+   "attributed_purchases": 1668972.31
+  },
+  {
+   "seller_company_id": "73730",
+   "seller_name": "Allure Farms",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 1624671.02,
+   "seller_fees_billed": 33788.93,
+   "rate": 0.020797,
+   "rate_source": "vendedor",
+   "attributed_purchases": 1618882.12
+  },
+  {
+   "seller_company_id": "200503",
+   "seller_name": "Stellar Farms",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 1611872.26,
+   "seller_fees_billed": 23525.16,
+   "rate": 0.014595,
+   "rate_source": "vendedor",
+   "attributed_purchases": 1614624.57
+  },
+  {
+   "seller_company_id": "377256",
+   "seller_name": "Multiflora Corporation",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 3103504.56,
+   "seller_fees_billed": 46853.29,
+   "rate": 0.015097,
+   "rate_source": "vendedor",
+   "attributed_purchases": 1535797.91
+  },
+  {
+   "seller_company_id": "38582",
+   "seller_name": "Gala Roses",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 1552870.34,
+   "seller_fees_billed": 23357.53,
+   "rate": 0.015042,
+   "rate_source": "vendedor",
+   "attributed_purchases": 1532685.33
+  },
+  {
+   "seller_company_id": "468041",
+   "seller_name": "U.S. Greens Corp",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 1502294.78,
+   "seller_fees_billed": 22843.78,
+   "rate": 0.015206,
+   "rate_source": "vendedor",
+   "attributed_purchases": 1505750.08
+  },
+  {
+   "seller_company_id": "375054",
+   "seller_name": "Miaflora Farms",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 2454669.22,
+   "seller_fees_billed": 36928.62,
+   "rate": 0.015044,
+   "rate_source": "vendedor",
+   "attributed_purchases": 1444667.89
+  },
+  {
+   "seller_company_id": "182870",
+   "seller_name": "Cananvalle USA LLC",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 1922634.32,
+   "seller_fees_billed": 28728.7,
+   "rate": 0.014942,
+   "rate_source": "vendedor",
+   "attributed_purchases": 1444539.42
+  },
+  {
+   "seller_company_id": "467802",
+   "seller_name": "Protean Farms US",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 1437026.11,
+   "seller_fees_billed": 21545.13,
+   "rate": 0.014993,
+   "rate_source": "vendedor",
+   "attributed_purchases": 1441294.02
+  },
+  {
+   "seller_company_id": "377256",
+   "seller_name": "Multiflora Corporation",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 1358678.64,
+   "seller_fees_billed": 20624.7,
+   "rate": 0.01518,
+   "rate_source": "vendedor",
+   "attributed_purchases": 1359194.74
+  },
+  {
+   "seller_company_id": "41934",
+   "seller_name": "Continental Floral LLC",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 2114287.88,
+   "seller_fees_billed": 32081.26,
+   "rate": 0.015174,
+   "rate_source": "vendedor",
+   "attributed_purchases": 1355577.65
+  },
+  {
+   "seller_company_id": "22218",
+   "seller_name": "Sunburst Farms",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 1351819.34,
+   "seller_fees_billed": 20198.79,
+   "rate": 0.014942,
+   "rate_source": "vendedor",
+   "attributed_purchases": 1349111.25
+  },
+  {
+   "seller_company_id": "378242",
+   "seller_name": "Premium Flowers",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 1301416.16,
+   "seller_fees_billed": 19693.55,
+   "rate": 0.015132,
+   "rate_source": "vendedor",
+   "attributed_purchases": 1304015.77
+  },
+  {
+   "seller_company_id": "41934",
+   "seller_name": "Continental Floral LLC",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 1283590.09,
+   "seller_fees_billed": 19401.33,
+   "rate": 0.015115,
+   "rate_source": "vendedor",
+   "attributed_purchases": 1285284.6
+  },
+  {
+   "seller_company_id": "395159",
+   "seller_name": "Equiflor LLC",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 1278503.61,
+   "seller_fees_billed": 19313.59,
+   "rate": 0.015106,
+   "rate_source": "vendedor",
+   "attributed_purchases": 1282014.27
+  },
+  {
+   "seller_company_id": "200279",
+   "seller_name": "DP Flowers Corp",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 1887186.34,
+   "seller_fees_billed": 27024.0,
+   "rate": 0.01432,
+   "rate_source": "vendedor",
+   "attributed_purchases": 1180900.56
+  },
+  {
+   "seller_company_id": "395159",
+   "seller_name": "Equiflor LLC",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 1710042.55,
+   "seller_fees_billed": 25764.02,
+   "rate": 0.015066,
+   "rate_source": "vendedor",
+   "attributed_purchases": 1113450.12
+  },
+  {
+   "seller_company_id": "508421",
+   "seller_name": "Gardens America Inc.",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 2086020.28,
+   "seller_fees_billed": 31129.55,
+   "rate": 0.014923,
+   "rate_source": "vendedor",
+   "attributed_purchases": 1109756.22
+  },
+  {
+   "seller_company_id": "614448",
+   "seller_name": "The Queens Flowers, Corp",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 1505587.38,
+   "seller_fees_billed": 22900.77,
+   "rate": 0.015211,
+   "rate_source": "vendedor",
+   "attributed_purchases": 1064701.3
+  },
+  {
+   "seller_company_id": "139851",
+   "seller_name": "Floral Chain Direct",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 1061631.8,
+   "seller_fees_billed": 15874.38,
+   "rate": 0.014953,
+   "rate_source": "vendedor",
+   "attributed_purchases": 1063520.72
+  },
+  {
+   "seller_company_id": "198117",
+   "seller_name": "Continental Farms",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 987512.83,
+   "seller_fees_billed": 14907.56,
+   "rate": 0.015096,
+   "rate_source": "vendedor",
+   "attributed_purchases": 988416.46
+  },
+  {
+   "seller_company_id": "343614",
+   "seller_name": "Galleria Farms",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 1886510.4,
+   "seller_fees_billed": 28567.09,
+   "rate": 0.015143,
+   "rate_source": "vendedor",
+   "attributed_purchases": 988134.59
+  },
+  {
+   "seller_company_id": "378242",
+   "seller_name": "Premium Flowers",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 1685110.25,
+   "seller_fees_billed": 25397.32,
+   "rate": 0.015072,
+   "rate_source": "vendedor",
+   "attributed_purchases": 982557.67
+  },
+  {
+   "seller_company_id": "467802",
+   "seller_name": "Protean Farms US",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 1626123.96,
+   "seller_fees_billed": 24137.96,
+   "rate": 0.014844,
+   "rate_source": "vendedor",
+   "attributed_purchases": 975569.67
+  },
+  {
+   "seller_company_id": "412951",
+   "seller_name": "KBC Cooler Account",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 1029455.74,
+   "seller_fees_billed": 24.58,
+   "rate": 2.4e-05,
+   "rate_source": "vendedor",
+   "attributed_purchases": 886653.98
+  },
+  {
+   "seller_company_id": "200503",
+   "seller_name": "Stellar Farms",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 1403758.83,
+   "seller_fees_billed": 20592.56,
+   "rate": 0.01467,
+   "rate_source": "vendedor",
+   "attributed_purchases": 877284.84
+  },
+  {
+   "seller_company_id": "395382",
+   "seller_name": "Naranjo Farms LLC",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 1216507.58,
+   "seller_fees_billed": 18259.21,
+   "rate": 0.01501,
+   "rate_source": "vendedor",
+   "attributed_purchases": 858897.49
+  },
+  {
+   "seller_company_id": "130337",
+   "seller_name": "EQR USA",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 1295247.55,
+   "seller_fees_billed": 19385.04,
+   "rate": 0.014966,
+   "rate_source": "vendedor",
+   "attributed_purchases": 784970.49
+  },
+  {
+   "seller_company_id": "144369",
+   "seller_name": "Premium Greens Australia LLC",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 1200562.0,
+   "seller_fees_billed": 12709.36,
+   "rate": 0.010586,
+   "rate_source": "vendedor",
+   "attributed_purchases": 728962.55
+  },
+  {
+   "seller_company_id": "77300",
+   "seller_name": "Golden Flowers",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 718647.45,
+   "seller_fees_billed": 10781.37,
+   "rate": 0.015002,
+   "rate_source": "vendedor",
+   "attributed_purchases": 709632.52
+  },
+  {
+   "seller_company_id": "54343",
+   "seller_name": "Wafex USA",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 1087595.7,
+   "seller_fees_billed": 16039.48,
+   "rate": 0.014748,
+   "rate_source": "vendedor",
+   "attributed_purchases": 684278.19
+  },
+  {
+   "seller_company_id": "6554",
+   "seller_name": "Valley Springs LLC",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 875301.22,
+   "seller_fees_billed": 1366.42,
+   "rate": 0.001561,
+   "rate_source": "vendedor",
+   "attributed_purchases": 658567.72
+  },
+  {
+   "seller_company_id": "257477",
+   "seller_name": "Mayta International LLC / Native Blooms",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 1164913.45,
+   "seller_fees_billed": 17595.81,
+   "rate": 0.015105,
+   "rate_source": "vendedor",
+   "attributed_purchases": 651398.9
+  },
+  {
+   "seller_company_id": "507518",
+   "seller_name": "Anton Spaargaren B.V.",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 1433734.61,
+   "seller_fees_billed": 20972.85,
+   "rate": 0.014628,
+   "rate_source": "vendedor",
+   "attributed_purchases": 644951.81
+  },
+  {
+   "seller_company_id": "508421",
+   "seller_name": "Gardens America Inc.",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 590344.64,
+   "seller_fees_billed": 8831.67,
+   "rate": 0.01496,
+   "rate_source": "vendedor",
+   "attributed_purchases": 591245.27
+  },
+  {
+   "seller_company_id": "395382",
+   "seller_name": "Naranjo Farms LLC",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 575989.4,
+   "seller_fees_billed": 8635.69,
+   "rate": 0.014993,
+   "rate_source": "vendedor",
+   "attributed_purchases": 578240.34
+  },
+  {
+   "seller_company_id": "343614",
+   "seller_name": "Galleria Farms",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 545133.34,
+   "seller_fees_billed": 7685.48,
+   "rate": 0.014098,
+   "rate_source": "vendedor",
+   "attributed_purchases": 546594.36
+  },
+  {
+   "seller_company_id": "1614",
+   "seller_name": "-Groflowers",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 809323.54,
+   "seller_fees_billed": 12168.73,
+   "rate": 0.015036,
+   "rate_source": "vendedor",
+   "attributed_purchases": 526410.11
+  },
+  {
+   "seller_company_id": "6554",
+   "seller_name": "Valley Springs LLC",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 498563.6,
+   "seller_fees_billed": 7434.57,
+   "rate": 0.014912,
+   "rate_source": "vendedor",
+   "attributed_purchases": 500327.06
+  },
+  {
+   "seller_company_id": "130337",
+   "seller_name": "EQR USA",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 497650.22,
+   "seller_fees_billed": 7459.5,
+   "rate": 0.014989,
+   "rate_source": "vendedor",
+   "attributed_purchases": 497190.73
+  },
+  {
+   "seller_company_id": "498769",
+   "seller_name": "Melody Farms LLC",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 1129318.44,
+   "seller_fees_billed": 16443.08,
+   "rate": 0.01456,
+   "rate_source": "vendedor",
+   "attributed_purchases": 492613.68
+  },
+  {
+   "seller_company_id": "591665",
+   "seller_name": "Natural Flowers, Inc",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 1015676.87,
+   "seller_fees_billed": 15433.02,
+   "rate": 0.015195,
+   "rate_source": "vendedor",
+   "attributed_purchases": 490420.37
+  },
+  {
+   "seller_company_id": "35266",
+   "seller_name": "Liberty Blooms",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 717222.23,
+   "seller_fees_billed": 10920.2,
+   "rate": 0.015226,
+   "rate_source": "vendedor",
+   "attributed_purchases": 467994.12
+  },
+  {
+   "seller_company_id": "498769",
+   "seller_name": "Melody Farms LLC",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 410098.41,
+   "seller_fees_billed": 6409.27,
+   "rate": 0.015629,
+   "rate_source": "vendedor",
+   "attributed_purchases": 407787.65
+  },
+  {
+   "seller_company_id": "44225",
+   "seller_name": "Pinnacle Flowers, LLC",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 562109.65,
+   "seller_fees_billed": 7398.96,
+   "rate": 0.013163,
+   "rate_source": "vendedor",
+   "attributed_purchases": 383837.54
+  },
+  {
+   "seller_company_id": "475084",
+   "seller_name": "Valleflor USA",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 475514.18,
+   "seller_fees_billed": 7007.81,
+   "rate": 0.014737,
+   "rate_source": "vendedor",
+   "attributed_purchases": 345218.48
+  },
+  {
+   "seller_company_id": "591665",
+   "seller_name": "Natural Flowers, Inc",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 325687.02,
+   "seller_fees_billed": 4841.14,
+   "rate": 0.014864,
+   "rate_source": "vendedor",
+   "attributed_purchases": 325930.1
+  },
+  {
+   "seller_company_id": "44150",
+   "seller_name": "Kennicott Brothers Company",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 27754796.15,
+   "seller_fees_billed": 7940.84,
+   "rate": 0.000286,
+   "rate_source": "vendedor",
+   "attributed_purchases": 320079.35
+  },
+  {
+   "seller_company_id": "521854",
+   "seller_name": "Albin Hagstrom & Son, Inc.",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 301713.34,
+   "seller_fees_billed": 4549.66,
+   "rate": 0.015079,
+   "rate_source": "vendedor",
+   "attributed_purchases": 286867.81
+  },
+  {
+   "seller_company_id": "257477",
+   "seller_name": "Mayta International LLC / Native Blooms",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 276581.94,
+   "seller_fees_billed": 4167.24,
+   "rate": 0.015067,
+   "rate_source": "vendedor",
+   "attributed_purchases": 277043.44
+  },
+  {
+   "seller_company_id": "200279",
+   "seller_name": "DP Flowers Corp",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 271229.34,
+   "seller_fees_billed": 5283.39,
+   "rate": 0.019479,
+   "rate_source": "vendedor",
+   "attributed_purchases": 270030.59
+  },
+  {
+   "seller_company_id": "35266",
+   "seller_name": "Liberty Blooms",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 269151.51,
+   "seller_fees_billed": 4084.39,
+   "rate": 0.015175,
+   "rate_source": "vendedor",
+   "attributed_purchases": 267017.43
+  },
+  {
+   "seller_company_id": "54343",
+   "seller_name": "Wafex USA",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 263470.01,
+   "seller_fees_billed": 3927.16,
+   "rate": 0.014906,
+   "rate_source": "vendedor",
+   "attributed_purchases": 263433.6
+  },
+  {
+   "seller_company_id": "182872",
+   "seller_name": "The Elite Flower",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 262425.74,
+   "seller_fees_billed": 3755.79,
+   "rate": 0.014312,
+   "rate_source": "vendedor",
+   "attributed_purchases": 262107.54
+  },
+  {
+   "seller_company_id": "321907",
+   "seller_name": "Greens and Flowers Connection",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 568785.28,
+   "seller_fees_billed": 8504.75,
+   "rate": 0.014952,
+   "rate_source": "vendedor",
+   "attributed_purchases": 255490.1
+  },
+  {
+   "seller_company_id": "575819",
+   "seller_name": "LA TOSCANA FARMS",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 368245.65,
+   "seller_fees_billed": 5495.2,
+   "rate": 0.014923,
+   "rate_source": "vendedor",
+   "attributed_purchases": 253045.45
+  },
+  {
+   "seller_company_id": "614448",
+   "seller_name": "The Queens Flowers, Corp",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 231361.96,
+   "seller_fees_billed": 3589.73,
+   "rate": 0.015516,
+   "rate_source": "vendedor",
+   "attributed_purchases": 231466.85
+  },
+  {
+   "seller_company_id": "182870",
+   "seller_name": "Cananvalle USA LLC",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 228466.95,
+   "seller_fees_billed": 3430.14,
+   "rate": 0.015014,
+   "rate_source": "vendedor",
+   "attributed_purchases": 229016.45
+  },
+  {
+   "seller_company_id": "470794",
+   "seller_name": "AquaRose",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 522512.75,
+   "seller_fees_billed": 7811.98,
+   "rate": 0.014951,
+   "rate_source": "vendedor",
+   "attributed_purchases": 227664.7
+  },
+  {
+   "seller_company_id": "182872",
+   "seller_name": "The Elite Flower",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 381073.08,
+   "seller_fees_billed": 5466.19,
+   "rate": 0.014344,
+   "rate_source": "vendedor",
+   "attributed_purchases": 226912.46
+  },
+  {
+   "seller_company_id": "189419",
+   "seller_name": "Legacy Flowers",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 314484.07,
+   "seller_fees_billed": 4003.94,
+   "rate": 0.012732,
+   "rate_source": "vendedor",
+   "attributed_purchases": 222836.12
+  },
+  {
+   "seller_company_id": "796779",
+   "seller_name": "Kennicott Brothers West",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 209316.97,
+   "seller_fees_billed": 1565.02,
+   "rate": 0.007477,
+   "rate_source": "vendedor",
+   "attributed_purchases": 209316.97
+  },
+  {
+   "seller_company_id": "573661",
+   "seller_name": "J&E Greens",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 671996.16,
+   "seller_fees_billed": 10036.15,
+   "rate": 0.014935,
+   "rate_source": "vendedor",
+   "attributed_purchases": 208529.93
+  },
+  {
+   "seller_company_id": "701292",
+   "seller_name": "Riverdale Farms",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 329048.93,
+   "seller_fees_billed": 4978.55,
+   "rate": 0.01513,
+   "rate_source": "vendedor",
+   "attributed_purchases": 184363.08
+  },
+  {
+   "seller_company_id": "701292",
+   "seller_name": "Riverdale Farms",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 180049.19,
+   "seller_fees_billed": 2705.41,
+   "rate": 0.015026,
+   "rate_source": "vendedor",
+   "attributed_purchases": 180341.51
+  },
+  {
+   "seller_company_id": "509751",
+   "seller_name": "Best Miami Growers LLC",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 302182.02,
+   "seller_fees_billed": 4513.7,
+   "rate": 0.014937,
+   "rate_source": "vendedor",
+   "attributed_purchases": 171808.12
+  },
+  {
+   "seller_company_id": "199908",
+   "seller_name": "Bloomistics",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 245988.96,
+   "seller_fees_billed": 3701.69,
+   "rate": 0.015048,
+   "rate_source": "vendedor",
+   "attributed_purchases": 162982.96
+  },
+  {
+   "seller_company_id": "1614",
+   "seller_name": "-Groflowers",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 163640.03,
+   "seller_fees_billed": 2455.09,
+   "rate": 0.015003,
+   "rate_source": "vendedor",
+   "attributed_purchases": 159203.61
+  },
+  {
+   "seller_company_id": "530493",
+   "seller_name": "The Flower Co, LLC",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 255824.97,
+   "seller_fees_billed": 3604.74,
+   "rate": 0.014091,
+   "rate_source": "vendedor",
+   "attributed_purchases": 150774.21
+  },
+  {
+   "seller_company_id": "449683",
+   "seller_name": "Floreco, Inc",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 409832.62,
+   "seller_fees_billed": 6029.51,
+   "rate": 0.014712,
+   "rate_source": "vendedor",
+   "attributed_purchases": 150160.97
+  },
+  {
+   "seller_company_id": "649745",
+   "seller_name": "Miraflor LLC",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 240135.52,
+   "seller_fees_billed": 3587.66,
+   "rate": 0.01494,
+   "rate_source": "vendedor",
+   "attributed_purchases": 143273.32
+  },
+  {
+   "seller_company_id": "319143",
+   "seller_name": "FloraCo, Inc",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 211288.38,
+   "seller_fees_billed": 3474.37,
+   "rate": 0.016444,
+   "rate_source": "vendedor",
+   "attributed_purchases": 140428.06
+  },
+  {
+   "seller_company_id": "672147",
+   "seller_name": "A1 Floral Xpressions",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 133660.23,
+   "seller_fees_billed": 1989.56,
+   "rate": 0.014885,
+   "rate_source": "vendedor",
+   "attributed_purchases": 133592.23
+  },
+  {
+   "seller_company_id": "477673",
+   "seller_name": "ECOROSES LLC",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 248708.69,
+   "seller_fees_billed": 3724.43,
+   "rate": 0.014975,
+   "rate_source": "vendedor",
+   "attributed_purchases": 124203.84
+  },
+  {
+   "seller_company_id": "14422",
+   "seller_name": "PAT FLOR SCARL CORP",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 208009.92,
+   "seller_fees_billed": 1766.7,
+   "rate": 0.008493,
+   "rate_source": "vendedor",
+   "attributed_purchases": 123676.41
+  },
+  {
+   "seller_company_id": "579932",
+   "seller_name": "Tutuli Flower Farms",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 121004.95,
+   "seller_fees_billed": 1831.21,
+   "rate": 0.015133,
+   "rate_source": "vendedor",
+   "attributed_purchases": 120798.6
+  },
+  {
+   "seller_company_id": "454705",
+   "seller_name": "South Florals Imports LLC",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 119591.79,
+   "seller_fees_billed": 1819.03,
+   "rate": 0.01521,
+   "rate_source": "vendedor",
+   "attributed_purchases": 119756.82
+  },
+  {
+   "seller_company_id": "477673",
+   "seller_name": "ECOROSES LLC",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 116609.99,
+   "seller_fees_billed": 1756.59,
+   "rate": 0.015064,
+   "rate_source": "vendedor",
+   "attributed_purchases": 117092.99
+  },
+  {
+   "seller_company_id": "20769",
+   "seller_name": "AmeriLink Floratrader",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 113292.84,
+   "seller_fees_billed": 1696.49,
+   "rate": 0.014974,
+   "rate_source": "vendedor",
+   "attributed_purchases": 113543.09
+  },
+  {
+   "seller_company_id": "488495",
+   "seller_name": "Sierra Flower Trading",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 340970.59,
+   "seller_fees_billed": 850.22,
+   "rate": 0.002494,
+   "rate_source": "vendedor",
+   "attributed_purchases": 113133.99
+  },
+  {
+   "seller_company_id": "188968",
+   "seller_name": "Global Flowers",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 214972.36,
+   "seller_fees_billed": 2923.7,
+   "rate": 0.0136,
+   "rate_source": "vendedor",
+   "attributed_purchases": 109480.99
+  },
+  {
+   "seller_company_id": "13982",
+   "seller_name": "Servicios Chilfresh Ltda.",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 198519.46,
+   "seller_fees_billed": 3012.09,
+   "rate": 0.015173,
+   "rate_source": "vendedor",
+   "attributed_purchases": 97174.3
+  },
+  {
+   "seller_company_id": "541854",
+   "seller_name": "Fletch Wholesale LLC",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 387757.46,
+   "seller_fees_billed": 23.68,
+   "rate": 6.1e-05,
+   "rate_source": "vendedor",
+   "attributed_purchases": 96606.3
+  },
+  {
+   "seller_company_id": "575819",
+   "seller_name": "LA TOSCANA FARMS",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 95689.3,
+   "seller_fees_billed": 1439.7,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 95955.05
+  },
+  {
+   "seller_company_id": "14422",
+   "seller_name": "PAT FLOR SCARL CORP",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 95321.01,
+   "seller_fees_billed": 2626.83,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 94505.97
+  },
+  {
+   "seller_company_id": "18322",
+   "seller_name": "Jet Fresh Flower Distributors Inc.",
+   "fee_channel": "api",
+   "seller_sell_gmv": 2967529.49,
+   "seller_fees_billed": 32111.33,
+   "rate": 0.010821,
+   "rate_source": "vendedor",
+   "attributed_purchases": 92927.84
+  },
+  {
+   "seller_company_id": "521854",
+   "seller_name": "Albin Hagstrom & Son, Inc.",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 270759.8,
+   "seller_fees_billed": 4069.31,
+   "rate": 0.015029,
+   "rate_source": "vendedor",
+   "attributed_purchases": 92669.85
+  },
+  {
+   "seller_company_id": "193829",
+   "seller_name": "Muchflowers Inc.",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 90583.29,
+   "seller_fees_billed": 1587.67,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 89422.63
+  },
+  {
+   "seller_company_id": "672147",
+   "seller_name": "A1 Floral Xpressions",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 225531.5,
+   "seller_fees_billed": 2696.81,
+   "rate": 0.011958,
+   "rate_source": "vendedor",
+   "attributed_purchases": 86462.5
+  },
+  {
+   "seller_company_id": "449683",
+   "seller_name": "Floreco, Inc",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 85410.65,
+   "seller_fees_billed": 1307.06,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 84895.1
+  },
+  {
+   "seller_company_id": "622743",
+   "seller_name": "Megaflor USA",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 151958.2,
+   "seller_fees_billed": 2124.58,
+   "rate": 0.013981,
+   "rate_source": "vendedor",
+   "attributed_purchases": 84423.96
+  },
+  {
+   "seller_company_id": "199908",
+   "seller_name": "Bloomistics",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 120724.57,
+   "seller_fees_billed": 1816.15,
+   "rate": 0.015044,
+   "rate_source": "vendedor",
+   "attributed_purchases": 80800.68
+  },
+  {
+   "seller_company_id": "533116",
+   "seller_name": "Zion Flowers INC",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 79502.8,
+   "seller_fees_billed": 1183.1,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 79700.3
+  },
+  {
+   "seller_company_id": "533116",
+   "seller_name": "Zion Flowers INC",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 183607.73,
+   "seller_fees_billed": 2639.03,
+   "rate": 0.014373,
+   "rate_source": "vendedor",
+   "attributed_purchases": 79223.75
+  },
+  {
+   "seller_company_id": "588417",
+   "seller_name": "SHAW LAKE FARMS INC.",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 99308.45,
+   "seller_fees_billed": 2422.56,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 77246.05
+  },
+  {
+   "seller_company_id": "554187",
+   "seller_name": "IRIS ROSES LLC",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 75660.95,
+   "seller_fees_billed": 1130.19,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 75660.95
+  },
+  {
+   "seller_company_id": "193829",
+   "seller_name": "Muchflowers Inc.",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 153305.03,
+   "seller_fees_billed": 2487.32,
+   "rate": 0.016225,
+   "rate_source": "vendedor",
+   "attributed_purchases": 72781.96
+  },
+  {
+   "seller_company_id": "188968",
+   "seller_name": "Global Flowers",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 72577.77,
+   "seller_fees_billed": 930.08,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 72688.27
+  },
+  {
+   "seller_company_id": "622743",
+   "seller_name": "Megaflor USA",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 72044.01,
+   "seller_fees_billed": 1107.15,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 71709.73
+  },
+  {
+   "seller_company_id": "470794",
+   "seller_name": "AquaRose",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 71261.8,
+   "seller_fees_billed": 1066.52,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 70865.8
+  },
+  {
+   "seller_company_id": "615898",
+   "seller_name": "Salter's Evergreen Supply",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 201085.99,
+   "seller_fees_billed": 3222.66,
+   "rate": 0.016026,
+   "rate_source": "vendedor",
+   "attributed_purchases": 69620.99
+  },
+  {
+   "seller_company_id": "509751",
+   "seller_name": "Best Miami Growers LLC",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 65912.81,
+   "seller_fees_billed": 990.64,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 65929.71
+  },
+  {
+   "seller_company_id": "649745",
+   "seller_name": "Miraflor LLC",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 67988.47,
+   "seller_fees_billed": 1015.68,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 63463.92
+  },
+  {
+   "seller_company_id": "610510",
+   "seller_name": "MYSTICFLOWERS LLC",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 132455.34,
+   "seller_fees_billed": 1519.65,
+   "rate": 0.011473,
+   "rate_source": "vendedor",
+   "attributed_purchases": 61951.0
+  },
+  {
+   "seller_company_id": "454705",
+   "seller_name": "South Florals Imports LLC",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 576101.13,
+   "seller_fees_billed": 8160.26,
+   "rate": 0.014165,
+   "rate_source": "vendedor",
+   "attributed_purchases": 61937.52
+  },
+  {
+   "seller_company_id": "608547",
+   "seller_name": "MONTEROSAS LLC",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 143840.57,
+   "seller_fees_billed": 2101.35,
+   "rate": 0.014609,
+   "rate_source": "vendedor",
+   "attributed_purchases": 60647.6
+  },
+  {
+   "seller_company_id": "573661",
+   "seller_name": "J&E Greens",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 58768.91,
+   "seller_fees_billed": 878.42,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 58691.86
+  },
+  {
+   "seller_company_id": "44225",
+   "seller_name": "Pinnacle Flowers, LLC",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 58160.31,
+   "seller_fees_billed": 1845.62,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 57435.03
+  },
+  {
+   "seller_company_id": "399890",
+   "seller_name": "Patagonia Sun",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 142020.8,
+   "seller_fees_billed": 2034.5,
+   "rate": 0.014325,
+   "rate_source": "vendedor",
+   "attributed_purchases": 56407.6
+  },
+  {
+   "seller_company_id": "588417",
+   "seller_name": "SHAW LAKE FARMS INC.",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 55934.46,
+   "seller_fees_billed": 876.49,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 55789.49
+  },
+  {
+   "seller_company_id": "25120",
+   "seller_name": "Kennicott Kuts",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 54666.1,
+   "seller_fees_billed": 290.65,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 55341.6
+  },
+  {
+   "seller_company_id": "488495",
+   "seller_name": "Sierra Flower Trading",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 54725.52,
+   "seller_fees_billed": 5019.3,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 54795.72
+  },
+  {
+   "seller_company_id": "579932",
+   "seller_name": "Tutuli Flower Farms",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 69426.14,
+   "seller_fees_billed": 1061.58,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 52665.01
+  },
+  {
+   "seller_company_id": "20749",
+   "seller_name": "EF FLOWERS",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 55292.6,
+   "seller_fees_billed": 765.24,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 52272.95
+  },
+  {
+   "seller_company_id": "475084",
+   "seller_name": "Valleflor USA",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 52003.39,
+   "seller_fees_billed": 789.02,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 51763.56
+  },
+  {
+   "seller_company_id": "144369",
+   "seller_name": "Premium Greens Australia LLC",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 51569.0,
+   "seller_fees_billed": 750.7,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 51698.0
+  },
+  {
+   "seller_company_id": "321907",
+   "seller_name": "Greens and Flowers Connection",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 50547.96,
+   "seller_fees_billed": 731.21,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 50862.78
+  },
+  {
+   "seller_company_id": "530493",
+   "seller_name": "The Flower Co, LLC",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 47911.23,
+   "seller_fees_billed": 713.77,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 47911.23
+  },
+  {
+   "seller_company_id": "319143",
+   "seller_name": "FloraCo, Inc",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 46329.03,
+   "seller_fees_billed": 883.24,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 46130.58
+  },
+  {
+   "seller_company_id": "727131",
+   "seller_name": "EQ Blooms LLC",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 44020.28,
+   "seller_fees_billed": 660.64,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 44020.28
+  },
+  {
+   "seller_company_id": "727131",
+   "seller_name": "EQ Blooms LLC",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 90093.34,
+   "seller_fees_billed": 1352.46,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 41511.49
+  },
+  {
+   "seller_company_id": "616760",
+   "seller_name": "Flex Direct, LLC",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 39589.53,
+   "seller_fees_billed": 0.0,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 40233.15
+  },
+  {
+   "seller_company_id": "608547",
+   "seller_name": "MONTEROSAS LLC",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 40049.57,
+   "seller_fees_billed": 590.57,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 39863.57
+  },
+  {
+   "seller_company_id": "189002",
+   "seller_name": "Royal Flowers S.A",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 38960.95,
+   "seller_fees_billed": 582.14,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 37913.2
+  },
+  {
+   "seller_company_id": "296458",
+   "seller_name": "Florimex Toronto Corp.",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 1003674.47,
+   "seller_fees_billed": 14988.04,
+   "rate": 0.014933,
+   "rate_source": "vendedor",
+   "attributed_purchases": 36965.71
+  },
+  {
+   "seller_company_id": "554187",
+   "seller_name": "IRIS ROSES LLC",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 68965.25,
+   "seller_fees_billed": 1050.4,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 36644.5
+  },
+  {
+   "seller_company_id": "677319",
+   "seller_name": "Juliet Wholesale Flowers LLC",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 44503.43,
+   "seller_fees_billed": 638.88,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 33060.27
+  },
+  {
+   "seller_company_id": "397789",
+   "seller_name": "Dreaming Roses Corp",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 45755.0,
+   "seller_fees_billed": 681.9,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 32747.0
+  },
+  {
+   "seller_company_id": "733250",
+   "seller_name": "ROYAL BASE (U.S.A) CORPORATION",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 132930.0,
+   "seller_fees_billed": 1963.82,
+   "rate": 0.014773,
+   "rate_source": "vendedor",
+   "attributed_purchases": 30147.4
+  },
+  {
+   "seller_company_id": "13982",
+   "seller_name": "Servicios Chilfresh Ltda.",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 28500.67,
+   "seller_fees_billed": 427.05,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 28500.67
+  },
+  {
+   "seller_company_id": "764867",
+   "seller_name": "Hana Farms Inc.",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 28222.39,
+   "seller_fees_billed": 433.39,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 28306.39
+  },
+  {
+   "seller_company_id": "153031",
+   "seller_name": "FloraLink",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 1325898.5,
+   "seller_fees_billed": 1251.37,
+   "rate": 0.000944,
+   "rate_source": "vendedor",
+   "attributed_purchases": 25088.53
+  },
+  {
+   "seller_company_id": "732448",
+   "seller_name": "Nazcaflor USA, Inc",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 96153.1,
+   "seller_fees_billed": 1447.9,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 24144.1
+  },
+  {
+   "seller_company_id": "399890",
+   "seller_name": "Patagonia Sun",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 24620.82,
+   "seller_fees_billed": 346.65,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 24085.31
+  },
+  {
+   "seller_company_id": "20769",
+   "seller_name": "AmeriLink Floratrader",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 69455.9,
+   "seller_fees_billed": 1036.63,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 21509.09
+  },
+  {
+   "seller_company_id": "612783",
+   "seller_name": "Faguaflowers Intl LLC",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 87691.84,
+   "seller_fees_billed": 1006.01,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 20413.78
+  },
+  {
+   "seller_company_id": "610504",
+   "seller_name": "The Flower Emporium LLC",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 44704.74,
+   "seller_fees_billed": 335.18,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 20310.51
+  },
+  {
+   "seller_company_id": "44150",
+   "seller_name": "Kennicott Brothers Company",
+   "fee_channel": "api",
+   "seller_sell_gmv": 10058042.3,
+   "seller_fees_billed": 23918.08,
+   "rate": 0.002378,
+   "rate_source": "vendedor",
+   "attributed_purchases": 19650.1
+  },
+  {
+   "seller_company_id": "507518",
+   "seller_name": "Anton Spaargaren B.V.",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 19194.05,
+   "seller_fees_billed": 278.08,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 19194.05
+  },
+  {
+   "seller_company_id": "38582",
+   "seller_name": "Gala Roses",
+   "fee_channel": "api",
+   "seller_sell_gmv": 68435.94,
+   "seller_fees_billed": 513.72,
+   "rate": 0.001559,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 18879.94
+  },
+  {
+   "seller_company_id": "505603",
+   "seller_name": "MGA Flowers",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 22915.8,
+   "seller_fees_billed": 341.37,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 18627.7
+  },
+  {
+   "seller_company_id": "802590",
+   "seller_name": "Pacifica Produce Farms LLC",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 43164.5,
+   "seller_fees_billed": 704.61,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 18161.55
+  },
+  {
+   "seller_company_id": "397789",
+   "seller_name": "Dreaming Roses Corp",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 18275.0,
+   "seller_fees_billed": 266.86,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 18091.0
+  },
+  {
+   "seller_company_id": "189419",
+   "seller_name": "Legacy Flowers",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 16226.31,
+   "seller_fees_billed": 884.95,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 16303.31
+  },
+  {
+   "seller_company_id": "378264",
+   "seller_name": "Dynamic Farms",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 18940.9,
+   "seller_fees_billed": 417.28,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 15426.25
+  },
+  {
+   "seller_company_id": "770796",
+   "seller_name": "VERA",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 14341.0,
+   "seller_fees_billed": 215.32,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 14341.0
+  },
+  {
+   "seller_company_id": "612783",
+   "seller_name": "Faguaflowers Intl LLC",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 14109.18,
+   "seller_fees_billed": 277.31,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 14109.18
+  },
+  {
+   "seller_company_id": "620453",
+   "seller_name": "MALIMA USA, LLC",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 40508.27,
+   "seller_fees_billed": 589.95,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 13521.32
+  },
+  {
+   "seller_company_id": "529464",
+   "seller_name": "Direct Farms, LLC",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 17579.43,
+   "seller_fees_billed": 254.63,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 12673.09
+  },
+  {
+   "seller_company_id": "561518",
+   "seller_name": "Floramix, Inc.",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 13273.45,
+   "seller_fees_billed": 184.47,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 12501.65
+  },
+  {
+   "seller_company_id": "25120",
+   "seller_name": "Kennicott Kuts",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 12222.5,
+   "seller_fees_billed": 10.48,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 12348.5
+  },
+  {
+   "seller_company_id": "671046",
+   "seller_name": "Blossom Bliss LLC",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 123831.24,
+   "seller_fees_billed": 122.6,
+   "rate": 0.00099,
+   "rate_source": "vendedor",
+   "attributed_purchases": 11980.72
+  },
+  {
+   "seller_company_id": "613695",
+   "seller_name": "FLORAL1 INC",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 11602.18,
+   "seller_fees_billed": 176.36,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 11711.18
+  },
+  {
+   "seller_company_id": "716378",
+   "seller_name": "Moonlight Flowers",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 11647.55,
+   "seller_fees_billed": 174.98,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 11647.55
+  },
+  {
+   "seller_company_id": "770796",
+   "seller_name": "VERA",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 23777.0,
+   "seller_fees_billed": 354.88,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 11260.0
+  },
+  {
+   "seller_company_id": "613695",
+   "seller_name": "FLORAL1 INC",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 18436.43,
+   "seller_fees_billed": 277.28,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 11047.7
+  },
+  {
+   "seller_company_id": "537092",
+   "seller_name": "Tropical Blooms Inc.",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 10312.5,
+   "seller_fees_billed": 159.94,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 10312.5
+  },
+  {
+   "seller_company_id": "677319",
+   "seller_name": "Juliet Wholesale Flowers LLC",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 9701.65,
+   "seller_fees_billed": 149.73,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 9980.65
+  },
+  {
+   "seller_company_id": "673823",
+   "seller_name": "Anniroses",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 14049.0,
+   "seller_fees_billed": 206.73,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 9946.25
+  },
+  {
+   "seller_company_id": "401680",
+   "seller_name": "FLORISOL & COMPANY FLOWER TRADING LLC",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 15353.9,
+   "seller_fees_billed": 230.06,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 8469.2
+  },
+  {
+   "seller_company_id": "569309",
+   "seller_name": "Castle Hayne Farms",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 16101.89,
+   "seller_fees_billed": 241.66,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 8225.2
+  },
+  {
+   "seller_company_id": "322928",
+   "seller_name": "Inversiones Napy S.A",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 8378.08,
+   "seller_fees_billed": 2.76,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 8186.68
+  },
+  {
+   "seller_company_id": "189002",
+   "seller_name": "Royal Flowers S.A",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 7476.33,
+   "seller_fees_billed": 112.36,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 7476.33
+  },
+  {
+   "seller_company_id": "814810",
+   "seller_name": "Lartisan Roses LLC",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 7457.55,
+   "seller_fees_billed": 112.0,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 7457.55
+  },
+  {
+   "seller_company_id": "401680",
+   "seller_name": "FLORISOL & COMPANY FLOWER TRADING LLC",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 7296.22,
+   "seller_fees_billed": 108.18,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 7296.22
+  },
+  {
+   "seller_company_id": "492219",
+   "seller_name": "Interflor LLC",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 6206.69,
+   "seller_fees_billed": 89.51,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 6206.69
+  },
+  {
+   "seller_company_id": "503075",
+   "seller_name": "HANAYA FARMS",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 9720.86,
+   "seller_fees_billed": 119.67,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 6155.25
+  },
+  {
+   "seller_company_id": "762941",
+   "seller_name": "FOB UIO -  Alma Spray / Agrinag / Natuflor",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 16609.36,
+   "seller_fees_billed": 264.55,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 5866.48
+  },
+  {
+   "seller_company_id": "610510",
+   "seller_name": "MYSTICFLOWERS LLC",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 5701.3,
+   "seller_fees_billed": 78.52,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 5701.3
+  },
+  {
+   "seller_company_id": "796715",
+   "seller_name": "ADEESE FLOWERS LLC",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 5208.35,
+   "seller_fees_billed": 74.83,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 5208.35
+  },
+  {
+   "seller_company_id": "680251",
+   "seller_name": "RUMHORA GREENS LLC",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 5169.37,
+   "seller_fees_billed": 79.97,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 5169.37
+  },
+  {
+   "seller_company_id": "13989",
+   "seller_name": "Pronto Farms LLC",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 50396.55,
+   "seller_fees_billed": 46.42,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 5016.06
+  },
+  {
+   "seller_company_id": "13989",
+   "seller_name": "Pronto Farms LLC",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 4292.35,
+   "seller_fees_billed": 838.27,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 4292.35
+  },
+  {
+   "seller_company_id": "489148",
+   "seller_name": "FLOWERMART CORP",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 4260.28,
+   "seller_fees_billed": 73.09,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 4100.28
+  },
+  {
+   "seller_company_id": "615898",
+   "seller_name": "Salter's Evergreen Supply",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 4050.0,
+   "seller_fees_billed": 60.77,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 4050.0
+  },
+  {
+   "seller_company_id": "20749",
+   "seller_name": "EF FLOWERS",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 3961.7,
+   "seller_fees_billed": 59.44,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 3961.7
+  },
+  {
+   "seller_company_id": "537092",
+   "seller_name": "Tropical Blooms Inc.",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 33490.57,
+   "seller_fees_billed": 494.94,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 3891.85
+  },
+  {
+   "seller_company_id": "505063",
+   "seller_name": "Andean Fresh LLC",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 9328.7,
+   "seller_fees_billed": 67.69,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 3774.2
+  },
+  {
+   "seller_company_id": "815558",
+   "seller_name": "Florens Group LLC",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 3754.83,
+   "seller_fees_billed": 56.31,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 3754.83
+  },
+  {
+   "seller_company_id": "492219",
+   "seller_name": "Interflor LLC",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 4858.79,
+   "seller_fees_billed": 69.93,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 3472.58
+  },
+  {
+   "seller_company_id": "716378",
+   "seller_name": "Moonlight Flowers",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 10897.8,
+   "seller_fees_billed": 143.43,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 3249.85
+  },
+  {
+   "seller_company_id": "603102",
+   "seller_name": "AGM BROTHERS WORLD TRADING LLC",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 3379.2,
+   "seller_fees_billed": 0.0,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 3225.6
+  },
+  {
+   "seller_company_id": "620453",
+   "seller_name": "MALIMA USA, LLC",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 3032.94,
+   "seller_fees_billed": 51.51,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 3032.94
+  },
+  {
+   "seller_company_id": "732448",
+   "seller_name": "Nazcaflor USA, Inc",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 2859.0,
+   "seller_fees_billed": 42.91,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 2859.0
+  },
+  {
+   "seller_company_id": "733250",
+   "seller_name": "ROYAL BASE (U.S.A) CORPORATION",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 2616.0,
+   "seller_fees_billed": 39.24,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 2616.0
+  },
+  {
+   "seller_company_id": "800562",
+   "seller_name": "Jetty USA LLC",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 2492.75,
+   "seller_fees_billed": 37.4,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 2492.75
+  },
+  {
+   "seller_company_id": "673823",
+   "seller_name": "Anniroses",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 2395.75,
+   "seller_fees_billed": 35.96,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 2395.75
+  },
+  {
+   "seller_company_id": "631682",
+   "seller_name": "Mojanda Corporation",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 5748.0,
+   "seller_fees_billed": 0.0,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 2366.0
+  },
+  {
+   "seller_company_id": "756140",
+   "seller_name": "Flower List",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 2359.05,
+   "seller_fees_billed": 34.48,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 2359.05
+  },
+  {
+   "seller_company_id": "650252",
+   "seller_name": "GRUPO DEL PACIFICO",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 2348.4,
+   "seller_fees_billed": 32.27,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 2348.4
+  },
+  {
+   "seller_company_id": "802590",
+   "seller_name": "Pacifica Produce Farms LLC",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 2270.35,
+   "seller_fees_billed": 38.55,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 2270.35
+  },
+  {
+   "seller_company_id": "671046",
+   "seller_name": "Blossom Bliss LLC",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 2217.1,
+   "seller_fees_billed": 1544.25,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 2217.1
+  },
+  {
+   "seller_company_id": "571220",
+   "seller_name": "Dramm & Echter, Inc",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 2590.78,
+   "seller_fees_billed": 35.83,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 1971.0
+  },
+  {
+   "seller_company_id": "529464",
+   "seller_name": "Direct Farms, LLC",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 1912.83,
+   "seller_fees_billed": 29.32,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 1912.83
+  },
+  {
+   "seller_company_id": "592806",
+   "seller_name": "Aurum Farms LLC",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 2120.45,
+   "seller_fees_billed": 27.2,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 1895.0
+  },
+  {
+   "seller_company_id": "634665",
+   "seller_name": "Agrivaldani",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 1918.6,
+   "seller_fees_billed": 1.32,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 1756.6
+  },
+  {
+   "seller_company_id": "804758",
+   "seller_name": "FGS.Flowers.MIA",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 1679.3,
+   "seller_fees_billed": 25.18,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 1679.3
+  },
+  {
+   "seller_company_id": "610504",
+   "seller_name": "The Flower Emporium LLC",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 1676.47,
+   "seller_fees_billed": 442.92,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 1676.47
+  },
+  {
+   "seller_company_id": "800562",
+   "seller_name": "Jetty USA LLC",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 5329.23,
+   "seller_fees_billed": 81.36,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 1321.65
+  },
+  {
+   "seller_company_id": "505603",
+   "seller_name": "MGA Flowers",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 1293.55,
+   "seller_fees_billed": 19.41,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 1293.55
+  },
+  {
+   "seller_company_id": "765583",
+   "seller_name": "Bellaflor Group Inc.",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 1254.12,
+   "seller_fees_billed": 9.8,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 1254.12
+  },
+  {
+   "seller_company_id": "821768",
+   "seller_name": "Coquette Roses and Flowers",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 1271.55,
+   "seller_fees_billed": 19.09,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 1216.55
+  },
+  {
+   "seller_company_id": "498992",
+   "seller_name": "CANTIZA FLORAL DBA NFD",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 2033.25,
+   "seller_fees_billed": 29.28,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 1214.5
+  },
+  {
+   "seller_company_id": "590728",
+   "seller_name": "DC FLOWERS DIRECT",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 213878.88,
+   "seller_fees_billed": 72.72,
+   "rate": 0.00034,
+   "rate_source": "vendedor",
+   "attributed_purchases": 976.9
+  },
+  {
+   "seller_company_id": "498992",
+   "seller_name": "CANTIZA FLORAL DBA NFD",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 955.25,
+   "seller_fees_billed": 14.34,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 955.25
+  },
+  {
+   "seller_company_id": "584973",
+   "seller_name": "Flores de la Hacienda",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 4203.5,
+   "seller_fees_billed": 62.39,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 944.5
+  },
+  {
+   "seller_company_id": "489148",
+   "seller_name": "FLOWERMART CORP",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 14864.38,
+   "seller_fees_billed": 219.45,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 933.75
+  },
+  {
+   "seller_company_id": "751391",
+   "seller_name": "MegaFlor Finca",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 876.2,
+   "seller_fees_billed": 51.85,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 876.2
+  },
+  {
+   "seller_company_id": "620160",
+   "seller_name": "Petals Direct",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 1724.2,
+   "seller_fees_billed": 3.12,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 774.76
+  },
+  {
+   "seller_company_id": "751341",
+   "seller_name": "Olimpo Flowers Finca",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 752.16,
+   "seller_fees_billed": 11.28,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 752.16
+  },
+  {
+   "seller_company_id": "762941",
+   "seller_name": "FOB UIO -  Alma Spray / Agrinag / Natuflor",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 663.6,
+   "seller_fees_billed": 10.53,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 663.6
+  },
+  {
+   "seller_company_id": "751391",
+   "seller_name": "MegaFlor Finca",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 676.2,
+   "seller_fees_billed": 0.0,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 652.2
+  },
+  {
+   "seller_company_id": "103112",
+   "seller_name": "Fresca Farms",
+   "fee_channel": "api",
+   "seller_sell_gmv": 1621845.85,
+   "seller_fees_billed": 23834.61,
+   "rate": 0.014696,
+   "rate_source": "vendedor",
+   "attributed_purchases": 568.0
+  },
+  {
+   "seller_company_id": "796715",
+   "seller_name": "ADEESE FLOWERS LLC",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 13205.65,
+   "seller_fees_billed": 199.44,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 528.0
+  },
+  {
+   "seller_company_id": "610818",
+   "seller_name": "Farms Connect",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 498.0,
+   "seller_fees_billed": 14.97,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 498.0
+  },
+  {
+   "seller_company_id": "769085",
+   "seller_name": "Ecoroses - Floropolis",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 462.4,
+   "seller_fees_billed": 0.0,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 462.4
+  },
+  {
+   "seller_company_id": "828357",
+   "seller_name": "SYRIUS INC",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 16556.37,
+   "seller_fees_billed": 184.0,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 450.05
+  },
+  {
+   "seller_company_id": "601982",
+   "seller_name": "Greenrose",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 37699.5,
+   "seller_fees_billed": 570.35,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 441.0
+  },
+  {
+   "seller_company_id": "813947",
+   "seller_name": "Floricola Llanos de Alba",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 425.0,
+   "seller_fees_billed": 8.18,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 425.0
+  },
+  {
+   "seller_company_id": "6864",
+   "seller_name": "Sofi's Flowers",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 1793.04,
+   "seller_fees_billed": 32.89,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 419.2
+  },
+  {
+   "seller_company_id": "751334",
+   "seller_name": "Much Flowers Finca",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 402.0,
+   "seller_fees_billed": 2.93,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 402.0
+  },
+  {
+   "seller_company_id": "650252",
+   "seller_name": "GRUPO DEL PACIFICO",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 1392.5,
+   "seller_fees_billed": 22.99,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 382.5
+  },
+  {
+   "seller_company_id": "592806",
+   "seller_name": "Aurum Farms LLC",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 380.7,
+   "seller_fees_billed": 5.71,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 380.7
+  },
+  {
+   "seller_company_id": "798243",
+   "seller_name": "Alison Flowers",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 351.8,
+   "seller_fees_billed": 5.26,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 351.8
+  },
+  {
+   "seller_company_id": "296458",
+   "seller_name": "Florimex Toronto Corp.",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 323.0,
+   "seller_fees_billed": 4.85,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 323.0
+  },
+  {
+   "seller_company_id": "808527",
+   "seller_name": "Hortensias Cabogana Cia Ltda",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 316.27,
+   "seller_fees_billed": 0.0,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 316.27
+  },
+  {
+   "seller_company_id": "453081",
+   "seller_name": "Welyflor / Profile Flowers",
+   "fee_channel": "api",
+   "seller_sell_gmv": 125771.91,
+   "seller_fees_billed": 1889.62,
+   "rate": 0.015024,
+   "rate_source": "vendedor",
+   "attributed_purchases": 315.0
+  },
+  {
+   "seller_company_id": "680251",
+   "seller_name": "RUMHORA GREENS LLC",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 18364.05,
+   "seller_fees_billed": 270.61,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 301.5
+  },
+  {
+   "seller_company_id": "603611",
+   "seller_name": "GREEN OCEAN LLC",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 6877.95,
+   "seller_fees_billed": 98.85,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 295.44
+  },
+  {
+   "seller_company_id": "491757",
+   "seller_name": "Del Alma Group",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 65727.66,
+   "seller_fees_billed": 986.39,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 271.8
+  },
+  {
+   "seller_company_id": "6864",
+   "seller_name": "Sofi's Flowers",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 260.12,
+   "seller_fees_billed": 5.24,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 260.12
+  },
+  {
+   "seller_company_id": "764867",
+   "seller_name": "Hana Farms Inc.",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 4198.35,
+   "seller_fees_billed": 47.33,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 256.25
+  },
+  {
+   "seller_company_id": "828357",
+   "seller_name": "SYRIUS INC",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 254.1,
+   "seller_fees_billed": 3.81,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 254.1
+  },
+  {
+   "seller_company_id": "25489",
+   "seller_name": "Sole Farms",
+   "fee_channel": "api",
+   "seller_sell_gmv": 3259802.28,
+   "seller_fees_billed": 26015.23,
+   "rate": 0.007981,
+   "rate_source": "vendedor",
+   "attributed_purchases": 232.2
+  },
+  {
+   "seller_company_id": "610818",
+   "seller_name": "Farms Connect",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 982.62,
+   "seller_fees_billed": 12.07,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 226.0
+  },
+  {
+   "seller_company_id": "44150",
+   "seller_name": "Kennicott Brothers Company",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 176.95,
+   "seller_fees_billed": 243151.11,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 176.95
+  },
+  {
+   "seller_company_id": "809546",
+   "seller_name": "Expobloom",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 110.0,
+   "seller_fees_billed": 0.0,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 110.0
+  },
+  {
+   "seller_company_id": "812869",
+   "seller_name": "Gypso",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 96.0,
+   "seller_fees_billed": 1.44,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 96.0
+  },
+  {
+   "seller_company_id": "555280",
+   "seller_name": "Golden State Flowers Inc",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 95.5,
+   "seller_fees_billed": 1.43,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 95.5
+  },
+  {
+   "seller_company_id": "592615",
+   "seller_name": "NYC FLORAL GREENS",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 744.63,
+   "seller_fees_billed": 0.0,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 91.32
+  },
+  {
+   "seller_company_id": "795674",
+   "seller_name": "Akarana Farms",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 90.0,
+   "seller_fees_billed": 1.36,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 90.0
+  },
+  {
+   "seller_company_id": "505063",
+   "seller_name": "Andean Fresh LLC",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 90.0,
+   "seller_fees_billed": 1.35,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 90.0
+  },
+  {
+   "seller_company_id": "821768",
+   "seller_name": "Coquette Roses and Flowers",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 80.5,
+   "seller_fees_billed": 1.21,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 80.5
+  },
+  {
+   "seller_company_id": "584973",
+   "seller_name": "Flores de la Hacienda",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 70.8,
+   "seller_fees_billed": 1.06,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 70.8
+  },
+  {
+   "seller_company_id": "770224",
+   "seller_name": "Magic Flowers - Floropolis",
+   "fee_channel": "k2k",
+   "seller_sell_gmv": 55.2,
+   "seller_fees_billed": 0.0,
+   "rate": 0.023676,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 55.2
+  },
+  {
+   "seller_company_id": "22143",
+   "seller_name": "Royal Flowers Inc., Domestic",
+   "fee_channel": "api",
+   "seller_sell_gmv": 673048.99,
+   "seller_fees_billed": 7202.27,
+   "rate": 0.010701,
+   "rate_source": "vendedor",
+   "attributed_purchases": 50.0
+  },
+  {
+   "seller_company_id": "812869",
+   "seller_name": "Gypso",
+   "fee_channel": "ecom",
+   "seller_sell_gmv": 45.6,
+   "seller_fees_billed": 0.68,
+   "rate": 0.008253,
+   "rate_source": "red (base del vendedor < $100K)",
+   "attributed_purchases": 45.6
+  }
+ ]
+}

@@ -1,0 +1,4099 @@
+{
+ "_meta": {
+  "generated_at": "2026-09-08",
+  "description": "Universo de wholesalers. portfolio_sfdc_ids = filtro can\u00f3nico \u222a hoja de Christine/Facundo: es lo que entra al portafolio. sfdc_ids = ese conjunto m\u00e1s las cuentas que el universo 618 identifica como wholesalers, que se registran pero NO entran al portafolio ni a sus KPI hasta que el equipo valide la clasificaci\u00f3n.",
+  "counts": {
+   "A_filtro": 127,
+   "B_hoja_christine": 139,
+   "C_universo_618": 280,
+   "portafolio": 145,
+   "universo_completo": 353,
+   "solo_618_fuera_del_portafolio": 208
+  },
+  "note": "El 618 se cruz\u00f3 por nombre porque su columna in_sfdc viene vac\u00eda en las 618 filas: 417 de 618 cruzaron (391 exactas + 26 fuzzy con guarda de n\u00facleo distintivo). No se cambia el business_type de ninguna cuenta en Salesforce."
+ },
+ "portfolio_sfdc_ids": [
+  "0011600001lfVtAAAU",
+  "0011600001lgc6sAAA",
+  "0011600001lhbwBAAQ",
+  "0011600001mKVtUAAW",
+  "0011600001mLcyvAAC",
+  "0011600001riCHoAAM",
+  "0011600001tWETgAAO",
+  "0011600001uSNXnAAO",
+  "0011600001uSU5jAAG",
+  "0011600001uSYzvAAG",
+  "0011600001uSZXFAA4",
+  "0011600001uScxFAAS",
+  "0011600001uSjSfAAK",
+  "0011600001uSjyvAAC",
+  "0011600001uSk8RAAS",
+  "0011600001uSkCOAA0",
+  "0011600001uSkF3AAK",
+  "0011600001uTH0wAAG",
+  "0011600001uTOjKAAW",
+  "0011600001zVGSVAA4",
+  "0011600001zVU4vAAG",
+  "0011600001zrCXXAA2",
+  "00116000021BDnbAAG",
+  "00116000021BPGhAAO",
+  "00116000021Z8FtAAK",
+  "00116000021bflwAAA",
+  "00116000021c3HoAAI",
+  "001160000222AFqAAM",
+  "00116000022ofJ2AAI",
+  "00116000023rB8qAAE",
+  "00116000023sYATAA2",
+  "00116000026WSexAAG",
+  "001160000276kVxAAI",
+  "001160000276ptzAAA",
+  "0011L00001zzDR9QAM",
+  "0011L00001zzDSCQA2",
+  "0011L00001zzDYPQA2",
+  "0011L000028TahoQAC",
+  "0011L000028TcCRQA0",
+  "0011L000028V2EyQAK",
+  "0011L000028VnGrQAK",
+  "0011L000029kBirQAE",
+  "0011L00002ICyF3QAL",
+  "0011L00002KVe1mQAD",
+  "0011L00002WO3HUQA1",
+  "0011L00002WO7dMQAT",
+  "0011L00002WOu1fQAD",
+  "0011L00002Y7yX7QAJ",
+  "0011L00002h0CH9QAM",
+  "0011L00002p55GMQAY",
+  "0011L00002rCC5zQAG",
+  "0014p00001lORHxAAO",
+  "0014p00001ndeAmAAI",
+  "0014p00001so6ueAAA",
+  "0014p00001z9zUXAAY",
+  "0014p000020tateAAA",
+  "0014p000020wFxeAAE",
+  "0014p000021fXK6AAM",
+  "0014p000021zRPfAAM",
+  "0014p000021zRSBAA2",
+  "0014p0000220KDPAA2",
+  "0014p0000220MfNAAU",
+  "0014p0000220b01AAA",
+  "0014p000022EYtaAAG",
+  "0014p000022EYvBAAW",
+  "0014p000022EYvCAAW",
+  "0014p000022EYw1AAG",
+  "0014p000022HSvrAAG",
+  "0014p000022R9RlAAK",
+  "001G000001DVt5TIAT",
+  "001G000001DW4OGIA1",
+  "001G000001DW4OTIA1",
+  "001G000001DW4PBIA1",
+  "001G000001DW4PaIAL",
+  "001G000001DW4QnIAL",
+  "001G000001DW4QoIAL",
+  "001G000001DW4R3IAL",
+  "001G000001DW4S5IAL",
+  "001G000001DW4SmIAL",
+  "001G000001DW4SyIAL",
+  "001G000001DW4T3IAL",
+  "001G000001GQ6u4IAD",
+  "001G000001H3CrIIAV",
+  "001G000001IYgNpIAL",
+  "001G000001K8yfgIAB",
+  "001G000001L8zkpIAB",
+  "001G000001TsFyvIAF",
+  "001G000001TsGEcIAN",
+  "001G000001TsIX2IAN",
+  "001G000001TsIbtIAF",
+  "001G000001TsIedIAF",
+  "001G000001TsIltIAF",
+  "001G000001TsJNiIAN",
+  "001G000001TsJj3IAF",
+  "001G000001TsKPSIA3",
+  "001G000001TsMbNIAV",
+  "001G000001TsYWjIAN",
+  "001G000001Tsg6jIAB",
+  "001G000001TsgdSIAR",
+  "001G000001TskZ7IAJ",
+  "001G000001TskmvIAB",
+  "001G000001TsqcLIAR",
+  "001G000001TtDnBIAV",
+  "001G000001TtEaaIAF",
+  "001G000001TtIBxIAN",
+  "001G000001TtTOOIA3",
+  "001G000001V5PivIAF",
+  "001G000001V7resIAB",
+  "001G000001ZFNa1IAH",
+  "001G000001ZwODhIAN",
+  "001G000001buCmhIAE",
+  "001VL000001TMnmYAG",
+  "001VL000002uhlyYAA",
+  "001VL000003KcH9YAK",
+  "001VL000003MuLTYA0",
+  "001VL00000A5ntfYAB",
+  "001VL00000AsdReYAJ",
+  "001VL00000DSXzGYAX",
+  "001VL00000F4yJVYAZ",
+  "001VL00000GL9dQYAT",
+  "001VL00000HI21dYAD",
+  "001VL00000HVuQvYAL",
+  "001VL00000JGRHRYA5",
+  "001VL00000KKWD8YAP",
+  "001VL00000L1SkaYAF",
+  "001VL00000LVfPRYA1",
+  "001VL00000LmynPYAR",
+  "001VL00000OLqk9YAD",
+  "001VL00000RiggjYAB",
+  "001VL00000TUGt3YAH",
+  "001VL00000UN5fFYAT",
+  "001VL00000V2gNuYAJ",
+  "001VL00000Wy5buYAB",
+  "001VL00000YHEixYAH",
+  "001VL00000YHLNpYAP",
+  "001VL00000bMO6QYAW",
+  "001VL00000bryvBYAQ",
+  "001VL00000gB1JzYAK",
+  "001VL00000hSd5hYAC",
+  "001VL00000k6ul2YAA",
+  "001VL00000leyK9YAI",
+  "001VL00000o9iOSYAY",
+  "001VL00000qmfPWYAY",
+  "001VL00000r1tVOYAY",
+  "001VL00000sK4BfYAK"
+ ],
+ "sfdc_ids": [
+  "0011600001lfVtAAAU",
+  "0011600001lgc6sAAA",
+  "0011600001lhbwBAAQ",
+  "0011600001lhfGEAAY",
+  "0011600001mKVtUAAW",
+  "0011600001mLcyvAAC",
+  "0011600001ncRipAAE",
+  "0011600001oUSUIAA4",
+  "0011600001pwvTPAAY",
+  "0011600001rGvOwAAK",
+  "0011600001rhHfYAAU",
+  "0011600001riCHoAAM",
+  "0011600001rjUmOAAU",
+  "0011600001tWETgAAO",
+  "0011600001uRssiAAC",
+  "0011600001uSNXnAAO",
+  "0011600001uSOVlAAO",
+  "0011600001uSPFsAAO",
+  "0011600001uSPwCAAW",
+  "0011600001uSRlWAAW",
+  "0011600001uSS4dAAG",
+  "0011600001uSU5jAAG",
+  "0011600001uSYzvAAG",
+  "0011600001uSZGKAA4",
+  "0011600001uSZJaAAO",
+  "0011600001uSZXFAA4",
+  "0011600001uScxFAAS",
+  "0011600001uSdCyAAK",
+  "0011600001uSj1KAAS",
+  "0011600001uSj2cAAC",
+  "0011600001uSj5MAAS",
+  "0011600001uSjSfAAK",
+  "0011600001uSjyvAAC",
+  "0011600001uSk8RAAS",
+  "0011600001uSkCOAA0",
+  "0011600001uSkF3AAK",
+  "0011600001uTH0wAAG",
+  "0011600001uTLq0AAG",
+  "0011600001uTOjKAAW",
+  "0011600001uTSvRAAW",
+  "0011600001uUyJlAAK",
+  "0011600001xHhmfAAC",
+  "0011600001zFAH3AAO",
+  "0011600001zVGSVAA4",
+  "0011600001zVU4vAAG",
+  "0011600001zrCXXAA2",
+  "00116000020LCvJAAW",
+  "00116000020NFwWAAW",
+  "00116000020OCgLAAW",
+  "00116000020OVSAAA4",
+  "001160000219BLAAA2",
+  "00116000021BDnbAAG",
+  "00116000021BPGhAAO",
+  "00116000021Z8FtAAK",
+  "00116000021bflwAAA",
+  "00116000021c3HoAAI",
+  "001160000221ktcAAA",
+  "001160000222AFqAAM",
+  "00116000022RQZmAAO",
+  "00116000022ofJ2AAI",
+  "00116000023rB8qAAE",
+  "00116000023sYATAA2",
+  "00116000025JsB2AAK",
+  "00116000025sMRVAA2",
+  "00116000026Vdd4AAC",
+  "00116000026VeXIAA0",
+  "00116000026WSexAAG",
+  "00116000026WjjWAAS",
+  "001160000276kVxAAI",
+  "001160000276ptzAAA",
+  "001160000278F68AAE",
+  "0011L00001zzDR9QAM",
+  "0011L00001zzDSCQA2",
+  "0011L00001zzDYPQA2",
+  "0011L00001zzDznQAE",
+  "0011L000027XBWKQA4",
+  "0011L000028F0KvQAK",
+  "0011L000028F9SYQA0",
+  "0011L000028TahoQAC",
+  "0011L000028TcCRQA0",
+  "0011L000028Tod6QAC",
+  "0011L000028V2EyQAK",
+  "0011L000028V59qQAC",
+  "0011L000028VONDQA4",
+  "0011L000028VYPUQA4",
+  "0011L000028Vl2UQAS",
+  "0011L000028VnGrQAK",
+  "0011L000029k3IJQAY",
+  "0011L000029kBirQAE",
+  "0011L000029kBksQAE",
+  "0011L000029kOTRQA2",
+  "0011L000029kXypQAE",
+  "0011L000029kXz9QAE",
+  "0011L000029kY5qQAE",
+  "0011L000029kZAyQAM",
+  "0011L000029kZv0QAE",
+  "0011L000029ka2aQAA",
+  "0011L000029kbesQAA",
+  "0011L000029keimQAA",
+  "0011L000029kf1KQAQ",
+  "0011L000029kfDzQAI",
+  "0011L000029kgJoQAI",
+  "0011L00002BInj0QAD",
+  "0011L00002ICyF3QAL",
+  "0011L00002IDd7hQAD",
+  "0011L00002IDeWhQAL",
+  "0011L00002IDjZOQA1",
+  "0011L00002IEBTHQA5",
+  "0011L00002IFUFDQA5",
+  "0011L00002KVe1mQAD",
+  "0011L00002WO3HUQA1",
+  "0011L00002WO7dMQAT",
+  "0011L00002WOu1fQAD",
+  "0011L00002Y7yX7QAJ",
+  "0011L00002dFBf0QAG",
+  "0011L00002eoFCZQA2",
+  "0011L00002eqDgTQAU",
+  "0011L00002eqjoaQAA",
+  "0011L00002g9KaPQAU",
+  "0011L00002h0CH9QAM",
+  "0011L00002p3RB4QAM",
+  "0011L00002p55GMQAY",
+  "0011L00002rCC5zQAG",
+  "0011L00002rEB34QAG",
+  "0014p00001lOEl6AAG",
+  "0014p00001lORHxAAO",
+  "0014p00001lR1gMAAS",
+  "0014p00001ndeAmAAI",
+  "0014p00001so6ueAAA",
+  "0014p00001t5gUtAAI",
+  "0014p00001waeZYAAY",
+  "0014p00001y6Ac0AAE",
+  "0014p00001z9zUXAAY",
+  "0014p00001zanUFAAY",
+  "0014p00001zdXhfAAE",
+  "0014p00001zy3KeAAI",
+  "0014p000020tateAAA",
+  "0014p000020vm8TAAQ",
+  "0014p000020vycQAAQ",
+  "0014p000020wDaDAAU",
+  "0014p000020wFxeAAE",
+  "0014p000021IdyjAAC",
+  "0014p000021fXK6AAM",
+  "0014p000021zHQjAAM",
+  "0014p000021zRPfAAM",
+  "0014p000021zRRqAAM",
+  "0014p000021zRSAAA2",
+  "0014p000021zRSBAA2",
+  "0014p0000220KDPAA2",
+  "0014p0000220MfNAAU",
+  "0014p0000220Np3AAE",
+  "0014p0000220OCmAAM",
+  "0014p0000220Sp2AAE",
+  "0014p0000220b01AAA",
+  "0014p000022EMZLAA4",
+  "0014p000022EYtaAAG",
+  "0014p000022EYu3AAG",
+  "0014p000022EYvBAAW",
+  "0014p000022EYvCAAW",
+  "0014p000022EYw1AAG",
+  "0014p000022EnCtAAK",
+  "0014p000022FBrQAAW",
+  "0014p000022FEx7AAG",
+  "0014p000022FmM4AAK",
+  "0014p000022HSulAAG",
+  "0014p000022HSvrAAG",
+  "0014p000022QdhpAAC",
+  "0014p000022R9RlAAK",
+  "0014p000022Vab1AAC",
+  "001G000001DVt5TIAT",
+  "001G000001DW4O5IAL",
+  "001G000001DW4OGIA1",
+  "001G000001DW4OKIA1",
+  "001G000001DW4OTIA1",
+  "001G000001DW4OWIA1",
+  "001G000001DW4OlIAL",
+  "001G000001DW4OsIAL",
+  "001G000001DW4OuIAL",
+  "001G000001DW4P4IAL",
+  "001G000001DW4PAIA1",
+  "001G000001DW4PBIA1",
+  "001G000001DW4PEIA1",
+  "001G000001DW4PFIA1",
+  "001G000001DW4PTIA1",
+  "001G000001DW4PaIAL",
+  "001G000001DW4PcIAL",
+  "001G000001DW4PfIAL",
+  "001G000001DW4PgIAL",
+  "001G000001DW4Q6IAL",
+  "001G000001DW4QCIA1",
+  "001G000001DW4QJIA1",
+  "001G000001DW4QWIA1",
+  "001G000001DW4QcIAL",
+  "001G000001DW4QmIAL",
+  "001G000001DW4QnIAL",
+  "001G000001DW4QoIAL",
+  "001G000001DW4R3IAL",
+  "001G000001DW4R6IAL",
+  "001G000001DW4S5IAL",
+  "001G000001DW4SZIA1",
+  "001G000001DW4SbIAL",
+  "001G000001DW4SeIAL",
+  "001G000001DW4SfIAL",
+  "001G000001DW4SmIAL",
+  "001G000001DW4SyIAL",
+  "001G000001DW4T2IAL",
+  "001G000001DW4T3IAL",
+  "001G000001GQ6u4IAD",
+  "001G000001H3CrIIAV",
+  "001G000001IYgNpIAL",
+  "001G000001K7URpIAN",
+  "001G000001K8yfgIAB",
+  "001G000001L8zkpIAB",
+  "001G000001TsE8iIAF",
+  "001G000001TsFyvIAF",
+  "001G000001TsGEcIAN",
+  "001G000001TsGMFIA3",
+  "001G000001TsGPsIAN",
+  "001G000001TsIX2IAN",
+  "001G000001TsIbtIAF",
+  "001G000001TsIedIAF",
+  "001G000001TsIltIAF",
+  "001G000001TsJHuIAN",
+  "001G000001TsJNiIAN",
+  "001G000001TsJRRIA3",
+  "001G000001TsJj3IAF",
+  "001G000001TsJkQIAV",
+  "001G000001TsKIvIAN",
+  "001G000001TsKPSIA3",
+  "001G000001TsKQfIAN",
+  "001G000001TsKntIAF",
+  "001G000001TsMbNIAV",
+  "001G000001TsYWjIAN",
+  "001G000001Tsg6jIAB",
+  "001G000001TsgdSIAR",
+  "001G000001TskZ7IAJ",
+  "001G000001TskmvIAB",
+  "001G000001TsosVIAR",
+  "001G000001TsqcLIAR",
+  "001G000001Tssa3IAB",
+  "001G000001TtDnBIAV",
+  "001G000001TtEaaIAF",
+  "001G000001TtIBxIAN",
+  "001G000001TtJMFIA3",
+  "001G000001TtKgnIAF",
+  "001G000001TtTOOIA3",
+  "001G000001UTWVuIAP",
+  "001G000001V5PivIAF",
+  "001G000001V7resIAB",
+  "001G000001ZFNa1IAH",
+  "001G000001ZwODhIAN",
+  "001G000001as1u1IAA",
+  "001G000001buCmhIAE",
+  "001G000001echXWIAY",
+  "001G000001evx5aIAA",
+  "001G000001fjeOcIAI",
+  "001G000001jjTb0IAE",
+  "001VL000000ln6xYAA",
+  "001VL000001TMnmYAG",
+  "001VL000001pKqXYAU",
+  "001VL000002uhlyYAA",
+  "001VL000003KcH9YAK",
+  "001VL000003MuLTYA0",
+  "001VL000004nLImYAM",
+  "001VL000007lGrmYAE",
+  "001VL000007lUQ7YAM",
+  "001VL000007lWNHYA2",
+  "001VL000007lZmWYAU",
+  "001VL000007lawtYAA",
+  "001VL000007ldI6YAI",
+  "001VL000007lfbbYAA",
+  "001VL000007lgvqYAA",
+  "001VL000007li3BYAQ",
+  "001VL000007lijNYAQ",
+  "001VL000007lmZtYAI",
+  "001VL00000A5glfYAB",
+  "001VL00000A5kZBYAZ",
+  "001VL00000A5kapYAB",
+  "001VL00000A5muKYAR",
+  "001VL00000A5mzDYAR",
+  "001VL00000A5nswYAB",
+  "001VL00000A5ntfYAB",
+  "001VL00000A5sd8YAB",
+  "001VL00000A5uLbYAJ",
+  "001VL00000A5w41YAB",
+  "001VL00000AOmovYAD",
+  "001VL00000AWTsRYAX",
+  "001VL00000AsdReYAJ",
+  "001VL00000BHG23YAH",
+  "001VL00000BqMKfYAN",
+  "001VL00000Bvbz3YAB",
+  "001VL00000DSXzGYAX",
+  "001VL00000F4yJVYAZ",
+  "001VL00000FGRmpYAH",
+  "001VL00000GL2fAYAT",
+  "001VL00000GL9dQYAT",
+  "001VL00000Gjis3YAB",
+  "001VL00000H4VTZYA3",
+  "001VL00000HI21dYAD",
+  "001VL00000HVuQvYAL",
+  "001VL00000Hqn2xYAB",
+  "001VL00000HxMM6YAN",
+  "001VL00000IFWlxYAH",
+  "001VL00000JGRHRYA5",
+  "001VL00000JomsvYAB",
+  "001VL00000KKWD8YAP",
+  "001VL00000L1QR0YAN",
+  "001VL00000L1SkaYAF",
+  "001VL00000LVfPRYA1",
+  "001VL00000LmynPYAR",
+  "001VL00000MxdQWYAZ",
+  "001VL00000OLqk9YAD",
+  "001VL00000OlelpYAB",
+  "001VL00000PL6fFYAT",
+  "001VL00000PSO13YAH",
+  "001VL00000Pos6tYAB",
+  "001VL00000PwohBYAR",
+  "001VL00000RU8tRYAT",
+  "001VL00000RiggjYAB",
+  "001VL00000RkBqXYAV",
+  "001VL00000S2ArCYAV",
+  "001VL00000Sj16lYAB",
+  "001VL00000Sj9JxYAJ",
+  "001VL00000TUGt3YAH",
+  "001VL00000TqkCZYAZ",
+  "001VL00000UN5fFYAT",
+  "001VL00000V2gNuYAJ",
+  "001VL00000WNEfpYAH",
+  "001VL00000Wy5buYAB",
+  "001VL00000XPtSwYAL",
+  "001VL00000YHEixYAH",
+  "001VL00000YHLNpYAP",
+  "001VL00000bMO6QYAW",
+  "001VL00000bryvBYAQ",
+  "001VL00000fFC2tYAG",
+  "001VL00000gB1JzYAK",
+  "001VL00000gC7ITYA0",
+  "001VL00000hSd5hYAC",
+  "001VL00000j7chnYAA",
+  "001VL00000jXdaCYAS",
+  "001VL00000k6ul2YAA",
+  "001VL00000k74R0YAI",
+  "001VL00000leyK9YAI",
+  "001VL00000o9iOSYAY",
+  "001VL00000oVfgQYAS",
+  "001VL00000psqZ7YAI",
+  "001VL00000qmfPWYAY",
+  "001VL00000r1tVOYAY",
+  "001VL00000sK4BfYAK",
+  "001VL00000wFlKCYA0",
+  "001VL00000xYROpYAO",
+  "001VL00000xxPQDYA2",
+  "001VL0000102fTCYAY"
+ ],
+ "only_618_sfdc_ids": [
+  "0011600001lhfGEAAY",
+  "0011600001ncRipAAE",
+  "0011600001oUSUIAA4",
+  "0011600001pwvTPAAY",
+  "0011600001rGvOwAAK",
+  "0011600001rhHfYAAU",
+  "0011600001rjUmOAAU",
+  "0011600001uRssiAAC",
+  "0011600001uSOVlAAO",
+  "0011600001uSPFsAAO",
+  "0011600001uSPwCAAW",
+  "0011600001uSRlWAAW",
+  "0011600001uSS4dAAG",
+  "0011600001uSZGKAA4",
+  "0011600001uSZJaAAO",
+  "0011600001uSdCyAAK",
+  "0011600001uSj1KAAS",
+  "0011600001uSj2cAAC",
+  "0011600001uSj5MAAS",
+  "0011600001uTLq0AAG",
+  "0011600001uTSvRAAW",
+  "0011600001uUyJlAAK",
+  "0011600001xHhmfAAC",
+  "0011600001zFAH3AAO",
+  "00116000020LCvJAAW",
+  "00116000020NFwWAAW",
+  "00116000020OCgLAAW",
+  "00116000020OVSAAA4",
+  "001160000219BLAAA2",
+  "001160000221ktcAAA",
+  "00116000022RQZmAAO",
+  "00116000025JsB2AAK",
+  "00116000025sMRVAA2",
+  "00116000026Vdd4AAC",
+  "00116000026VeXIAA0",
+  "00116000026WjjWAAS",
+  "001160000278F68AAE",
+  "0011L00001zzDznQAE",
+  "0011L000027XBWKQA4",
+  "0011L000028F0KvQAK",
+  "0011L000028F9SYQA0",
+  "0011L000028Tod6QAC",
+  "0011L000028V59qQAC",
+  "0011L000028VONDQA4",
+  "0011L000028VYPUQA4",
+  "0011L000028Vl2UQAS",
+  "0011L000029k3IJQAY",
+  "0011L000029kBksQAE",
+  "0011L000029kOTRQA2",
+  "0011L000029kXypQAE",
+  "0011L000029kXz9QAE",
+  "0011L000029kY5qQAE",
+  "0011L000029kZAyQAM",
+  "0011L000029kZv0QAE",
+  "0011L000029ka2aQAA",
+  "0011L000029kbesQAA",
+  "0011L000029keimQAA",
+  "0011L000029kf1KQAQ",
+  "0011L000029kfDzQAI",
+  "0011L000029kgJoQAI",
+  "0011L00002BInj0QAD",
+  "0011L00002IDd7hQAD",
+  "0011L00002IDeWhQAL",
+  "0011L00002IDjZOQA1",
+  "0011L00002IEBTHQA5",
+  "0011L00002IFUFDQA5",
+  "0011L00002dFBf0QAG",
+  "0011L00002eoFCZQA2",
+  "0011L00002eqDgTQAU",
+  "0011L00002eqjoaQAA",
+  "0011L00002g9KaPQAU",
+  "0011L00002p3RB4QAM",
+  "0011L00002rEB34QAG",
+  "0014p00001lOEl6AAG",
+  "0014p00001lR1gMAAS",
+  "0014p00001t5gUtAAI",
+  "0014p00001waeZYAAY",
+  "0014p00001y6Ac0AAE",
+  "0014p00001zanUFAAY",
+  "0014p00001zdXhfAAE",
+  "0014p00001zy3KeAAI",
+  "0014p000020vm8TAAQ",
+  "0014p000020vycQAAQ",
+  "0014p000020wDaDAAU",
+  "0014p000021IdyjAAC",
+  "0014p000021zHQjAAM",
+  "0014p000021zRRqAAM",
+  "0014p000021zRSAAA2",
+  "0014p0000220Np3AAE",
+  "0014p0000220OCmAAM",
+  "0014p0000220Sp2AAE",
+  "0014p000022EMZLAA4",
+  "0014p000022EYu3AAG",
+  "0014p000022EnCtAAK",
+  "0014p000022FBrQAAW",
+  "0014p000022FEx7AAG",
+  "0014p000022FmM4AAK",
+  "0014p000022HSulAAG",
+  "0014p000022QdhpAAC",
+  "0014p000022Vab1AAC",
+  "001G000001DW4O5IAL",
+  "001G000001DW4OKIA1",
+  "001G000001DW4OWIA1",
+  "001G000001DW4OlIAL",
+  "001G000001DW4OsIAL",
+  "001G000001DW4OuIAL",
+  "001G000001DW4P4IAL",
+  "001G000001DW4PAIA1",
+  "001G000001DW4PEIA1",
+  "001G000001DW4PFIA1",
+  "001G000001DW4PTIA1",
+  "001G000001DW4PcIAL",
+  "001G000001DW4PfIAL",
+  "001G000001DW4PgIAL",
+  "001G000001DW4Q6IAL",
+  "001G000001DW4QCIA1",
+  "001G000001DW4QJIA1",
+  "001G000001DW4QWIA1",
+  "001G000001DW4QcIAL",
+  "001G000001DW4QmIAL",
+  "001G000001DW4R6IAL",
+  "001G000001DW4SZIA1",
+  "001G000001DW4SbIAL",
+  "001G000001DW4SeIAL",
+  "001G000001DW4SfIAL",
+  "001G000001DW4T2IAL",
+  "001G000001K7URpIAN",
+  "001G000001TsE8iIAF",
+  "001G000001TsGMFIA3",
+  "001G000001TsGPsIAN",
+  "001G000001TsJHuIAN",
+  "001G000001TsJRRIA3",
+  "001G000001TsJkQIAV",
+  "001G000001TsKIvIAN",
+  "001G000001TsKQfIAN",
+  "001G000001TsKntIAF",
+  "001G000001TsosVIAR",
+  "001G000001Tssa3IAB",
+  "001G000001TtJMFIA3",
+  "001G000001TtKgnIAF",
+  "001G000001UTWVuIAP",
+  "001G000001as1u1IAA",
+  "001G000001echXWIAY",
+  "001G000001evx5aIAA",
+  "001G000001fjeOcIAI",
+  "001G000001jjTb0IAE",
+  "001VL000000ln6xYAA",
+  "001VL000001pKqXYAU",
+  "001VL000004nLImYAM",
+  "001VL000007lGrmYAE",
+  "001VL000007lUQ7YAM",
+  "001VL000007lWNHYA2",
+  "001VL000007lZmWYAU",
+  "001VL000007lawtYAA",
+  "001VL000007ldI6YAI",
+  "001VL000007lfbbYAA",
+  "001VL000007lgvqYAA",
+  "001VL000007li3BYAQ",
+  "001VL000007lijNYAQ",
+  "001VL000007lmZtYAI",
+  "001VL00000A5glfYAB",
+  "001VL00000A5kZBYAZ",
+  "001VL00000A5kapYAB",
+  "001VL00000A5muKYAR",
+  "001VL00000A5mzDYAR",
+  "001VL00000A5nswYAB",
+  "001VL00000A5sd8YAB",
+  "001VL00000A5uLbYAJ",
+  "001VL00000A5w41YAB",
+  "001VL00000AOmovYAD",
+  "001VL00000AWTsRYAX",
+  "001VL00000BHG23YAH",
+  "001VL00000BqMKfYAN",
+  "001VL00000Bvbz3YAB",
+  "001VL00000FGRmpYAH",
+  "001VL00000GL2fAYAT",
+  "001VL00000Gjis3YAB",
+  "001VL00000H4VTZYA3",
+  "001VL00000Hqn2xYAB",
+  "001VL00000HxMM6YAN",
+  "001VL00000IFWlxYAH",
+  "001VL00000JomsvYAB",
+  "001VL00000L1QR0YAN",
+  "001VL00000MxdQWYAZ",
+  "001VL00000OlelpYAB",
+  "001VL00000PL6fFYAT",
+  "001VL00000PSO13YAH",
+  "001VL00000Pos6tYAB",
+  "001VL00000PwohBYAR",
+  "001VL00000RU8tRYAT",
+  "001VL00000RkBqXYAV",
+  "001VL00000S2ArCYAV",
+  "001VL00000Sj16lYAB",
+  "001VL00000Sj9JxYAJ",
+  "001VL00000TqkCZYAZ",
+  "001VL00000WNEfpYAH",
+  "001VL00000XPtSwYAL",
+  "001VL00000fFC2tYAG",
+  "001VL00000gC7ITYA0",
+  "001VL00000j7chnYAA",
+  "001VL00000jXdaCYAS",
+  "001VL00000k74R0YAI",
+  "001VL00000oVfgQYAS",
+  "001VL00000psqZ7YAI",
+  "001VL00000wFlKCYA0",
+  "001VL00000xYROpYAO",
+  "001VL00000xxPQDYA2",
+  "001VL0000102fTCYAY"
+ ],
+ "detail": [
+  {
+   "sfdc_id": "0011600001lfVtAAAU",
+   "company_id": "654566",
+   "company_name": "Gassafy Wholesale Florist Inc",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0011600001lgc6sAAA",
+   "company_id": "632322",
+   "company_name": "Northline Wholesale Flowers",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0011600001lhbwBAAQ",
+   "company_id": "652199",
+   "company_name": "JOHNSENS WHOLESALE FLORIST",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0011600001lhfGEAAY",
+   "company_id": null,
+   "company_name": "Southern Wholesale Florists, Inc.",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011600001mKVtUAAW",
+   "company_id": "704636",
+   "company_name": "UNITED WHOLESALE- FFL  ENTERPRISES",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0011600001mLcyvAAC",
+   "company_id": "477128",
+   "company_name": "Arizona Floral Exchange",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0011600001ncRipAAE",
+   "company_id": "153031",
+   "company_name": "FloraLink",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011600001oUSUIAA4",
+   "company_id": null,
+   "company_name": "Associated Wholesale Florist",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011600001pwvTPAAY",
+   "company_id": null,
+   "company_name": "Carlstedt's LLC",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011600001rGvOwAAK",
+   "company_id": null,
+   "company_name": "Danisa's Wholesale Fresh Flowers, Inc",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011600001rhHfYAAU",
+   "company_id": null,
+   "company_name": "Mountain Bloom",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011600001riCHoAAM",
+   "company_id": "623491",
+   "company_name": "Baisch & Skinner",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0011600001rjUmOAAU",
+   "company_id": null,
+   "company_name": "United Floral Distributors",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011600001tWETgAAO",
+   "company_id": "655382",
+   "company_name": "Staalduinen Floral-LTF1118",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0011600001uRssiAAC",
+   "company_id": "322928",
+   "company_name": "Inversiones Napy S.A",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011600001uSNXnAAO",
+   "company_id": "612641",
+   "company_name": "Florasource KC",
+   "sources": [
+    "filtro",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0011600001uSOVlAAO",
+   "company_id": null,
+   "company_name": "Inland Wholesale Flowers",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011600001uSPFsAAO",
+   "company_id": null,
+   "company_name": "Newport Wholesale Floral",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011600001uSPwCAAW",
+   "company_id": null,
+   "company_name": "Paseo Flowers",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011600001uSRlWAAW",
+   "company_id": null,
+   "company_name": "Prime Source Floral Distributors",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011600001uSS4dAAG",
+   "company_id": null,
+   "company_name": "San Marcos Wholesale Flowers",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011600001uSU5jAAG",
+   "company_id": "665336",
+   "company_name": "Torchio Nursery",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0011600001uSYzvAAG",
+   "company_id": "665080",
+   "company_name": "Coward Wholesale",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0011600001uSZGKAA4",
+   "company_id": null,
+   "company_name": "D.B.E.C Wholesale Company",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011600001uSZJaAAO",
+   "company_id": null,
+   "company_name": "Davis Wholesale Florist",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011600001uSZXFAA4",
+   "company_id": "716166",
+   "company_name": "Exclusive Wholesale",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0011600001uScxFAAS",
+   "company_id": "713789",
+   "company_name": "HALL\u00b4S - BIRMINGHAM",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0011600001uSdCyAAK",
+   "company_id": null,
+   "company_name": "J and E Wholesale Floral Company",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011600001uSj1KAAS",
+   "company_id": "729696",
+   "company_name": "METCALFE WHOLESALE FLORIST",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011600001uSj2cAAC",
+   "company_id": null,
+   "company_name": "Memphis Metro Wholesale Florist",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011600001uSj5MAAS",
+   "company_id": null,
+   "company_name": "Midway Wholesale Florist",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011600001uSjSfAAK",
+   "company_id": "742781",
+   "company_name": "New England Wholesale Florist",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0011600001uSjyvAAC",
+   "company_id": "730920",
+   "company_name": "Shamrock Wholesale Florist Memphis",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0011600001uSk8RAAS",
+   "company_id": "653842",
+   "company_name": "TFS- Chattanooga",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0011600001uSkCOAA0",
+   "company_id": "664381",
+   "company_name": "Unifour Wholesale",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0011600001uSkF3AAK",
+   "company_id": "670701",
+   "company_name": "Webb\u2019s Wholesale Florist",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0011600001uTH0wAAG",
+   "company_id": "543610",
+   "company_name": "Frank Adams Wholesale Florist",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0011600001uTLq0AAG",
+   "company_id": null,
+   "company_name": "Breed Brothers Wholesale",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011600001uTOjKAAW",
+   "company_id": "729666",
+   "company_name": "NORTHWEST WHOLESALE FLORIST",
+   "sources": [
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0011600001uTSvRAAW",
+   "company_id": "315007",
+   "company_name": "The Queens Flowers Corp",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011600001uUyJlAAK",
+   "company_id": "153536",
+   "company_name": "Fair Trade Floral Inc.",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011600001xHhmfAAC",
+   "company_id": "521854",
+   "company_name": "Albin Hagstrom & Son, Inc.",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011600001zFAH3AAO",
+   "company_id": "509751",
+   "company_name": "Best Miami Growers LLC",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011600001zVGSVAA4",
+   "company_id": "193886",
+   "company_name": "Import Flowers Nashville LLC",
+   "sources": [
+    "filtro",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0011600001zVU4vAAG",
+   "company_id": "821576",
+   "company_name": "MAIN WHOLESALE FLORIST LLC / Pennsauken Location",
+   "sources": [
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0011600001zrCXXAA2",
+   "company_id": "146183",
+   "company_name": "EPIC FARMS USA LLC",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "00116000020LCvJAAW",
+   "company_id": "189685",
+   "company_name": "Farm Fresh Exports INC",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "00116000020NFwWAAW",
+   "company_id": null,
+   "company_name": "J. Van Vliet New York",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "00116000020OCgLAAW",
+   "company_id": "643672",
+   "company_name": "Allied Cut Flower",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "00116000020OVSAAA4",
+   "company_id": null,
+   "company_name": "Reeves Floral Products, Inc.",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001160000219BLAAA2",
+   "company_id": "670473",
+   "company_name": "FLORISTS SUPPLY WINNIPEG",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "00116000021BDnbAAG",
+   "company_id": "400013",
+   "company_name": "Washington Floral Service, Inc",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "00116000021BPGhAAO",
+   "company_id": "726631",
+   "company_name": "Wolfe Wholesale Florist, Inc. Waco",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "00116000021Z8FtAAK",
+   "company_id": "591877",
+   "company_name": "Claymore C. Sieck Wholesale Florist",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "00116000021bflwAAA",
+   "company_id": "808079",
+   "company_name": "JFS Wholesale Floral",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "00116000021c3HoAAI",
+   "company_id": "561453",
+   "company_name": "A Florist First",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001160000221ktcAAA",
+   "company_id": "296456",
+   "company_name": "Produce Junction Inc",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001160000222AFqAAM",
+   "company_id": "733807",
+   "company_name": "Metropolitan Wholesale/Cityside Flowers",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "00116000022RQZmAAO",
+   "company_id": null,
+   "company_name": "Boulevard Florist Wholesale",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "00116000022ofJ2AAI",
+   "company_id": "713840",
+   "company_name": "WHOLESALE NORTON'S FLORIST",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "00116000023rB8qAAE",
+   "company_id": "193828",
+   "company_name": "Arizona Family Florist",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "00116000023sYATAA2",
+   "company_id": "578194",
+   "company_name": "Flowers Direct Inc",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "00116000025JsB2AAK",
+   "company_id": "476379",
+   "company_name": "Lone Star Flower Market",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "00116000025sMRVAA2",
+   "company_id": "503075",
+   "company_name": "HANAYA FARMS",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "00116000026Vdd4AAC",
+   "company_id": "492201",
+   "company_name": "Forest Flowers",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "00116000026VeXIAA0",
+   "company_id": "200279",
+   "company_name": "DP Flowers Corp",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "00116000026WSexAAG",
+   "company_id": "732830",
+   "company_name": "First Choice Floral",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "00116000026WjjWAAS",
+   "company_id": "200503",
+   "company_name": "Stellar Farms",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001160000276kVxAAI",
+   "company_id": "664201",
+   "company_name": "San Antonio Flower CO",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001160000276ptzAAA",
+   "company_id": "327132",
+   "company_name": "Royal Flower Import Group Inc.",
+   "sources": [
+    "filtro"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001160000278F68AAE",
+   "company_id": null,
+   "company_name": "Cedars Import Wholesale",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011L00001zzDR9QAM",
+   "company_id": "592345",
+   "company_name": "Orlando Wholesale Florist",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0011L00001zzDSCQA2",
+   "company_id": "672799",
+   "company_name": "Rokay Floral",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0011L00001zzDYPQA2",
+   "company_id": "449344",
+   "company_name": "Southern Floral Co",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0011L00001zzDznQAE",
+   "company_id": null,
+   "company_name": "Tommy's Wholesale Florist, Inc",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011L000027XBWKQA4",
+   "company_id": "296458",
+   "company_name": "Florimex Toronto Corp.",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011L000028F0KvQAK",
+   "company_id": "488495",
+   "company_name": "Sierra Flower Trading",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011L000028F9SYQA0",
+   "company_id": "313164",
+   "company_name": "Bunches Direct Blumenimport GmbH",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011L000028TahoQAC",
+   "company_id": "394783",
+   "company_name": "Metro Flower Market LLC",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0011L000028TcCRQA0",
+   "company_id": "735220",
+   "company_name": "WE GOT FLOWERS",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0011L000028Tod6QAC",
+   "company_id": null,
+   "company_name": "Atrium Design Works",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011L000028V2EyQAK",
+   "company_id": "397194",
+   "company_name": "Charleston Wholesale Florist",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0011L000028V59qQAC",
+   "company_id": "665216",
+   "company_name": "CURTIS FLOWER FARMS, INC",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011L000028VONDQA4",
+   "company_id": "616760",
+   "company_name": "Flex Direct, LLC",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011L000028VYPUQA4",
+   "company_id": null,
+   "company_name": "Flower Pak Inc",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011L000028Vl2UQAS",
+   "company_id": null,
+   "company_name": "J Merullo Imports Inc",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011L000028VnGrQAK",
+   "company_id": "652551",
+   "company_name": "LD Trading/ Lawrence Developments Inc.",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0011L000029k3IJQAY",
+   "company_id": null,
+   "company_name": "Petal Pushers Express LLC",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011L000029kBirQAE",
+   "company_id": "665261",
+   "company_name": "Tradewinds / Pristine Wholesale Floral",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0011L000029kBksQAE",
+   "company_id": null,
+   "company_name": "Pulley Wholesale Florist",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011L000029kOTRQA2",
+   "company_id": "664157",
+   "company_name": "Tiptonhurst / Central Wholesale",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011L000029kXypQAE",
+   "company_id": null,
+   "company_name": "Brose's Wholesale Florist",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011L000029kXz9QAE",
+   "company_id": null,
+   "company_name": "Buds and Blossoms",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011L000029kY5qQAE",
+   "company_id": null,
+   "company_name": "Capital Wholesale Florist",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011L000029kZAyQAM",
+   "company_id": "729585",
+   "company_name": "Clifton Wholesale Florist, Inc.",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011L000029kZv0QAE",
+   "company_id": null,
+   "company_name": "Dan Engwers Wholesale Florist",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011L000029ka2aQAA",
+   "company_id": "620603",
+   "company_name": "El Paso Floral Distributors",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011L000029kbesQAA",
+   "company_id": "664103",
+   "company_name": "JANAL WHOLESALE FLORIST",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011L000029keimQAA",
+   "company_id": null,
+   "company_name": "Karthauser & Son's Inc",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011L000029kf1KQAQ",
+   "company_id": "665136",
+   "company_name": "METRO WHOLESALE FLORIST, INC",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011L000029kfDzQAI",
+   "company_id": null,
+   "company_name": "Mid East Flower Distributors",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011L000029kgJoQAI",
+   "company_id": null,
+   "company_name": "North America Wholesale Florist",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011L00002BInj0QAD",
+   "company_id": "321907",
+   "company_name": "Greens and Flowers Connection",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011L00002ICyF3QAL",
+   "company_id": "664719",
+   "company_name": "ALLIANCE FLORAL COMPANY. 6270",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0011L00002IDd7hQAD",
+   "company_id": null,
+   "company_name": "Bakersfield Flower Market",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011L00002IDeWhQAL",
+   "company_id": "618305",
+   "company_name": "J&G SPECIALTY CROPS LLC",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011L00002IDjZOQA1",
+   "company_id": "650252",
+   "company_name": "GRUPO DEL PACIFICO",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011L00002IEBTHQA5",
+   "company_id": "632275",
+   "company_name": "A. Perri Farms Inc.",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011L00002IFUFDQA5",
+   "company_id": null,
+   "company_name": "Point West Wholesale Flower Market",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011L00002KVe1mQAD",
+   "company_id": "740734",
+   "company_name": "Valley Floral Co. of OKC - Oklahoma",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0011L00002WO3HUQA1",
+   "company_id": "507479",
+   "company_name": "Ashland Addison",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0011L00002WO7dMQAT",
+   "company_id": "743681",
+   "company_name": "Alpha Fern Company, LLC",
+   "sources": [
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0011L00002WOu1fQAD",
+   "company_id": "398856",
+   "company_name": "National Floral Supply",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0011L00002Y7yX7QAJ",
+   "company_id": "651200",
+   "company_name": "Jacksonville Flower Market",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0011L00002dFBf0QAG",
+   "company_id": "453771",
+   "company_name": "Continental Floral CA LLC",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011L00002eoFCZQA2",
+   "company_id": null,
+   "company_name": "Bloomology Global",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011L00002eqDgTQAU",
+   "company_id": "806417",
+   "company_name": "Hyperactive Farms",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011L00002eqjoaQAA",
+   "company_id": "704005",
+   "company_name": "Nashville Flower Market",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011L00002g9KaPQAU",
+   "company_id": null,
+   "company_name": "AJ Flower Wholesale",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011L00002h0CH9QAM",
+   "company_id": "474847",
+   "company_name": "Vosz Floral LLC",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0011L00002p3RB4QAM",
+   "company_id": "493143",
+   "company_name": "Brightland Floral Distributors",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0011L00002p55GMQAY",
+   "company_id": "498865",
+   "company_name": "H&T Wholesale Flowers",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0011L00002rCC5zQAG",
+   "company_id": "496600",
+   "company_name": "Floristcentric, LLC",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0011L00002rEB34QAG",
+   "company_id": "610818",
+   "company_name": "Farms Connect",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0014p00001lOEl6AAG",
+   "company_id": "505896",
+   "company_name": "Continental Floral PNW LLC",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0014p00001lORHxAAO",
+   "company_id": "537092",
+   "company_name": "Tropical Blooms Inc.",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0014p00001lR1gMAAS",
+   "company_id": "508576",
+   "company_name": "Old Mill Wholesale Flowers, LLC",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0014p00001ndeAmAAI",
+   "company_id": "664019",
+   "company_name": "FLOWERS OF NASHVILLE",
+   "sources": [
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0014p00001so6ueAAA",
+   "company_id": "541854",
+   "company_name": "Fletch Wholesale LLC",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0014p00001t5gUtAAI",
+   "company_id": "569309",
+   "company_name": "Castle Hayne Farms",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0014p00001waeZYAAY",
+   "company_id": "592806",
+   "company_name": "Aurum Farms LLC",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0014p00001y6Ac0AAE",
+   "company_id": "577566",
+   "company_name": "FLEUPHORIA S.A.S",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0014p00001z9zUXAAY",
+   "company_id": "588171",
+   "company_name": "Magnolia Wholesale Florist Inc",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0014p00001zanUFAAY",
+   "company_id": "600370",
+   "company_name": "GOMEZ B.V.",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0014p00001zdXhfAAE",
+   "company_id": "584972",
+   "company_name": "* Flowers' International Group",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0014p00001zy3KeAAI",
+   "company_id": "590675",
+   "company_name": "FernTrust Inc.",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0014p000020tateAAA",
+   "company_id": "600910",
+   "company_name": "Sieck Wright Floral Products",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0014p000020vm8TAAQ",
+   "company_id": "603102",
+   "company_name": "AGM BROTHERS WORLD TRADING LLC",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0014p000020vycQAAQ",
+   "company_id": "591665",
+   "company_name": "Natural Flowers, Inc",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0014p000020wDaDAAU",
+   "company_id": "592615",
+   "company_name": "NYC FLORAL GREENS",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0014p000020wFxeAAE",
+   "company_id": "624737",
+   "company_name": "AMORES FLORES INC",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0014p000021IdyjAAC",
+   "company_id": "594981",
+   "company_name": "Evergreen Plant Company",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0014p000021fXK6AAM",
+   "company_id": "600558",
+   "company_name": "Metropetals",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0014p000021zHQjAAM",
+   "company_id": "603611",
+   "company_name": "GREEN OCEAN LLC",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0014p000021zRPfAAM",
+   "company_id": "618758",
+   "company_name": "Bo's Wholesale Florist",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0014p000021zRRqAAM",
+   "company_id": null,
+   "company_name": "Elite Floral Wholesale",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0014p000021zRSAAA2",
+   "company_id": "664750",
+   "company_name": "FST WHOLESALE LLC",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0014p000021zRSBAA2",
+   "company_id": "655643",
+   "company_name": "Solo Wholesale Flower LLC",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0014p0000220KDPAA2",
+   "company_id": "743648",
+   "company_name": "Zeidler Floral",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0014p0000220MfNAAU",
+   "company_id": "610504",
+   "company_name": "The Flower Emporium LLC",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0014p0000220Np3AAE",
+   "company_id": null,
+   "company_name": "Maui Floral Inc",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0014p0000220OCmAAM",
+   "company_id": "652302",
+   "company_name": "CASCADE FLOWERS DBA STADIUM FLOWERS INC",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0014p0000220Sp2AAE",
+   "company_id": null,
+   "company_name": "Classic Floral, Inc",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0014p0000220b01AAA",
+   "company_id": "675363",
+   "company_name": "Palm Beach Whsle Flowers, Inc.",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0014p000022EMZLAA4",
+   "company_id": "613695",
+   "company_name": "FLORAL1 INC",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0014p000022EYtaAAG",
+   "company_id": "816515",
+   "company_name": "Price's Floral Wholesale, LLC",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0014p000022EYu3AAG",
+   "company_id": "649109",
+   "company_name": "Blossoms Wholesale LLC",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0014p000022EYvBAAW",
+   "company_id": "731381",
+   "company_name": "CHICAGO\u00b4S WHOLESALE",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0014p000022EYvCAAW",
+   "company_id": "727605",
+   "company_name": "Lucas and Greer, Inc. dba L & G Wholesale Florist",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0014p000022EYw1AAG",
+   "company_id": "651574",
+   "company_name": "M&M CUT FLORA",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0014p000022EnCtAAK",
+   "company_id": null,
+   "company_name": "Asiri Blooms.",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0014p000022FBrQAAW",
+   "company_id": null,
+   "company_name": "Direct Flowers (Boston)",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0014p000022FEx7AAG",
+   "company_id": "612783",
+   "company_name": "Faguaflowers Intl LLC",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0014p000022FmM4AAK",
+   "company_id": "612707",
+   "company_name": "Miaflora Farms LLC",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0014p000022HSulAAG",
+   "company_id": "665481",
+   "company_name": "BloomTown Flower Market",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0014p000022HSvrAAG",
+   "company_id": "635064",
+   "company_name": "Ensign Wholesale Flower Market",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0014p000022QdhpAAC",
+   "company_id": "621198",
+   "company_name": "The Floral Reserve",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "0014p000022R9RlAAK",
+   "company_id": "631459",
+   "company_name": "Honey Bee Wholesale Florist, LLC",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "0014p000022Vab1AAC",
+   "company_id": "817168",
+   "company_name": "International Fresh Group",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001G000001DVt5TIAT",
+   "company_id": "7030",
+   "company_name": "Bill Doran Company",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001G000001DW4O5IAL",
+   "company_id": "20769",
+   "company_name": "AmeriLink Floratrader",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001G000001DW4OGIA1",
+   "company_id": "830406",
+   "company_name": "Avon Valley Floral",
+   "sources": [
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001G000001DW4OKIA1",
+   "company_id": "17789",
+   "company_name": "Bella Blossom LLC",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001G000001DW4OTIA1",
+   "company_id": "652251",
+   "company_name": "BOTANICA WHOLESALE FLORIST DALLAS (IRVING), LLC",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001G000001DW4OWIA1",
+   "company_id": "2516",
+   "company_name": "Brightland Farms",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001G000001DW4OlIAL",
+   "company_id": "341499",
+   "company_name": "Choice Farms",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001G000001DW4OsIAL",
+   "company_id": "198117",
+   "company_name": "Continental Farms",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001G000001DW4OuIAL",
+   "company_id": "73730",
+   "company_name": "Allure Farms",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001G000001DW4P4IAL",
+   "company_id": "529464",
+   "company_name": "Direct Farms, LLC",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001G000001DW4PAIA1",
+   "company_id": "571220",
+   "company_name": "Dramm & Echter, Inc",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001G000001DW4PBIA1",
+   "company_id": "765491",
+   "company_name": "Dreisbach Wholesale",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001G000001DW4PEIA1",
+   "company_id": null,
+   "company_name": "East Coast Wholesale Flowers",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001G000001DW4PFIA1",
+   "company_id": "38582",
+   "company_name": "Gala Roses",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001G000001DW4PTIA1",
+   "company_id": "1241",
+   "company_name": "Farm To Canada",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001G000001DW4PaIAL",
+   "company_id": "664314",
+   "company_name": "Florabundance.",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001G000001DW4PcIAL",
+   "company_id": "670437",
+   "company_name": "Florasolusa",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001G000001DW4PfIAL",
+   "company_id": "568020",
+   "company_name": "Floraxis Cut Flowers, Inc",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001G000001DW4PgIAL",
+   "company_id": "449683",
+   "company_name": "Floreco, Inc",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001G000001DW4Q6IAL",
+   "company_id": "508421",
+   "company_name": "Gardens America Inc.",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001G000001DW4QCIA1",
+   "company_id": "77300",
+   "company_name": "Golden Flowers",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001G000001DW4QJIA1",
+   "company_id": "1614",
+   "company_name": "-Groflowers",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001G000001DW4QWIA1",
+   "company_id": "18322",
+   "company_name": "Jet Fresh Flower Distributors Inc.",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001G000001DW4QcIAL",
+   "company_id": null,
+   "company_name": "Kendal Floral Supply, LLC",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001G000001DW4QmIAL",
+   "company_id": "189419",
+   "company_name": "Legacy Flowers",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001G000001DW4QnIAL",
+   "company_id": "541415",
+   "company_name": "Len Busch Roses",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001G000001DW4QoIAL",
+   "company_id": "654758",
+   "company_name": "LIHML INC Fayetteville - #01235 GF Rep Kareena 19",
+   "sources": [
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001G000001DW4R3IAL",
+   "company_id": "103078",
+   "company_name": "Mayesh Wholesale Florist Inc",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001G000001DW4R6IAL",
+   "company_id": "498769",
+   "company_name": "Melody Farms LLC",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001G000001DW4S5IAL",
+   "company_id": "731558",
+   "company_name": "MRS. BLOOM\u2019S DIRECT, INC.",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001G000001DW4SZIA1",
+   "company_id": "378242",
+   "company_name": "Premium Flowers",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001G000001DW4SbIAL",
+   "company_id": "33023",
+   "company_name": "Prime Petals LLC",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001G000001DW4SeIAL",
+   "company_id": "13989",
+   "company_name": "Pronto Farms LLC",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001G000001DW4SfIAL",
+   "company_id": "467802",
+   "company_name": "Protean Farms US",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001G000001DW4SmIAL",
+   "company_id": "664096",
+   "company_name": "Riverside Wholesale Florists KY",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001G000001DW4SyIAL",
+   "company_id": "585613",
+   "company_name": "Sieck Floral Distributing, Inc",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001G000001DW4T2IAL",
+   "company_id": "25489",
+   "company_name": "Sole Farms",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001G000001DW4T3IAL",
+   "company_id": "17503",
+   "company_name": "SOS Floral",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001G000001GQ6u4IAD",
+   "company_id": "651216",
+   "company_name": "HARDIN\u00b4S WHLSE - LIBERTY",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001G000001H3CrIIAV",
+   "company_id": "44150",
+   "company_name": "Kennicott Brothers Company",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001G000001IYgNpIAL",
+   "company_id": "393475",
+   "company_name": "American Agroproducts",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001G000001K7URpIAN",
+   "company_id": "35266",
+   "company_name": "Liberty Blooms",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001G000001K8yfgIAB",
+   "company_id": "651513",
+   "company_name": "PETALS WEST, INC.",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001G000001L8zkpIAB",
+   "company_id": "828336",
+   "company_name": "SPRINGFIELD FLORIST SUPPLY INC",
+   "sources": [
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001G000001TsE8iIAF",
+   "company_id": "598944",
+   "company_name": "Las Vegas Floral Wholesale",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001G000001TsFyvIAF",
+   "company_id": "586784",
+   "company_name": "Louisiana Wholesale Florist",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001G000001TsGEcIAN",
+   "company_id": "152602",
+   "company_name": "Lubbock Wholesale",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001G000001TsGMFIA3",
+   "company_id": null,
+   "company_name": "Main Wholesale Florist, Inc. (L1)",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001G000001TsGPsIAN",
+   "company_id": "664231",
+   "company_name": "Mears Floral Products, Inc.",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001G000001TsIX2IAN",
+   "company_id": "669090",
+   "company_name": "The Oklahoma Flower Market",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001G000001TsIbtIAF",
+   "company_id": "395357",
+   "company_name": "Pikes Peak Floral",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001G000001TsIedIAF",
+   "company_id": "554905",
+   "company_name": "Quinlan-Wasserman, Inc",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001G000001TsIltIAF",
+   "company_id": "650536",
+   "company_name": "R&W WHOLESALE, INC.",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001G000001TsJHuIAN",
+   "company_id": "651992",
+   "company_name": "Schaefer Wholesale Florists Inc",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001G000001TsJNiIAN",
+   "company_id": "476679",
+   "company_name": "Taylor Wholesale Florist",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001G000001TsJRRIA3",
+   "company_id": "565262",
+   "company_name": "Best In Bloom Inc.",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001G000001TsJj3IAF",
+   "company_id": "475168",
+   "company_name": "South Carolina Specialty Cut",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001G000001TsJkQIAV",
+   "company_id": null,
+   "company_name": "Spedale's Florist and Wholesale",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001G000001TsKIvIAN",
+   "company_id": null,
+   "company_name": "Advantage Plus Flower Wholesale",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001G000001TsKPSIA3",
+   "company_id": "654944",
+   "company_name": "Apex Floral Distributors Mississauga",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001G000001TsKQfIAN",
+   "company_id": "651742",
+   "company_name": "BELVIEW WHOLESALE FLORIST",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001G000001TsKntIAF",
+   "company_id": null,
+   "company_name": "Bennett Wholesale Florist",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001G000001TsMbNIAV",
+   "company_id": "655098",
+   "company_name": "BRIEGER WHSLE -TX.",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001G000001TsYWjIAN",
+   "company_id": "650767",
+   "company_name": "Coastal Wholesale Flowers, Inc.",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001G000001Tsg6jIAB",
+   "company_id": "651959",
+   "company_name": "CINCINNATI WHSLE FLORIST INC.5643",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001G000001TsgdSIAR",
+   "company_id": "159761",
+   "company_name": "Cleveland Plant & Flower Co.",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001G000001TskZ7IAJ",
+   "company_id": "732518",
+   "company_name": "DKAY WHOLESALE INC",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001G000001TskmvIAB",
+   "company_id": "654131",
+   "company_name": "DVFLORA SEWELL",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001G000001TsosVIAR",
+   "company_id": "651671",
+   "company_name": "FIELD OF FLOWERS, INC.",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001G000001TsqcLIAR",
+   "company_id": "601933",
+   "company_name": "Flora Fresh Inc",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001G000001Tssa3IAB",
+   "company_id": "37745",
+   "company_name": "Floral Cooperative Purchasing Group LLC",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001G000001TtDnBIAV",
+   "company_id": "484037",
+   "company_name": "Delaware Valley Floral Group",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001G000001TtEaaIAF",
+   "company_id": "321023",
+   "company_name": "Bill Doran Company (2)",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001G000001TtIBxIAN",
+   "company_id": "670508",
+   "company_name": "Hartford Florist Supply",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001G000001TtJMFIA3",
+   "company_id": null,
+   "company_name": "Island Wholesale Florist Inc.",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001G000001TtKgnIAF",
+   "company_id": null,
+   "company_name": "J & J Wholesale Florist",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001G000001TtTOOIA3",
+   "company_id": "664648",
+   "company_name": "Tradewinds/ KING FLORAL SUPPLY",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001G000001UTWVuIAP",
+   "company_id": "146846",
+   "company_name": "Continental Flowers",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001G000001V5PivIAF",
+   "company_id": "642076",
+   "company_name": "Full Pot - Ft. Lauderdale",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001G000001V7resIAB",
+   "company_id": "651277",
+   "company_name": "BAYSTATE FARM DIRECT FLOWERS - CRANSTON",
+   "sources": [
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001G000001ZFNa1IAH",
+   "company_id": "641341",
+   "company_name": "Maple Grove Floral",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001G000001ZwODhIAN",
+   "company_id": "677319",
+   "company_name": "Juliet Wholesale Flowers LLC",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001G000001as1u1IAA",
+   "company_id": "610510",
+   "company_name": "MYSTICFLOWERS LLC",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001G000001buCmhIAE",
+   "company_id": "815425",
+   "company_name": "Coward & Glisson Whsl. Flst.",
+   "sources": [
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001G000001echXWIAY",
+   "company_id": "577847",
+   "company_name": "Holland Flower Market inc",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001G000001evx5aIAA",
+   "company_id": "44225",
+   "company_name": "Pinnacle Flowers, LLC",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001G000001fjeOcIAI",
+   "company_id": "575819",
+   "company_name": "LA TOSCANA FARMS",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001G000001jjTb0IAE",
+   "company_id": "54343",
+   "company_name": "Wafex USA",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL000000ln6xYAA",
+   "company_id": "620160",
+   "company_name": "Petals Direct",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL000001TMnmYAG",
+   "company_id": "640977",
+   "company_name": "Ninfa Flowers",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001VL000001pKqXYAU",
+   "company_id": "622743",
+   "company_name": "Megaflor USA",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL000002uhlyYAA",
+   "company_id": "649935",
+   "company_name": "Sims Flower Distribution",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001VL000003KcH9YAK",
+   "company_id": "632203",
+   "company_name": "Tristate Wholesale Florist",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001VL000003MuLTYA0",
+   "company_id": "624816",
+   "company_name": "CD Wholesale",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001VL000004nLImYAM",
+   "company_id": null,
+   "company_name": "New England Flower Market",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL000007lGrmYAE",
+   "company_id": null,
+   "company_name": "Berkeley Florist Supply (L1)",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL000007lUQ7YAM",
+   "company_id": null,
+   "company_name": "Hires Best Flowers (L1)",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL000007lWNHYA2",
+   "company_id": null,
+   "company_name": "Oklahoma Flower Market, Inc (L1)",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL000007lZmWYAU",
+   "company_id": null,
+   "company_name": "MIRAFLOR (L1)",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL000007lawtYAA",
+   "company_id": null,
+   "company_name": "Mike's Finest Wholesale Flower (L1)",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL000007ldI6YAI",
+   "company_id": null,
+   "company_name": "Riverside Wholesale Florist (L1)",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL000007lfbbYAA",
+   "company_id": null,
+   "company_name": "BUDs Floral Importers & Distributors, Inc. (L1)",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL000007lgvqYAA",
+   "company_id": null,
+   "company_name": "Palm Beach Wholesale Flowers, Inc (L1)",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL000007li3BYAQ",
+   "company_id": null,
+   "company_name": "D-Kay Wholesale Florist (L1)",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL000007lijNYAQ",
+   "company_id": null,
+   "company_name": "Algro Flowers & Plants",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL000007lmZtYAI",
+   "company_id": null,
+   "company_name": "Holex USA",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000A5glfYAB",
+   "company_id": null,
+   "company_name": "Horton Wholesale Floral Co. Inc. (L1)",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000A5kZBYAZ",
+   "company_id": null,
+   "company_name": "Hall's Theodore Wholesale Florist, Inc (L1)",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000A5kapYAB",
+   "company_id": "651390",
+   "company_name": "TFS / Roanoke",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000A5muKYAR",
+   "company_id": null,
+   "company_name": "McCallum Sauber Wholesale Florist Inc (L1)",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000A5mzDYAR",
+   "company_id": null,
+   "company_name": "Johnsen's Wholesale Florist (L1)",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000A5nswYAB",
+   "company_id": null,
+   "company_name": "Mellano & Company (L1)",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000A5ntfYAB",
+   "company_id": "640251",
+   "company_name": "FreshLink",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001VL00000A5sd8YAB",
+   "company_id": null,
+   "company_name": "Dreisbach Wholesale Florist (L1)",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000A5uLbYAJ",
+   "company_id": null,
+   "company_name": "Dillon Floral Corporation (L1)",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000A5w41YAB",
+   "company_id": null,
+   "company_name": "Springfield Florists Supply Inc. (L1)",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000AOmovYAD",
+   "company_id": null,
+   "company_name": "Bay Area Flower Market",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000AWTsRYAX",
+   "company_id": null,
+   "company_name": "Solo Wholesale Floral, LLC (L1)",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000AsdReYAJ",
+   "company_id": "642311",
+   "company_name": "White Rose Flowers & Supplies Inc.",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001VL00000BHG23YAH",
+   "company_id": null,
+   "company_name": "Colgarden Group (L1)",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000BqMKfYAN",
+   "company_id": "647357",
+   "company_name": "Floreria La Ocasion LLC",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000Bvbz3YAB",
+   "company_id": null,
+   "company_name": "Malar Horticulture International LLC - DBA JD Royer Who",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000DSXzGYAX",
+   "company_id": "649585",
+   "company_name": "Penelope\u2019s Petals, LLC",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001VL00000F4yJVYAZ",
+   "company_id": "650721",
+   "company_name": "Alders Wholesale Florist, Inc.",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001VL00000FGRmpYAH",
+   "company_id": null,
+   "company_name": "Coastal Wholesale Florist (L1)",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000GL2fAYAT",
+   "company_id": "667626",
+   "company_name": "Green Bouquet LLC",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000GL9dQYAT",
+   "company_id": "672781",
+   "company_name": "NY Floral Supply",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001VL00000Gjis3YAB",
+   "company_id": null,
+   "company_name": "Brieger Wholesale Floral Supply (L1)",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000H4VTZYA3",
+   "company_id": null,
+   "company_name": "Tennessee Florist Supply Inc (L1)",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000HI21dYAD",
+   "company_id": "664054",
+   "company_name": "TFS Bristol",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001VL00000HVuQvYAL",
+   "company_id": "664494",
+   "company_name": "MAGNOLIA HOLDINGS 301 LLC  ABSOLUTELY BEAUTIFUL FLOWERS",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001VL00000Hqn2xYAB",
+   "company_id": "672147",
+   "company_name": "A1 Floral Xpressions",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000HxMM6YAN",
+   "company_id": "675451",
+   "company_name": "Blossom Express",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000IFWlxYAH",
+   "company_id": "672205",
+   "company_name": "Del Tropico/Ameriblooms",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000JGRHRYA5",
+   "company_id": "675361",
+   "company_name": "Fleurametz USA NYC",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001VL00000JomsvYAB",
+   "company_id": "680290",
+   "company_name": "Ecuflower Roses Kft.",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000KKWD8YAP",
+   "company_id": "676090",
+   "company_name": "FleuraMetz Montreal Ltd",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001VL00000L1QR0YAN",
+   "company_id": "700340",
+   "company_name": "FleuraMetz LA",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000L1SkaYAF",
+   "company_id": "681739",
+   "company_name": "Fleurametz Chicago",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001VL00000LVfPRYA1",
+   "company_id": "808448",
+   "company_name": "Derita Floral Floral Supply Co",
+   "sources": [
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001VL00000LmynPYAR",
+   "company_id": "739329",
+   "company_name": "Penn Valley Flora LLC",
+   "sources": [
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001VL00000MxdQWYAZ",
+   "company_id": null,
+   "company_name": "Atlanta Flower Collective",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000OLqk9YAD",
+   "company_id": "712429",
+   "company_name": "Rose Runners",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001VL00000OlelpYAB",
+   "company_id": null,
+   "company_name": "King Floral Supply (L1)",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000PL6fFYAT",
+   "company_id": null,
+   "company_name": "Hall's Birmingham Wholesale Florist (L1)",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000PSO13YAH",
+   "company_id": null,
+   "company_name": "Alliance Floral Company (L1)",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000Pos6tYAB",
+   "company_id": "716378",
+   "company_name": "Moonlight Flowers",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000PwohBYAR",
+   "company_id": "755593",
+   "company_name": "Kontikiflor BV",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000RU8tRYAT",
+   "company_id": null,
+   "company_name": "Fleurametz Toronto",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000RiggjYAB",
+   "company_id": "654374",
+   "company_name": "BOTANICA WHSLE FLORIST-HOUSTON",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001VL00000RkBqXYAV",
+   "company_id": "735488",
+   "company_name": "Acassia Wholesale Flowers LLC",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000S2ArCYAV",
+   "company_id": null,
+   "company_name": "Wolfe Wholesale Florist (L1)",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000Sj16lYAB",
+   "company_id": "729712",
+   "company_name": "ABRAFLORA WHOLESALE FLOWERS, LLC",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000Sj9JxYAJ",
+   "company_id": "729735",
+   "company_name": "ec flowers & more",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000TUGt3YAH",
+   "company_id": "743217",
+   "company_name": "Nova Packaging Solutions, Inc.",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001VL00000TqkCZYAZ",
+   "company_id": "731414",
+   "company_name": "Amazing Floral Wholesaler",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000UN5fFYAT",
+   "company_id": "735300",
+   "company_name": "Cataleya Flowers D&A",
+   "sources": [
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001VL00000V2gNuYAJ",
+   "company_id": "742939",
+   "company_name": "Stemline Wholesale",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001VL00000WNEfpYAH",
+   "company_id": "795517",
+   "company_name": "Nathalia Bloemenexport LLC",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000Wy5buYAB",
+   "company_id": "746233",
+   "company_name": "MARAFLOR",
+   "sources": [
+    "filtro"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001VL00000XPtSwYAL",
+   "company_id": null,
+   "company_name": "Forn\u00e9s Group",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000YHEixYAH",
+   "company_id": "740646",
+   "company_name": "Valley Floral Co. - Wichita",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001VL00000YHLNpYAP",
+   "company_id": "740696",
+   "company_name": "Valley Floral Co. of Oklahoma LLC - Tulsa",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001VL00000bMO6QYAW",
+   "company_id": "756108",
+   "company_name": "Schaefer Greenhouses",
+   "sources": [
+    "filtro",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001VL00000bryvBYAQ",
+   "company_id": "762172",
+   "company_name": "Floropolis",
+   "sources": [
+    "filtro",
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001VL00000fFC2tYAG",
+   "company_id": null,
+   "company_name": "Picaflora",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000gB1JzYAK",
+   "company_id": "811196",
+   "company_name": "Heirloom Home Decor",
+   "sources": [
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001VL00000gC7ITYA0",
+   "company_id": "769085",
+   "company_name": "Ecoroses - Floropolis",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000hSd5hYAC",
+   "company_id": "809201",
+   "company_name": "San Jose Floral Service LLC",
+   "sources": [
+    "filtro",
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001VL00000j7chnYAA",
+   "company_id": null,
+   "company_name": "351 Wholesale Florist",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000jXdaCYAS",
+   "company_id": null,
+   "company_name": "In Bloom Floral Company",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000k6ul2YAA",
+   "company_id": "664820",
+   "company_name": "Younger & Son Inc",
+   "sources": [
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001VL00000k74R0YAI",
+   "company_id": "822938",
+   "company_name": "Flores San Miguel LLC",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000leyK9YAI",
+   "company_id": "811368",
+   "company_name": "Asiri Blooms LLC",
+   "sources": [
+    "filtro"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001VL00000o9iOSYAY",
+   "company_id": "815945",
+   "company_name": "FUJI WHOLESALE FLOWERS",
+   "sources": [
+    "hoja_christine",
+    "universo_618"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001VL00000oVfgQYAS",
+   "company_id": null,
+   "company_name": "Panhandle Wholesale Florist",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000psqZ7YAI",
+   "company_id": null,
+   "company_name": "Sunshine Flowers Wholesale",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000qmfPWYAY",
+   "company_id": "827180",
+   "company_name": "MAIN WHOLESALE FLORIST LLC / NJ Clifton Location",
+   "sources": [
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001VL00000r1tVOYAY",
+   "company_id": "825773",
+   "company_name": "Creations from Heaven",
+   "sources": [
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001VL00000sK4BfYAK",
+   "company_id": "831754",
+   "company_name": "Nexa Flowers Group",
+   "sources": [
+    "hoja_christine"
+   ],
+   "in_portfolio": true
+  },
+  {
+   "sfdc_id": "001VL00000wFlKCYA0",
+   "company_id": null,
+   "company_name": "Flourish and Grace Floral",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000xYROpYAO",
+   "company_id": "834122",
+   "company_name": "Main Wholesale - Hawthorne, NY",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL00000xxPQDYA2",
+   "company_id": null,
+   "company_name": "Nuna Flowers",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  },
+  {
+   "sfdc_id": "001VL0000102fTCYAY",
+   "company_id": null,
+   "company_name": "United Flower Wholesale",
+   "sources": [
+    "universo_618"
+   ],
+   "in_portfolio": false
+  }
+ ]
+}

@@ -103,12 +103,13 @@ describe('EvidenceAdapter parity with legacy JS (YTD)', () => {
     expect(ids).toEqual(legacy.getAllAccountIds())
   })
 
-  it('anchors periods on the sell cube (2026-07)', () => {
-    expect(evidenceAdapter.getAnchorMonth()).toBe('2026-07')
+  it('anchors periods on the sell cube (2026-08)', () => {
+    expect(evidenceAdapter.getAnchorMonth()).toBe('2026-08')
     const p = evidenceAdapter.getPeriods()
-    expect(p.ytd).toMatchObject({ from: '2026-01', to: '2026-07', months: 7, prior: { from: '2025-01', to: '2025-07' } })
+    expect(p.ytd).toMatchObject({ from: '2026-01', to: '2026-08', months: 8, prior: { from: '2025-01', to: '2025-08' } })
+    expect(p.h1).toMatchObject({ from: '2026-01', to: '2026-06', months: 6, prior: { from: '2025-01', to: '2025-06' } })
     expect(p.prev_year).toMatchObject({ from: '2025-01', to: '2025-12', months: 12, prior: { from: '2024-01', to: '2024-12' } })
-    expect(p.l12m).toMatchObject({ from: '2025-08', to: '2026-07', months: 12, prior: { from: '2024-08', to: '2025-07' } })
+    expect(p.l12m).toMatchObject({ from: '2025-09', to: '2026-08', months: 12, prior: { from: '2024-09', to: '2025-08' } })
   })
 
   it('produces identical non-fee evidence for every account', () => {
