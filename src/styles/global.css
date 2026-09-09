@@ -40,3 +40,29 @@ input {
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
+
+/* Estado de evidencia de un valor: de dónde salió y cuánto pesa.
+   Global y no CSS Module porque las seis tarjetas lo usan y el nombre del
+   estado llega como dato desde el adapter ('observed' | 'model' | 'proxy' |
+   'gap' | 'tautological'), no como una clase elegida en el componente. */
+.ev-state {
+  display: inline-block;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  padding: 1px 4px;
+  border-radius: 3px;
+  margin-left: 4px;
+  vertical-align: middle;
+  background: #f1f5f9;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+.ev-state.observed,
+.ev-state.Alta { background: #dcfce7; color: #166534; }
+.ev-state.model,
+.ev-state.proxy,
+.ev-state.Baja { background: #fef3c7; color: #92400e; }
+.ev-state.gap { background: #fee2e2; color: #991b1b; }
+.ev-state.tautological { background: #e0e7ff; color: #3730a3; }

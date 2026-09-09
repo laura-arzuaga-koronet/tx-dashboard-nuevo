@@ -15,6 +15,9 @@ export type FiltersAction =
   | { type: 'removeChip'; group: 'priorities' | 'impl'; value: string }
   | { type: 'setActionTab'; tab: ActionTab }
   | { type: 'clear'; key: SingleFilterKey }
+  /** Varias claves de una: lo usa el drill-down de la matriz, que fija tipo de
+   *  negocio, tier y banda de GMV en un solo paso. */
+  | { type: 'setMany'; values: Partial<Record<SingleFilterKey, string>> }
   | { type: 'clearAll' }
   | { type: 'reset' };
 
@@ -46,6 +49,8 @@ export function filtersReducer(state: FilterState, action: FiltersAction): Filte
       return { ...state, [action.group]: removeFrom(state[action.group], action.value) };
     case 'setActionTab':
       return { ...state, actionTab: action.tab };
+    case 'setMany':
+      return { ...state, ...action.values };
     case 'clear':
       return { ...state, [action.key]: '' };
     case 'clearAll':

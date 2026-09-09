@@ -12,11 +12,13 @@ import { usePortfolio } from '../../hooks/usePortfolio';
 import { CoverageWarning, KpiStrip } from './components/KpiStrip';
 import { ActionTabs, BusinessTypeTabs } from './components/PortfolioTabs';
 import { LoadMore, NoteStrip, PortfolioTable, SectionLabel } from './components/PortfolioTable';
+import { DefinitionsMatrix } from './components/DefinitionsMatrix';
 import { TopBar } from './components/TopBar';
 import styles from './PortfolioView.module.css';
 
 export function PortfolioView() {
   const [periodId, setPeriodId] = useState<PeriodId>(DEFAULT_PERIOD_ID);
+  const [definitionsOpen, setDefinitionsOpen] = useState(false);
 
   const data = useDashboardData(periodId);
   // Until the data (and its anchor month) arrives, show periods built on the default anchor.
@@ -48,8 +50,23 @@ export function PortfolioView() {
       </TopBar>
 
       <main className={styles.main}>
-        <BusinessTypeTabs value={model.filters.businessType} counts={model.businessTypeCounts} dispatch={model.dispatch} />
+        <BusinessTypeTabs
+          value={model.filters.businessType}
+          counts={model.businessTypeCounts}
+          dispatch={model.dispatch}
+          definitionsOpen={definitionsOpen}
+          onToggleDefinitions={() => setDefinitionsOpen((v) => !v)}
+        />
         <ActionTabs value={model.filters.actionTab} counts={model.actionCounts} dispatch={model.dispatch} />
+
+        {definitionsOpen && (
+          <DefinitionsMatrix
+            all={data.evidence}
+            period={period}
+            dispatch={model.dispatch}
+            onClose={() => setDefinitionsOpen(false)}
+          />
+        )}
 
         <SectionLabel>
           {loading

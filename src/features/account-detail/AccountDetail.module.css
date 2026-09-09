@@ -31,12 +31,14 @@
   background: var(--bg);
 }
 .sourceFound { color: var(--green); border-color: var(--green-border); background: var(--green-bg); }
-.placeholder {
+
+/* Las seis tarjetas de evidencia ocupan todo el ancho del panel y se acomodan
+   en dos o tres columnas según el espacio: cada una se lee sola, así que el
+   orden importa menos que que entren sin scroll horizontal. */
+.cards {
   grid-column: 1 / -1;
-  font-size: var(--font-caption);
-  color: var(--text-muted);
-  font-style: italic;
-  padding: 6px 10px;
-  background: var(--bg);
-  border-radius: var(--radius-sm);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 12px;
+  align-items: start;
 }

@@ -1,0 +1,133 @@
+.wrap {
+  background: var(--surface, #fff);
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: var(--radius-md, 8px);
+  padding: 18px 20px 24px;
+}
+
+.h2 {
+  font-size: 15px;
+  margin: 0 0 6px;
+}
+
+.h2 + .h2,
+.tableWrap + .h2 {
+  margin-top: 28px;
+  padding-top: 16px;
+  border-top: 2px solid var(--border, #e2e8f0);
+}
+
+.h3 {
+  font-size: 13px;
+  color: var(--blue, #2563eb);
+  margin: 18px 0 6px;
+}
+
+.intro {
+  font-size: 11px;
+  color: var(--text-muted, #64748b);
+  line-height: 1.5;
+  margin: 0 0 12px;
+  max-width: 76ch;
+}
+
+.tableWrap { overflow-x: auto; }
+
+.matrix {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+
+.matrix th,
+.matrix td {
+  border: 1px solid var(--border, #e2e8f0);
+  padding: 0;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.matrix thead th,
+.matrix tbody th {
+  background: #f1f5f9;
+  padding: 6px 8px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.matrix tbody th { text-align: left; }
+
+.totalCol {
+  background: #f8fafc;
+  padding: 6px 8px !important;
+}
+
+.totalRow th,
+.totalRow td {
+  background: #f8fafc;
+  font-weight: 600;
+  padding: 6px 8px !important;
+}
+
+/* La celda entera es el target del drill-down: apuntarle a un número chico es
+   una molestia innecesaria cuando toda la celda significa lo mismo. */
+.cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  width: 100%;
+  padding: 6px 8px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  transition: background 0.12s;
+}
+
+.cell:hover { background: #eff6ff; }
+.cell:focus-visible { outline: 2px solid var(--blue, #2563eb); outline-offset: -2px; }
+
+/* Las celdas de TOTAL no son botones, así que sus spans necesitan apilarse
+   solos: si no, el conteo y el porcentaje se leen pegados ("2051.9%"). */
+.totalCol .cellN, .totalCol .cellPen, .totalCol .cellOnline,
+.totalRow .cellN, .totalRow .cellPen, .totalRow .cellOnline {
+  display: block;
+}
+
+.cellN { font-size: 13px; font-weight: 700; }
+.cellPen { font-size: 10px; font-weight: 600; }
+.cellOnline { font-size: 9px; color: var(--text-muted, #64748b); }
+.emptyCell { display: block; padding: 6px 8px; color: var(--text-muted, #64748b); }
+
+.green { color: var(--green, #059669); }
+.amber { color: var(--amber, #d97706); }
+.red { color: var(--red, #dc2626); }
+
+.defs {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+  margin-bottom: 8px;
+}
+
+.defs th {
+  text-align: left;
+  background: #f1f5f9;
+  padding: 5px 8px;
+  border: 1px solid var(--border, #e2e8f0);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--text-muted, #64748b);
+}
+
+.defs td {
+  padding: 6px 8px;
+  border: 1px solid var(--border, #e2e8f0);
+  vertical-align: top;
+  line-height: 1.5;
+}
+
+.defName { font-weight: 700; white-space: nowrap; }

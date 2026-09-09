@@ -1,15 +1,21 @@
 /**
  * Expanded account panel.
  *
- * Phase 1 ships two cards — Identity and Source coverage — plus a placeholder
- * for the six evidence cards (Potential, Opportunities, BUY, LIST, SELL,
- * Freshness) that phase 2 ports from the legacy dashboard.
+ * Identity and Key figures give the account at a glance; the six evidence cards
+ * below are the argument — what the account could be worth, what to do about
+ * it, and how much of that rests on data we actually have.
  */
 import type { AccountEvidence } from '../../data/adapter/types';
 import type { SfdcOppTotals } from '../../data/sfdc/openOpportunities';
 import { fmtInt, fmtMoney, fmtPct } from '../../domain/format';
 import { calcAtStake } from '../../domain/metrics';
 import styles from './AccountDetail.module.css';
+import { BuyCard } from './cards/BuyCard';
+import { FreshnessCard } from './cards/FreshnessCard';
+import { ListCard } from './cards/ListCard';
+import { OpportunitiesCard } from './cards/OpportunitiesCard';
+import { PotentialCard } from './cards/PotentialCard';
+import { SellCard } from './cards/SellCard';
 
 interface AccountDetailProps {
   ev: AccountEvidence;
@@ -52,8 +58,8 @@ export function AccountDetail({ ev, sfdcTotals }: AccountDetailProps) {
         <Row label="Est GMV (sell)" value={p ? `${fmtMoney(p.gmv_reference.value, true)} · ${p.gmv_reference.source ?? '—'}` : null} />
         <Row label="Koronet sell" value={fmtMoney(p?.koronet_sell_period.value ?? null, true)} />
         <Row label="Koronet buy" value={fmtMoney(p?.koronet_buy_period.value ?? null, true)} />
-        <Row label="Fees" value={fmtMoney(p?.fees_period.value ?? null, true)} />
-        <Row label="Fees prior period" value={fmtMoney(p?.fees_prior_period.value ?? null, true)} />
+        <Row label="Direct fees" value={fmtMoney(p?.fees_direct.value ?? null, true)} />
+        <Row label="Indirect fees" value={fmtMoney(p?.fees_indirect.value ?? null, true)} />
         <Row label="Take rate" value={fmtPct(p?.take_rate.value ?? null, 2)} />
         <Row label="$ at stake" value={atStake ? `${fmtMoney(atStake.amount, true)} (${atStake.source})` : null} />
         <Row label="Offline buyers" value={fmtInt(ev.sell?.buyers_table?.value?.offline_buyers ?? null)} />
@@ -75,8 +81,13 @@ export function AccountDetail({ ev, sfdcTotals }: AccountDetailProps) {
         </section>
       )}
 
-      <div className={styles.placeholder}>
-        ↳ Las tarjetas de evidencia (Potential, Opportunities, BUY, LIST, SELL, Freshness) se migran en la fase 2.
+      <div className={styles.cards}>
+        <PotentialCard ev={ev} sfdcTotals={sfdcTotals} />
+        <OpportunitiesCard ev={ev} sfdcTotals={sfdcTotals} />
+        <BuyCard ev={ev} />
+        <ListCard ev={ev} />
+        <SellCard ev={ev} />
+        <FreshnessCard ev={ev} />
       </div>
     </div>
   );

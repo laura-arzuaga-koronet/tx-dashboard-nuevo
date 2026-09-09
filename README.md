@@ -12,8 +12,8 @@ de datos tipado y verificado contra el original, y la lógica de negocio separad
 | **1 · Base** | Estructura del proyecto, tokens de estilo, adapter en TS con test de paridad, topbar con filtros, KPI strip, tabs, tabla de portafolio con sort/paginación, fila expandible con Identity / Key figures / Source coverage | ✅ |
 | **1b · Períodos** | Modelo `Period` con rangos explícitos y baseline YoY like-for-like; fees filtrados por período (corrige el KPI inflado del legacy); cubo de fees regenerado con grano mensual real desde Snowflake | ✅ |
 | **1c · Paridad con el legacy corregido** | Los cuatro períodos de la reunión; Direct/Indirect Fees y nuevo Take Rate; tendencia en todas las columnas; motivo por celda cuando una métrica está vacía; universo de wholesalers + tab del 618; exclusión de datos corruptos; auto-ventas separadas del sell GMV | ✅ Esta entrega |
-| 2 · Tarjetas | Las 6 tarjetas de evidencia (Potential, Opportunities, BUY, LIST, SELL, Freshness) dentro de la fila expandida | Pendiente |
-| 3 · Definitions & Matrix | Matriz Est GMV × Product Tier con drill-down, tablas de metodología | Pendiente |
+| **2 · Tarjetas** | Las 6 tarjetas de evidencia (Potential, Opportunities, BUY, LIST, SELL, Data coverage) dentro de la fila expandida | ✅ Esta entrega |
+| **3 · Definitions & Matrix** | Matriz Est GMV × Product Tier con drill-down a la tabla, y las tablas de metodología con las fórmulas nuevas | ✅ Esta entrega |
 | 4 · Datos | Script de build que compacta los 15 JSON (~9.6 MB) en un bundle por vista; derivar el período desde `_meta` en todos lados | Pendiente |
 
 ## Cómo correrlo
@@ -66,7 +66,9 @@ src/
       PortfolioView.tsx     Composición de la página
       filterOptions.ts      Listas estáticas de los dropdowns y chips
       components/           TopBar, KpiStrip, PortfolioTabs, PortfolioTable, PortfolioRow
-    account-detail/         Panel expandido por cuenta (fase 1: Identity, Key figures, Coverage)
+    account-detail/         Panel expandido por cuenta
+      EvidenceCard.tsx      Shell compartido por las 6 tarjetas (+ CardRow/CardTable/CardFocus/CardNext)
+      cards/                Potential · Opportunities · BUY · LIST · SELL · Freshness
 sql/                        Mapa JSON → query (Snowflake / Salesforce / Supabase) para la fase de datos en vivo
   README.md                 Estado por fuente, reglas del modelo, hallazgos
   cubes/                    sell / buy / fees (listas)
