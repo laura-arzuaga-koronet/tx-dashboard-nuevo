@@ -1061,8 +1061,13 @@
 
     // GMV confidence: derive from source
     var gmvConfidence = null;
+    /* 'Medido (parcial)' = dejó de vender dentro de la ventana, así que el valor
+       es la suma real sin proyectar. 'Medido (histórico)' = medición nuestra pero
+       de otra ventana: sigue siendo medición, pero vieja. */
     if (gmvSource === 'Medido') gmvConfidence = 'Alta';
     else if (gmvSource === 'Piso de red') gmvConfidence = 'Alta';
+    else if (gmvSource === 'Medido (parcial)') gmvConfidence = 'Alta';
+    else if (gmvSource === 'Medido (histórico)') gmvConfidence = 'Baja';
     else if (gmvSource === 'ORA' || gmvSource === 'FCS') gmvConfidence = 'Baja';
     else if (gmvSource === 'not in Christine cascade' || gmvSource === 'Sin dato') gmvConfidence = null;
 
@@ -1175,8 +1180,16 @@
     var buyYearAgg  = _aggregateBuyCube(buyRows, 'l12m');
     var yearSellMonths = sellYearAgg ? sellYearAgg.months.length : 0;
     var yearBuyMonths  = buyYearAgg  ? buyYearAgg.months.length  : 0;
+    /* Misma regla que scripts/rebuild_accounts_gmv.py, que produce el
+       gmv_reference contra el que esto se compara: se anualiza solo si la cuenta
+       seguía vendiendo en el último mes de la ventana. Si paró adentro, proyectar
+       sus meses activos a doce inventaría volumen que ya no genera. */
+    var _floorWin = _timeframeRange('l12m');
+    var _mesesVentana = (sellYearAgg && sellYearAgg.months) ? sellYearAgg.months.slice().sort() : [];
+    var _ultimoEnVentana = _mesesVentana.length ? _mesesVentana[_mesesVentana.length - 1] : null;
+    var _paroEnVentana = _ultimoEnVentana != null && _ultimoEnVentana < _floorWin.to;
     var annualizedSell = (sellYearAgg && yearSellMonths > 0)
-      ? sellYearAgg.total * (12 / yearSellMonths) : null;
+      ? sellYearAgg.total * (_paroEnVentana ? 1 : (12 / yearSellMonths)) : null;
     var annualizedBuy = (buyYearAgg && yearBuyMonths > 0)
       ? buyYearAgg.total * (12 / yearBuyMonths) : null;
 
@@ -1218,7 +1231,7 @@
        que el cubo tuviera el guard R4, la deduplicación por sale_item_id y la
        separación de auto-ventas: la mediana de las 41 cuentas etiquetadas mide
        0,83 de su etiqueta, y Ninfa 0,13. */
-    var claimsMeasured = /^(Medido|Piso)/.test(gmvSource || '');
+    var claimsMeasured = /^(Medido|Piso)/.test(gmvSource || '') && gmvSource !== 'Medido (histórico)';
     var cubeAgrees = (annualizedSell != null && gmvRef > 0
       && Math.abs(annualizedSell - gmvRef) / gmvRef <= 0.10);
     var estUnverified = claimsMeasured && !cubeAgrees;

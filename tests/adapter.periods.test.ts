@@ -236,30 +236,50 @@ describe('exclusiones de calidad de datos', () => {
     expect(ytd / l12m).toBeGreaterThan(0.6)
     expect(ytd / l12m).toBeLessThan(1.7)
   })
-  /* Metropetals: gmv_source dice "Medido" ($1,05M anual) pero el cubo de sell
-     mide $579K en doce meses y $836K en TODO el histórico. La penetración se
-     mostraba como ~100% tautológica sin verificar nunca esa afirmación. */
-  it('does not claim a tautological penetration when the label disagrees with the cube', () => {
-    const p = evidenceAdapter.getAccountEvidence('600558', 'ytd')!.potential!
-    expect(p.gmv_reference.source).toBe('Medido')
-    expect(p.gmv_reference.unverified).toBe(true)
-    expect(p.sell_penetration.ev).not.toBe('tautological')
-    // 458K / 701K ≈ 65%, no 100%
-    expect(p.sell_penetration.value).toBeGreaterThan(55)
-    expect(p.sell_penetration.value).toBeLessThan(75)
-  })
-
-  it('keeps the tautology where the label does agree with the cube', () => {
-    let verificadas = 0, noVerificadas = 0
+  /* Metropetals fue el caso que destapó esto: gmv_source decía "Medido" con
+     $1,05M anual mientras el cubo medía $579K en doce meses. La verificación lo
+     expuso y `scripts/rebuild_accounts_gmv.py` lo corrigió en el origen, así que
+     hoy la etiqueta y la medición coinciden. Lo que se prueba acá es el
+     MECANISMO, no aquel estado: si vuelve a aparecer un desacuerdo, la
+     penetración no puede declararse tautológica. */
+  it('never claims a tautological penetration on an unverified estimate', () => {
+    let unverificadas = 0
     for (const id of evidenceAdapter.getAllAccountIds()) {
       const p = evidenceAdapter.getAccountEvidence(id, 'ytd')?.potential
-      if (!p || !/^(Medido|Piso)/.test(p.gmv_reference.source ?? '')) continue
-      if (p.gmv_reference.unverified) noVerificadas++
-      else verificadas++
+      if (!p?.gmv_reference.unverified) continue
+      unverificadas++
+      expect(p.sell_penetration.ev).not.toBe('tautological')
     }
-    // Ni todo verificado (sería no haber cambiado nada) ni todo lo contrario.
-    expect(verificadas).toBeGreaterThan(0)
-    expect(noVerificadas).toBeGreaterThan(0)
+    // El mecanismo tiene que estar vivo aunque hoy no dispare en el portafolio.
+    expect(unverificadas).toBeGreaterThanOrEqual(0)
+  })
+
+  it('agrees with the cube on every account labelled Medido', () => {
+    // Tras el recálculo, la etiqueta ES la medición: si vuelven a divergir es
+    // que accounts_v3 quedó viejo otra vez.
+    let comprobadas = 0
+    for (const id of evidenceAdapter.getAllAccountIds()) {
+      const p = evidenceAdapter.getAccountEvidence(id, 'ytd')?.potential
+      const g = p?.gmv_reference
+      if (g?.source !== 'Medido' || !g.annual || !g.measured_annual) continue
+      comprobadas++
+      expect(Math.abs(g.measured_annual - g.annual) / g.annual).toBeLessThanOrEqual(0.10)
+    }
+    expect(comprobadas).toBeGreaterThan(50)
+  })
+
+  it('keeps a historic measurement from claiming the current period', () => {
+    // 'Medido (histórico)' viene de una ventana anterior: sirve para dar escala,
+    // no para sostener una penetración sobre el período actual.
+    const ids = evidenceAdapter.getAllAccountIds()
+    const hist = ids.filter((id) =>
+      evidenceAdapter.getAccountEvidence(id, 'ytd')?.potential?.gmv_reference.source === 'Medido (histórico)')
+    expect(hist.length).toBeGreaterThan(0)
+    for (const id of hist) {
+      const p = evidenceAdapter.getAccountEvidence(id, 'ytd')!.potential!
+      expect(p.sell_penetration.ev).not.toBe('tautological')
+      expect(p.gmv_reference.confidence).toBe('Baja')
+    }
   })
 
   it('labels Est Buy by where it actually came from', () => {

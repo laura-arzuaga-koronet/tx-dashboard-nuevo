@@ -174,7 +174,12 @@ export function buildPotential(companyId: string, period: Period): Potential {
   let buyEstSource: 'ratio' | 'floor' | null = buyGmvEst ? 'ratio' : null;
 
   let gmvConfidence: GmvReference['confidence'] = null;
-  if (gmvSource === 'Medido' || gmvSource === 'Piso de red') gmvConfidence = 'Alta';
+  /* 'Medido (parcial)' = la cuenta dejó de vender dentro de la ventana, así que
+     el valor es la suma real sin proyectar. 'Medido (histórico)' = no vendió nada
+     en la ventana y el valor viene de su último año con actividad: sigue siendo
+     medición nuestra, pero vieja, y por eso no llega a confianza Alta. */
+  if (gmvSource === 'Medido' || gmvSource === 'Piso de red' || gmvSource === 'Medido (parcial)') gmvConfidence = 'Alta';
+  else if (gmvSource === 'Medido (histórico)') gmvConfidence = 'Baja';
   else if (gmvSource === 'ORA' || gmvSource === 'FCS') gmvConfidence = 'Baja';
 
   // Pacing
@@ -255,8 +260,21 @@ export function buildPotential(companyId: string, period: Period): Potential {
   const yearSell = sellYearAgg ? sellYearAgg.total : null;
   const yearMonths = sellYearAgg ? sellYearAgg.months.length : 0;
   /* 0 medido no es lo mismo que "no medido": si la cuenta tiene filas en el año
-     y suman cero, eso es una medición de cero y así se reporta. */
-  const annualizedSell = sellYearAgg && yearMonths > 0 ? (yearSell ?? 0) * annualize(yearMonths) : null;
+     y suman cero, eso es una medición de cero y así se reporta.
+     
+     La anualización sigue la misma regla que scripts/rebuild_accounts_gmv.py, que
+     es quien produce el gmv_reference contra el que esto se compara: se anualiza
+     solo si la cuenta seguía vendiendo en el último mes de la ventana. Si dejó de
+     vender adentro, proyectar sus meses activos a doce inventaría volumen que ya
+     no genera — y hacía que el propio archivo que acabamos de recalcular quedara
+     marcado "no verificado" contra el adapter. */
+  const lastSellInWindow = sellYearAgg?.months?.length
+    ? [...sellYearAgg.months].sort().pop() ?? null
+    : null;
+  const stoppedInWindow = lastSellInWindow != null && lastSellInWindow < floorWindow().to;
+  const annualizedSell = sellYearAgg && yearMonths > 0
+    ? (yearSell ?? 0) * (stoppedInWindow ? 1 : annualize(yearMonths))
+    : null;
 
   if (noReference && annualizedSell && annualizedSell > 0) {
     gmvRef = annualizedSell;
@@ -306,7 +324,9 @@ export function buildPotential(companyId: string, period: Period): Potential {
      as unverified, so the disagreement is visible instead of hidden behind a
      round number. Accounts whose floor WE derived this run match by
      construction and always pass. */
-  const claimsMeasured = /^(Medido|Piso)/.test(gmvSource ?? '');
+  /* 'Medido (histórico)' queda fuera a propósito: su cifra es de otra ventana, así
+     que no puede sostener una penetración tautológica sobre esta. */
+  const claimsMeasured = /^(Medido|Piso)/.test(gmvSource ?? '') && gmvSource !== 'Medido (histórico)';
   const cubeAgrees = annualizedSell != null && gmvRef != null && gmvRef > 0
     && Math.abs(annualizedSell - gmvRef) / gmvRef <= TAUTOLOGY_TOLERANCE;
   const estUnverified = claimsMeasured && !cubeAgrees;
