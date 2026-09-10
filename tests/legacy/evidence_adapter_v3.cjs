@@ -1048,6 +1048,11 @@
     var gmvRef      = _num(acct.gmv_reference);
     var gmvSource   = acct.gmv_source || null;
     var gmvIsFloor  = acct.gmv_is_floor || false;
+    /* `gmv_is_floor` de accounts_v3 NO alcanza para decir "esto es nuestra
+       medición": 47 cuentas lo traen en true con gmv_source = 'Estimado' y sin
+       ficha en los archivos de estimación, así que su significado no es
+       rastreable. Solo confiamos en el piso que derivamos nosotros acá. */
+    var floorDerivedHere = false;
     var buyGmvEst   = _num(acct.buy_gmv_estimated);
     /* De dónde salió el Est Buy que se muestra: cuando la compra medida supera
        la estimación del 45%, la regla del piso la reemplaza y el número que se
@@ -1182,6 +1187,7 @@
       gmvSource = 'Piso de red';
       gmvConfidence = 'Alta';
       gmvIsFloor = true;
+      floorDerivedHere = true;
       buyGmvEst = gmvRef * 0.45;
       buyEstSource = 'ratio';
     }
@@ -1196,6 +1202,7 @@
       gmvSource = 'Piso de red';
       gmvConfidence = 'Alta';
       gmvIsFloor = true;
+      floorDerivedHere = true;
       buyGmvEst = gmvRef * 0.45;
       buyEstSource = 'ratio';
     }
@@ -1215,7 +1222,7 @@
     var cubeAgrees = (annualizedSell != null && gmvRef > 0
       && Math.abs(annualizedSell - gmvRef) / gmvRef <= 0.10);
     var estUnverified = claimsMeasured && !cubeAgrees;
-    var estIsMeasured = (gmvIsFloor || claimsMeasured) && !estUnverified;
+    var estIsMeasured = (floorDerivedHere || claimsMeasured) && !estUnverified;
 
     /* Prorrateo al período. Para un estimado externo (ORA, framework) el
        reparto plano es todo lo que la fuente soporta. Pero cuando el estimado

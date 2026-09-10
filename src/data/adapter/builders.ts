@@ -158,6 +158,13 @@ export function buildPotential(companyId: string, period: Period): Potential {
   let gmvRef = num(acct.gmv_reference);
   let gmvSource = (acct.gmv_source as string | null) || null;
   let gmvIsFloor = Boolean(acct.gmv_is_floor);
+  /* `gmv_is_floor` de accounts_v3 NO alcanza para decir "esto es nuestra
+     medición": 47 cuentas lo traen en true con gmv_source = 'Estimado' y sin
+     ficha en los archivos de estimación, así que su significado no es
+     rastreable. Tratarlas como medidas ponía 45 cuentas del portafolio en 100%
+     de penetración exacto sin declararlo tautológico. Solo confiamos en el piso
+     que derivamos nosotros en esta corrida. */
+  let floorDerivedHere = false;
   let buyGmvEst = num(acct.buy_gmv_estimated);
   /* De dónde salió el Est Buy que se muestra. La tarjeta lo etiquetaba siempre
      como "ratio 45%", pero cuando la compra medida supera esa estimación la
@@ -256,6 +263,7 @@ export function buildPotential(companyId: string, period: Period): Potential {
     gmvSource = 'Piso de red';
     gmvConfidence = 'Alta';
     gmvIsFloor = true;
+    floorDerivedHere = true;
     buyGmvEst = gmvRef * BUY_TO_SELL_RATIO;
     buyEstSource = 'ratio';
   }
@@ -283,6 +291,7 @@ export function buildPotential(companyId: string, period: Period): Potential {
     gmvSource = 'Piso de red';
     gmvConfidence = 'Alta';
     gmvIsFloor = true;
+    floorDerivedHere = true;
     buyGmvEst = gmvRef * BUY_TO_SELL_RATIO;
     buyEstSource = 'ratio';
   }
@@ -303,7 +312,7 @@ export function buildPotential(companyId: string, period: Period): Potential {
   const estUnverified = claimsMeasured && !cubeAgrees;
 
   /** The estimate IS our own measurement, and it checks out against the cube. */
-  const estIsMeasured = (gmvIsFloor || claimsMeasured) && !estUnverified;
+  const estIsMeasured = (floorDerivedHere || claimsMeasured) && !estUnverified;
 
   /**
    * Prorating the estimate to the period.
