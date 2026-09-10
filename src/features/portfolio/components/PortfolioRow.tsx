@@ -36,6 +36,14 @@ const toneClass: Record<Tone, string> = {
   neutral: styles.neutral,
 };
 
+/**
+ * La tabla imprimía "~100%" donde la penetración es una identidad, mientras la
+ * tarjeta ya decía "Calculated measured". Dos pantallas diciendo cosas
+ * distintas del mismo número. Ahora el valor es el porcentaje real y el
+ * calificador dice de dónde sale, igual que en la tarjeta.
+ */
+const TAUTOLOGICAL_QUALIFIER = 'calculated measured';
+
 function MetricCell({ children }: { children: ReactNode }) {
   return <td className={styles.metricCell}>{children}</td>;
 }
@@ -189,7 +197,17 @@ export function PortfolioRow({ ev, sfdcTotals, expanded, onToggle }: PortfolioRo
           </div>
         </td>
 
-        <MetricCell><Metric value={gmv.value} qualifier={gmv.qualifier} tone={gmv.tone} extra={<Why r={rs.gmv_reference} />} /></MetricCell>
+        {/* Est GMV y Est Buy llevan tendencia solo cuando el estimado ES nuestra
+            medición: ahí heredan el movimiento del cubo. Con un ORA o un modelo
+            externo detrás no hay serie, y el adapter devuelve null. */}
+        <MetricCell>
+          <Metric
+            value={<>{gmv.value} <Trend t={tr.gmv_reference} /></>}
+            qualifier={gmv.qualifier}
+            tone={gmv.tone}
+            extra={<Why r={rs.gmv_reference} />}
+          />
+        </MetricCell>
 
         <MetricCell>
           <Metric
@@ -200,8 +218,9 @@ export function PortfolioRow({ ev, sfdcTotals, expanded, onToggle }: PortfolioRo
         </MetricCell>
 
         <MetricCell>
-          <Metric value={<>{sellTautological ? '~100%' : fmtPct(sellPen)} {sellTautological ? null : <Trend t={tr.sell_penetration} />}</>}
-                  qualifier={sellPenS.qualifier} tone={sellPenS.tone} extra={<Why r={rs.sell_penetration} />} />
+          <Metric value={<>{fmtPct(sellPen)} {sellTautological ? null : <Trend t={tr.sell_penetration} />}</>}
+                  qualifier={sellTautological ? TAUTOLOGICAL_QUALIFIER : sellPenS.qualifier}
+                  tone={sellPenS.tone} extra={<Why r={rs.sell_penetration} />} />
         </MetricCell>
 
         <MetricCell>
@@ -213,11 +232,12 @@ export function PortfolioRow({ ev, sfdcTotals, expanded, onToggle }: PortfolioRo
           />
         </MetricCell>
 
-        <MetricCell><Metric value={fmtMoney(estBuy, true)} /></MetricCell>
+        <MetricCell><Metric value={<>{fmtMoney(estBuy, true)} <Trend t={tr.buy_gmv_estimated} /></>} /></MetricCell>
         <MetricCell><Metric value={<>{fmtMoney(koronetBuy, true)} <Trend t={tr.koronet_buy} /></>} extra={<Why r={rs.koronet_buy_period} />} /></MetricCell>
 
         <MetricCell>
-          <Metric value={<>{buyTautological ? '~100%' : fmtPct(buyPen)} {buyTautological ? null : <Trend t={tr.buy_penetration} />}</>}
+          <Metric value={<>{fmtPct(buyPen)} {buyTautological ? null : <Trend t={tr.buy_penetration} />}</>}
+                  qualifier={buyTautological ? TAUTOLOGICAL_QUALIFIER : undefined}
                   tone={buyPenS.tone} extra={<Why r={rs.buy_penetration} />} />
         </MetricCell>
 
