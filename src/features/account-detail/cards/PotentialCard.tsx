@@ -8,7 +8,7 @@
  */
 import type { AccountEvidence } from '../../../data/adapter/types';
 import type { SfdcOppTotals } from '../../../data/sfdc/openOpportunities';
-import { evValue, fmtMoney, fmtPct } from '../../../domain/format';
+import { evValue, fmtMoney, fmtPct, gmvSourceLabel } from '../../../domain/format';
 import { calcAtStake, detectOpportunityFlags } from '../../../domain/metrics';
 import { CardFocus, CardGap, CardNext, CardTable, EvidenceCard } from '../EvidenceCard';
 
@@ -16,6 +16,23 @@ const K2K_RATE = 1.5;
 
 function EvState({ state, label }: { state: string; label?: string }) {
   return <span className={`ev-state ${state}`}>{label ?? state}</span>;
+}
+
+/**
+ * Penetration cell.
+ *
+ * A tautological penetration used to print "~100%", and the tilde was doing too
+ * much work: read at a glance it looks like an account that moves everything
+ * through us, when in fact the denominator is our own measurement and the ratio
+ * could not have come out any other way. It is an identity, so the cell says so
+ * instead of putting a number where a number is not an answer.
+ */
+function PenCell({ pct, tautological, why }: { pct: number | null; tautological: boolean; why: string }) {
+  if (!tautological) return <>{fmtPct(pct)}</>;
+  return (
+    <><EvState state="tautological" label="identity" />
+      <div className="ev-note">{why}</div></>
+  );
 }
 
 export function PotentialCard({ ev, sfdcTotals }: { ev: AccountEvidence; sfdcTotals: SfdcOppTotals }) {
@@ -77,8 +94,8 @@ export function PotentialCard({ ev, sfdcTotals }: { ev: AccountEvidence; sfdcTot
               <EvState
                 state={p.gmv_reference?.unverified ? 'proxy' : p.gmv_reference?.confidence ?? 'gap'}
                 label={p.gmv_reference?.unverified
-                  ? `${p.gmv_reference.source} — unverified`
-                  : p.gmv_reference?.source ?? 'gap'} />
+                  ? `${gmvSourceLabel(p.gmv_reference.source)} — unverified`
+                  : gmvSourceLabel(p.gmv_reference?.source)} />
               {p.gmv_reference?.annual != null && p.gmv_reference.annual !== estSell
                 ? <div className="ev-note">{fmtMoney(p.gmv_reference.annual, true)} annual, prorated to the period</div> : null}
               {p.gmv_reference?.unverified
@@ -88,7 +105,8 @@ export function PotentialCard({ ev, sfdcTotals }: { ev: AccountEvidence; sfdcTot
                 ? <div className="ev-note">raised to what we measured in this window: the estimate sat below it</div>
                 : null}</>,
             fmtMoney(kSell, true),
-            sellTautological ? '~100%' : fmtPct(sellPen),
+            <PenCell pct={sellPen} tautological={sellTautological}
+              why="the estimate is our own measurement — there is nothing independent to compare it against" />,
             fmtPct(sellOnline),
           ],
           [
@@ -102,7 +120,8 @@ export function PotentialCard({ ev, sfdcTotals }: { ev: AccountEvidence; sfdcTot
                 ? <div className="ev-note">raised to the buy measured in this window</div>
                 : null}</>,
             fmtMoney(kBuy, true),
-            p.buy_penetration?.ev === 'tautological' ? '~100%' : fmtPct(buyPen),
+            <PenCell pct={buyPen} tautological={p.buy_penetration?.ev === 'tautological'}
+              why="the estimate IS the buy we measured: the 45% ratio came out below it" />,
             fmtPct(buyOnline),
           ],
         ]}

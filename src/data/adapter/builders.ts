@@ -388,14 +388,22 @@ export function buildPotential(companyId: string, period: Period): Potential {
     }
 
     if (buyGmvEst && buyGmvEst > 0 && koronetBuy && koronetBuy > 0) {
-      /* Si el Est Buy salió del piso medido, la penetración de compra es 100%
-         por construcción: el denominador ES el numerador anualizado. Mostrarlo
-         como un 100% "logrado" con evidencia proxy invita a leerlo como un
-         resultado cuando es una identidad. */
-      const buyTaut = isTautological || sellPenEv === 'tautological' || buyEstSource === 'floor';
+      /* La compra es tautológica SOLO cuando su propio estimado salió del piso
+         medido: ahí el denominador ES el numerador anualizado y el 100% es una
+         identidad, no un resultado.
+         Antes esto además heredaba la tautología del lado de venta
+         (`isTautological || sellPenEv === 'tautological'`), y esa herencia era
+         un error del mismo tipo que el que arreglamos en venta: 35 cuentas con
+         Est Buy de modelo (ratio 45%) mostraban ~100% sin que nadie hubiera
+         comparado nada. Pacifica Produce compra $0 contra un estimado de $23K y
+         figuraba al 100%; Chilfresh compra el 3,8% de su estimado; Mayesh el
+         85,9%. Que la venta sea nuestra medición no dice absolutamente nada
+         sobre cuánto de su compra pasa por Koronet. */
+      const buyTaut = buyEstSource === 'floor';
       buyPenetration = buyTaut ? 100 : (koronetBuy / (buyGmvEstPeriod ?? buyGmvEst * frac)) * 100;
       buyPenEv = buyTaut ? 'tautological' : estUnverified ? 'proxy' : gmvConfidence === 'Alta' ? 'model' : 'proxy';
-      buyPenNote = buyPeriodFloored ? `${gmvSource} — estimado por debajo de lo comprado en el período`
+      buyPenNote = buyTaut ? `${gmvSource} — identidad: el estimado es la compra medida`
+        : buyPeriodFloored ? `${gmvSource} — estimado por debajo de lo comprado en el período`
         : estUnverified ? `${gmvSource} — no verificado` : gmvSource;
     }
   }

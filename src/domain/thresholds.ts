@@ -123,7 +123,7 @@ export function gmvDisplay(ev: AccountEvidence): GmvDisplay {
         tone: 'neutral',
       };
     }
-    return { value: `${fmtMoney(ref.value, true)} ✓ Medido`, qualifier: 'Observed', tone: 'neutral' };
+    return { value: `${fmtMoney(ref.value, true)} ✓ Measured`, qualifier: 'Observed', tone: 'neutral' };
   }
   if (ref.confidence === 'Baja') {
     return { value: `${fmtMoney(ref.value, true)} pace`, qualifier: 'Low confidence', tone: 'amber' };

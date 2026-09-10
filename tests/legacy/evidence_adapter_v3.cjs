@@ -1277,12 +1277,17 @@
       }
 
       if (buyGmvEst && buyGmvEst > 0 && koronetBuyYtd && koronetBuyYtd > 0) {
-        /* Si el Est Buy salió del piso medido, la penetración de compra es 100%
-           por construcción: el denominador ES el numerador anualizado. */
-        var buyTaut = isTautological || sellPenEv === 'tautological' || buyEstSource === 'floor';
+        /* La compra es tautológica SOLO cuando su propio estimado salió del
+           piso medido: ahí el denominador ES el numerador anualizado.
+           Heredar la tautología del lado de venta era un error del mismo tipo
+           que el que arreglamos en venta: 35 cuentas con Est Buy de modelo
+           mostraban ~100% sin haber comparado nada (Pacifica Produce compra $0
+           contra un estimado de $23K; Chilfresh el 3,8%; Mayesh el 85,9%). */
+        var buyTaut = buyEstSource === 'floor';
         buyPenetration = buyTaut ? 100 : (koronetBuyYtd / (buyGmvEstPeriod2 != null ? buyGmvEstPeriod2 : buyGmvEst * _frac)) * 100;
         buyPenEv = buyTaut ? 'tautological' : (estUnverified ? 'proxy' : (gmvConfidence === 'Alta' ? 'model' : 'proxy'));
-        buyPenNote = buyPeriodFloored ? (gmvSource + ' — estimado por debajo de lo comprado en el período')
+        buyPenNote = buyTaut ? (gmvSource + ' — identidad: el estimado es la compra medida')
+          : buyPeriodFloored ? (gmvSource + ' — estimado por debajo de lo comprado en el período')
           : (estUnverified ? (gmvSource + ' — no verificado') : gmvSource);
       }
     }

@@ -53,3 +53,36 @@ export function fmtMonthKey(key: string | null | undefined): string {
   if (!y || !m) return key;
   return new Date(y, m - 1, 1).toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
 }
+
+/**
+ * The cascade emits its GMV sources in Spanish, because that is the vocabulary
+ * of accounts_v3 and of the docs that describe it. The dashboard is in English,
+ * so the string is translated here, at the edge, and the data keeps its own
+ * names: renaming them in the JSON would break every comparison against the
+ * legacy dashboard and every doc that cites them.
+ *
+ * An unknown source falls through unchanged — better a Spanish word on screen
+ * than a silently swallowed one.
+ */
+const GMV_SOURCE_EN: Record<string, string> = {
+  'Medido': 'Measured',
+  'Medido (parcial)': 'Measured (partial)',
+  'Medido (histórico)': 'Measured (historical)',
+  'Piso de red': 'Network floor',
+  'Estimado': 'Estimated',
+  'Estimado (verificar)': 'Estimated (to verify)',
+  'Estimado (AnnualRevenue×0.11)': 'Estimated (AnnualRevenue × 0.11)',
+  'Sin dato': 'No data',
+  'No vende (Koronet)': 'Does not sell (Koronet)',
+  'not in Christine cascade': 'Not in Christine cascade',
+};
+
+export function gmvSourceLabel(source: string | null | undefined): string {
+  if (!source) return 'gap';
+  return GMV_SOURCE_EN[source] ?? source;
+}
+
+/** 'Alta' | 'Baja' → 'High' | 'Low'. Same reasoning as gmvSourceLabel. */
+export function confidenceLabel(c: string | null | undefined): string {
+  return c === 'Alta' ? 'High' : c === 'Baja' ? 'Low' : c === 'Media' ? 'Medium' : (c ?? '');
+}
