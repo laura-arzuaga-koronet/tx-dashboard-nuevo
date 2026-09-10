@@ -17,6 +17,7 @@
 import type { AccountEvidence, Benchmarks, MonthlySellTotal } from '../../../data/adapter/types';
 import { evValue, fmtInt, fmtMoney, fmtMonthKey, fmtPct, fmtSignedPct } from '../../../domain/format';
 import { CardFocus, CardGap, CardNext, CardRow, CardSection, CardTable, EvidenceCard } from '../EvidenceCard';
+import { CatalogReachTable } from './CatalogReachTable';
 
 /** Fee yield applied to a GMV shift scenario — the network-wide take rate. */
 const TAKE_RATE = 0.002;
@@ -48,6 +49,7 @@ function shiftYear(month: string, delta: number): string {
 
 export function SellCard({ ev }: { ev: AccountEvidence }) {
   const sell = ev.sell;
+  const reach = sell?.catalog_reach?.value ?? null;
   if (!sell) {
     return (
       <EvidenceCard label="Card 5 · SELL" headline="No sell data" defaultOpen={false}>
@@ -265,6 +267,8 @@ export function SellCard({ ev }: { ev: AccountEvidence }) {
           excluded from sell GMV.
         </CardGap>
       ) : null}
+
+      {reach ? <CatalogReachTable reach={reach} side="sell" /> : null}
 
       {hg ? (
         <CardSection title="Hardgoods and plants">

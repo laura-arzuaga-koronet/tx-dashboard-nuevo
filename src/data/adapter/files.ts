@@ -26,6 +26,7 @@ export const DATA_FILES = {
   config: `${DATA_BASE}config_evidence_v2.json`,
   hardgoods: `${DATA_BASE}hardgoods_v2.json`,
   skusOnlineOffline: `${DATA_BASE}skus_online_offline.json`,
+  catalogReach: `${DATA_BASE}catalog_reach_v1.json`,
 
   // Salesforce — open opportunities (loaded outside the adapter)
   sfdcOpenOpportunities: `${DATA_BASE}sfdc_open_opportunities_v1.json`,

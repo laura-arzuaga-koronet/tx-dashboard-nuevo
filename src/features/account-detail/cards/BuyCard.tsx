@@ -13,6 +13,7 @@ import type { ReactNode } from 'react';
 import type { AccountEvidence, BucketSummary, MonthlyBuyTotal } from '../../../data/adapter/types';
 import { evValue, fmtInt, fmtMoney, fmtMonthKey, fmtPct, fmtSignedPct } from '../../../domain/format';
 import { CardFocus, CardGap, CardNext, CardSection, CardTable, EvidenceCard } from '../EvidenceCard';
+import { CatalogReachTable } from './CatalogReachTable';
 
 /** Buckets as the temporal cube emits them, ordered nearest-to-shipping first. */
 const HORIZON_BUCKETS = ['0-3d', '4-7d', '8-14d', '15-30d', '31-90d', '90d+'] as const;
@@ -96,6 +97,7 @@ function shiftYear(month: string, delta: number): string {
 
 export function BuyCard({ ev }: { ev: AccountEvidence }) {
   const buy = ev.buy;
+  const reach = buy?.catalog_reach?.value ?? null;
   const p = ev.potential;
 
   if (!buy) {
@@ -251,6 +253,8 @@ export function BuyCard({ ev }: { ev: AccountEvidence }) {
           </CardGap>
         </CardSection>
       ) : null}
+
+      {reach ? <CatalogReachTable reach={reach} side="buy" /> : null}
 
       {catRows.length ? (
         <CardSection title={`Top categories bought (top ${TOP_CATEGORIES} of the 20 surveyed)`}>

@@ -228,6 +228,19 @@ export interface TemporalFile {
   forward_inventory_depth?: { data: TemporalRow[] };
 }
 
+/**
+ * catalog_reach_v1.json — cuánto del catálogo movido pasa por un canal online.
+ *
+ * `companies` va indexado por company_id (no por nombre: indexar por nombre fue
+ * lo que dejó 4.014 cuentas sin config), y `network` trae los percentiles de
+ * cobertura de toda la red para poder comparar cada cuenta contra la mediana.
+ */
+export interface CatalogReachFile {
+  _metadata?: LooseRecord;
+  network?: LooseRecord;
+  companies?: Record<string, LooseRecord>;
+}
+
 export interface KeyedCompaniesFile {
   _metadata?: Record<string, unknown>;
   companies: Record<string, LooseRecord>;
@@ -431,6 +444,7 @@ export interface BuyDomain {
   categories_top20: Ev<unknown> | null;
   leakage: Ev<LooseRecord> | null;
   skus_online_offline: Ev<LooseRecord> | null;
+  catalog_reach: Ev<CatalogReach> | null;
 }
 
 export interface FreshnessGroup {
@@ -474,6 +488,33 @@ export interface BuyersTable {
   ev: EvidenceState;
 }
 
+/**
+ * Alcance online del catálogo, por dimensión.
+ *
+ * `offline_only` es una DIFERENCIA DE CONJUNTOS (total − online): lo que nunca
+ * tocó un canal online. No es `offline − online`, que es lo que hace el
+ * dashboard legacy y da negativos en 141 de 330 cuentas porque los dos conteos
+ * se solapan.
+ */
+export interface CatalogDim {
+  total: number;
+  online: number;
+  offline_only: number;
+  coverage_pct: number | null;
+  /** Mediana de la red, para leer la cobertura contra algo. */
+  network_median: number | null;
+  /** p90: el techo de la red. Suele ser 100% — la distribución es bimodal. */
+  network_p90: number | null;
+}
+
+export interface CatalogReach {
+  /** Ventana fija de 12 meses cerrados: no sigue el selector de período. */
+  window: string;
+  categories: CatalogDim;
+  varieties: CatalogDim;
+  skus: CatalogDim;
+}
+
 export interface SellDomain {
   buyers_table: Ev<BuyersTable> | null;
   cvr: Ev<unknown> | null;
@@ -487,6 +528,7 @@ export interface SellDomain {
   monthly_series: Ev<MonthlySellTotal[]> | null;
   current_month: MonthlySellTotal | null;
   prior_month: MonthlySellTotal | null;
+  catalog_reach: Ev<CatalogReach> | null;
 }
 
 export interface BenchmarkMetric {

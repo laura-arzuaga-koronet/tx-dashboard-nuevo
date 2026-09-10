@@ -55,6 +55,10 @@ export interface AdapterStore {
   config: Record<string, LooseRecord>;
   hardgoods: LooseRecord[];
   skusOnlineOffline: Record<string, LooseRecord>;
+  /** catalog_reach_v1: alcance online del catálogo por company_id, ventana fija. */
+  catalogReach: Record<string, LooseRecord>;
+  /** Percentiles de cobertura de toda la red, para comparar cada cuenta. */
+  catalogNetwork: LooseRecord | null;
 
   // Cube metadata (used by the UI to derive the data period instead of hardcoding it)
   cubeMeta: { sell: CubeMeta | null; buy: CubeMeta | null; fees: CubeMeta | null };
@@ -89,7 +93,7 @@ function emptyStore(): AdapterStore {
   return {
     loaded: false,
     accountsV3: [], sellCube: [], buyCube: [], feesCube: [], gmvPacing: [], gmvExternal: [],
-    buyers: {}, vendors: [], temporal: {}, inventory: {}, benchmarks: {}, config: {}, hardgoods: [], skusOnlineOffline: {},
+    buyers: {}, vendors: [], temporal: {}, inventory: {}, benchmarks: {}, config: {}, hardgoods: [], skusOnlineOffline: {}, catalogReach: {}, catalogNetwork: null,
     cubeMeta: { sell: null, buy: null, fees: null },
     coverage: { sell: null, buy: null, fees: null, indirect: null },
     accountById: {}, idToName: {}, nameToId: {},
@@ -115,7 +119,7 @@ export function loadAll(fetcher: JsonFetcher = fetchJson): Promise<void> {
   loadPromise = (async () => {
     const [
       accounts, sell, buy, fees, indirect, whUni, pacing, external,
-      buyers, vendors, temporal, inventory, benchmarks, config, hardgoods, skus,
+      buyers, vendors, temporal, inventory, benchmarks, config, hardgoods, skus, catalog,
     ] = await Promise.all([
       fetcher<RawAccountsFile>(DATA_FILES.accountsV3),
       fetcher<CubeFile<SellCubeRow>>(DATA_FILES.sellCube),
@@ -133,6 +137,7 @@ export function loadAll(fetcher: JsonFetcher = fetchJson): Promise<void> {
       fetcher<KeyedCompaniesFile>(DATA_FILES.config),
       fetcher<HardgoodsFile>(DATA_FILES.hardgoods),
       fetcher<KeyedCompaniesFile>(DATA_FILES.skusOnlineOffline),
+      fetcher<CatalogReachFile>(DATA_FILES.catalogReach),
     ]);
 
     store.accountsV3 = Array.isArray(accounts?.accounts) ? accounts.accounts : [];
@@ -158,6 +163,8 @@ export function loadAll(fetcher: JsonFetcher = fetchJson): Promise<void> {
     store.config = config?.companies ?? {};
     store.hardgoods = Array.isArray(hardgoods?.companies) ? hardgoods.companies : [];
     store.skusOnlineOffline = skus?.companies ?? {};
+    store.catalogReach = catalog?.companies ?? {};
+    store.catalogNetwork = catalog?.network ?? null;
     store.cubeMeta = { sell: sell?._meta ?? null, buy: buy?._meta ?? null, fees: fees?._meta ?? null };
 
     buildLookups();

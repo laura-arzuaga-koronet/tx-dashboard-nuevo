@@ -55,6 +55,8 @@
     config: {},               // config_evidence_v2.json .companies (id → obj)
     hardgoods: [],            // hardgoods_v2.json .companies (list)
     skusOnlineOffline: {},    // skus_online_offline.json .companies (name → obj)
+    catalogReach: {},         // catalog_reach_v1.json .companies (company_id → obj)
+    catalogNetwork: null,     // catalog_reach_v1.json .network (percentiles de la red)
 
     // ── Derived lookup maps ──
     accountById: {},          // company_id → accounts_v3 record
@@ -105,6 +107,7 @@
     config:            DATA_BASE + 'config_evidence_v2.json',
     hardgoods:         DATA_BASE + 'hardgoods_v2.json',
     skusOnlineOffline: DATA_BASE + 'skus_online_offline.json',
+    catalogReach:      DATA_BASE + 'catalog_reach_v1.json',
   };
 
   // Training/sandbox/demo accounts to exclude
@@ -980,6 +983,10 @@
           case 'skusOnlineOffline':
             _state.skusOnlineOffline = (r.data && r.data.companies) ? r.data.companies : {};
             break;
+          case 'catalogReach':
+            _state.catalogReach   = (r.data && r.data.companies) ? r.data.companies : {};
+            _state.catalogNetwork = (r.data && r.data.network)   ? r.data.network   : null;
+            break;
         }
       });
 
@@ -1727,7 +1734,46 @@
       categories_top20:     categoriesTop20 ? _ev(categoriesTop20, 'observed', 'vendors_evidence_v2') : null,
       leakage:              leakage ? _ev(leakage, 'observed', 'vendors_evidence_v2') : null,
       skus_online_offline:  skusRec ? _ev(skusRec, 'observed', 'skus_online_offline') : null,
+      catalog_reach:        _buildCatalogReach(id, 'buy'),
     };
+  }
+
+  /* ── CATALOG REACH ───────────────────────────────────────────────────────
+     Cuánto del catálogo que la cuenta movió pasó alguna vez por un canal
+     online. Ventana FIJA de 12 meses cerrados: la amplitud de catálogo depende
+     del largo de la ventana, así que seguir el selector mediría la ventana.
+
+     `offline_only` viene del archivo como total − online (diferencia de
+     conjuntos). NO es offline − online, que es lo que hace este dashboard en la
+     tabla SOURCING y da negativos en 141 de 330 cuentas. */
+  var CATALOG_WINDOW = '2025-09..2026-08';
+  var CATALOG_DIMS = ['categories', 'varieties', 'skus'];
+
+  function _catalogDim(raw, bench) {
+    if (!raw || typeof raw.total !== 'number') return null;
+    var n = function (v) { return typeof v === 'number' ? v : null; };
+    return {
+      total: raw.total,
+      online: typeof raw.online === 'number' ? raw.online : 0,
+      offline_only: typeof raw.offline_only === 'number' ? raw.offline_only : raw.total,
+      coverage_pct: n(raw.coverage_pct),
+      network_median: n(bench && bench.coverage_median),
+      network_p90: n(bench && bench.coverage_p90),
+    };
+  }
+
+  function _buildCatalogReach(id, side) {
+    var rec = _state.catalogReach ? _state.catalogReach[id] : null;
+    var lado = rec ? rec[side] : null;
+    if (!lado) return null;
+    var net = _state.catalogNetwork ? _state.catalogNetwork[side] : null;
+    var out = { window: CATALOG_WINDOW };
+    for (var i = 0; i < CATALOG_DIMS.length; i++) {
+      var d = _catalogDim(lado[CATALOG_DIMS[i]], net ? net[CATALOG_DIMS[i]] : null);
+      if (!d) return null;
+      out[CATALOG_DIMS[i]] = d;
+    }
+    return _ev(out, 'observed', side === 'sell' ? 'SALES_SV catalog reach' : 'PROCUREMENTS_SV catalog reach');
   }
 
   /** LIST DOMAIN — inventory, variety freshness, config (from V2) */
@@ -1892,6 +1938,7 @@
       sell_online_ytd:  _ev(sellOnlineYtd,  sellOnlineYtd  ? 'observed' : 'gap', null),
       sell_offline_ytd: _ev(sellOfflineYtd, sellOfflineYtd ? 'observed' : 'gap', null),
       sell_total_ytd:   _ev(sellTotalYtd,   sellTotalYtd   ? 'observed' : 'gap', null),
+      catalog_reach:    _buildCatalogReach(id, 'sell'),
       monthly_series:   monthlyTotals.length ? _ev(monthlyTotals, 'observed', 'sell cube') : null,
       current_month:    currentMonth || null,
       prior_month:      priorMonth   || null,

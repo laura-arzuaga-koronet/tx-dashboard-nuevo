@@ -33,6 +33,8 @@ import type {
   Benchmarks,
   BucketSummary,
   BuyDomain,
+  CatalogDim,
+  CatalogReach,
   BuyersTable,
   ConfigEvidence,
   EvidenceState,
@@ -67,6 +69,11 @@ export const TAKE_RATE_MIN_SELL = 10_000;
  * for those asserts something the data contradicts.
  */
 export const TAUTOLOGY_TOLERANCE = 0.10;
+/**
+ * Ventana del alcance de catálogo: los 12 meses cerrados del cubo. Fija a
+ * propósito — ver el comentario de buildCatalogReach.
+ */
+export const CATALOG_WINDOW = '2025-09..2026-08';
 
 const str = (v: unknown): string | null => (v == null || v === '' ? null : String(v));
 
@@ -639,6 +646,50 @@ function summarizeBuckets(rows: TemporalRow[]): BucketSummary {
   return { buckets, total_orders: totalOrders, avg_days: totalOrders > 0 ? weightedDays / totalOrders : null };
 }
 
+/* ── CATALOG REACH ────────────────────────────────────────────────────────
+   Cuánto del catálogo que la cuenta movió pasó alguna vez por un canal online.
+
+   Va sobre una ventana FIJA de 12 meses cerrados, no sobre el período elegido:
+   la cantidad de categorías distintas depende del largo de la ventana, así que
+   compararla entre H1 y YTD mediría la ventana y no la cuenta. Es un dato
+   estructural, como el inventario o la config, y se etiqueta con su ventana.  */
+const CATALOG_DIMS = ['categories', 'varieties', 'skus'] as const;
+
+function catalogDim(raw: unknown, bench: unknown): CatalogDim | null {
+  const r = raw as Record<string, unknown> | null | undefined;
+  if (!r || typeof r.total !== 'number') return null;
+  const b = bench as Record<string, unknown> | null | undefined;
+  const numOr = (v: unknown): number | null => (typeof v === 'number' ? v : null);
+  return {
+    total: r.total,
+    online: typeof r.online === 'number' ? r.online : 0,
+    offline_only: typeof r.offline_only === 'number' ? r.offline_only : r.total,
+    coverage_pct: numOr(r.coverage_pct),
+    network_median: numOr(b?.coverage_median),
+    network_p90: numOr(b?.coverage_p90),
+  };
+}
+
+function buildCatalogReach(companyId: string, side: 'sell' | 'buy'): Ev<CatalogReach> | null {
+  const rec = store.catalogReach[companyId] as Record<string, unknown> | undefined;
+  const lado = rec?.[side] as Record<string, unknown> | null | undefined;
+  if (!lado) return null;
+  const net = (store.catalogNetwork as Record<string, unknown> | null)?.[side] as
+    Record<string, unknown> | undefined;
+
+  const dims: Partial<Record<(typeof CATALOG_DIMS)[number], CatalogDim>> = {};
+  for (const d of CATALOG_DIMS) {
+    const dim = catalogDim(lado[d], net?.[d]);
+    if (!dim) return null;
+    dims[d] = dim;
+  }
+  return ev(
+    { window: CATALOG_WINDOW, categories: dims.categories!, varieties: dims.varieties!, skus: dims.skus! },
+    'observed',
+    side === 'sell' ? 'SALES_SV catalog reach' : 'PROCUREMENTS_SV catalog reach',
+  );
+}
+
 export function buildBuy(companyId: string, period: Period): BuyDomain {
   const name = store.idToName[companyId];
   const vendRec = store.vendorsById[companyId] ?? (name ? store.vendorsByName[name] ?? null : null);
@@ -691,6 +742,7 @@ export function buildBuy(companyId: string, period: Period): BuyDomain {
     categories_top20: categoriesTop20 ? ev(categoriesTop20, 'observed', 'vendors_evidence_v2') : null,
     leakage: leakage ? ev(leakage, 'observed', 'vendors_evidence_v2') : null,
     skus_online_offline: skusRec ? ev(skusRec, 'observed', 'skus_online_offline') : null,
+    catalog_reach: buildCatalogReach(companyId, 'buy'),
   };
 }
 
@@ -829,6 +881,7 @@ export function buildSell(companyId: string, period: Period): SellDomain {
     sell_online_period: ev(sellOnline, sellOnline ? 'observed' : 'gap'),
     sell_offline_period: ev(sellOffline, sellOffline ? 'observed' : 'gap'),
     sell_total_period: ev(sellTotal, sellTotal ? 'observed' : 'gap'),
+    catalog_reach: buildCatalogReach(companyId, 'sell'),
     monthly_series: monthly.length ? ev(monthly, 'observed', 'sell cube') : null,
     current_month: currentMonth,
     prior_month: priorMonth,
