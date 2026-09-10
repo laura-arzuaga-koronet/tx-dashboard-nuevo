@@ -57,6 +57,7 @@
     skusOnlineOffline: {},    // skus_online_offline.json .companies (name → obj)
     catalogReach: {},         // catalog_reach_v1.json .companies (company_id → obj)
     catalogNetwork: null,     // catalog_reach_v1.json .network (percentiles de la red)
+    catalogWindow: null,      // catalog_reach_v1.json ._metadata.window
 
     // ── Derived lookup maps ──
     accountById: {},          // company_id → accounts_v3 record
@@ -986,6 +987,8 @@
           case 'catalogReach':
             _state.catalogReach   = (r.data && r.data.companies) ? r.data.companies : {};
             _state.catalogNetwork = (r.data && r.data.network)   ? r.data.network   : null;
+            _state.catalogWindow  = (r.data && r.data._metadata && typeof r.data._metadata.window === 'string')
+              ? r.data._metadata.window : null;
             break;
         }
       });
@@ -1752,7 +1755,7 @@
      `offline_only` viene del archivo como total − online (diferencia de
      conjuntos). NO es offline − online, que es lo que hace este dashboard en la
      tabla SOURCING y da negativos en 141 de 330 cuentas. */
-  var CATALOG_WINDOW = '2025-09..2026-08';
+  var CATALOG_WINDOW_FALLBACK = '2025-09..2026-08';
   var CATALOG_DIMS = ['categories', 'varieties', 'skus'];
 
   function _catalogDim(raw, bench) {
@@ -1773,7 +1776,7 @@
     var lado = rec ? rec[side] : null;
     if (!lado) return null;
     var net = _state.catalogNetwork ? _state.catalogNetwork[side] : null;
-    var out = { window: CATALOG_WINDOW };
+    var out = { window: _state.catalogWindow || CATALOG_WINDOW_FALLBACK };
     for (var i = 0; i < CATALOG_DIMS.length; i++) {
       var d = _catalogDim(lado[CATALOG_DIMS[i]], net ? net[CATALOG_DIMS[i]] : null);
       if (!d) return null;

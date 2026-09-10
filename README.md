@@ -16,7 +16,7 @@ tipado y un test de paridad que compara campo por campo contra el adapter legacy
 | **3 · Definitions & Matrix** | Matriz Est GMV × Product Tier con drill-down a la tabla, y las tablas de metodología con las fórmulas nuevas | ✅ |
 | **3b · Correcciones de medición** | Est GMV prorrateado al período; verificación del "Medido" contra el cubo; tautología de compra desacoplada de la de venta; alcance online del catálogo con el gap bien calculado; los seis motivos del cero de venta | ✅ |
 | **3c · Re-extracción de fuentes** | Las 7 fuentes de evidencia al día, con `generated_at` en todas y scripts de reconstrucción versionados | ✅ |
-| 4 · Datos | Compactar los 20 JSON (~15,5 MB) en un bundle por vista; derivar el período desde `_meta` en todos lados | Pendiente |
+| 4 · Datos | Diferir los 2,4 MB que solo usa la fila expandida; podar los 26 campos sin usar de `accounts_v3`; pre-agregar el cubo de indirect fees | Pendiente, ver "Deuda conocida" |
 
 ## Cómo correrlo
 
@@ -208,7 +208,17 @@ Cada una salió de medir el original y encontrarlo mal, no de preferencia de dis
   de `inventory_current.sql` (necesita dedup cruzada, no se pueden sumar por empresa).
 - **`INVENTORY_DETAILS` no confirma visibilidad en el eShop.** Que `open_market` sea el pool que ve
   el comprador online es una hipótesis heredada del archivo original, no un hecho.
-- **Fase 4:** los 20 JSON se cargan enteros en cada visita.
+- **Fase 4 — carga de datos.** Medido sobre el build servido estático: **1,8 s** hasta la primera
+  fila, 39 MB de heap, 18 peticiones. Los 15,5 MB crudos comprimen a **1,28 MB** con gzip, que es lo
+  que sirve GitHub Pages, así que el costo real es de parseo y memoria, no de red. Por orden de
+  relación beneficio/riesgo:
+  1. **Diferir 2,4 MB** hasta que se expanda una fila (vendors, temporal, inventory, buyers,
+     catalog_reach, hardgoods, skus): la tabla no los toca.
+  2. **Podar `accounts_v3`**: 4,2 MB con 54 campos por cuenta, de los que el adapter usa 27.
+     Quedaría en 2,5 MB.
+  3. **Pre-agregar `indirect_fees_monthly`** por comprador + mes + estado: 16.313 filas → 10.606,
+     2,4 MB → 1,4 MB.
+  Nada de esto es urgente con 1,8 s de arranque; lo que sí conviene es no dejarlo crecer.
 
 ## Deploy
 

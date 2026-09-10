@@ -71,10 +71,13 @@ export const TAKE_RATE_MIN_SELL = 10_000;
  */
 export const TAUTOLOGY_TOLERANCE = 0.10;
 /**
- * Ventana del alcance de catálogo: los 12 meses cerrados del cubo. Fija a
- * propósito — ver el comentario de buildCatalogReach.
+ * Respaldo de la ventana del alcance de catálogo, por si el archivo no la
+ * declara. El valor real se lee de `catalog_reach_v1._metadata.window`:
+ * hardcodear la ventana significa que re-extraer con otro rango deja la
+ * tarjeta mintiendo, que es exactamente el error que ya costó meses de
+ * desfase invisible en accounts_v3.
  */
-export const CATALOG_WINDOW = '2025-09..2026-08';
+export const CATALOG_WINDOW_FALLBACK = '2025-09..2026-08';
 
 const str = (v: unknown): string | null => (v == null || v === '' ? null : String(v));
 
@@ -693,7 +696,7 @@ function buildCatalogReach(companyId: string, side: 'sell' | 'buy'): Ev<CatalogR
     dims[d] = dim;
   }
   return ev(
-    { window: CATALOG_WINDOW, categories: dims.categories!, varieties: dims.varieties!, skus: dims.skus! },
+    { window: store.catalogWindow ?? CATALOG_WINDOW_FALLBACK, categories: dims.categories!, varieties: dims.varieties!, skus: dims.skus! },
     'observed',
     side === 'sell' ? 'SALES_SV catalog reach' : 'PROCUREMENTS_SV catalog reach',
   );
