@@ -3,11 +3,20 @@
  * division, how recently each variety last sold, how deep the forward (prebook)
  * book is, and the configuration flags that gate all of it.
  *
- * Ported from the legacy `renderListCard`. Two legacy blocks are dropped here:
- * the online-vs-offline comparison table (categories and SKUs live in the BUY
- * card, which owns that evidence) and the "TAM not visible" pills, whose
- * proportional allocation is a directional scenario rather than evidence — the
- * domain models it as `tam_lost: null`.
+ * Ported from the legacy `renderListCard`. The "TAM not visible" pills are
+ * dropped: their proportional allocation is a directional scenario rather than
+ * evidence, and the domain models it as `tam_lost: null`.
+ *
+ * DÓNDE VA CADA COSA — las tres tarjetas responden preguntas distintas y es
+ * fácil confundirlas:
+ *
+ *   SELL  → lo VENDIDO por canal      (catalog reach, cubo de ventas)
+ *   BUY   → lo COMPRADO por canal     (catalog reach, procurements)
+ *   LIST  → lo DISPONIBLE por canal   (esta tarjeta, inventario publicado)
+ *
+ * Las dos primeras miran transacciones: qué se movió y por dónde. Esta mira el
+ * estante: qué hay cargado y de qué forma se ofrece. Una variedad publicada que
+ * no se vendió aparece acá y no allá, y esa diferencia es justamente el dato.
  */
 import type { ReactNode } from 'react';
 import type { AccountEvidence, FreshnessGroup, LooseRecord } from '../../../data/adapter/types';
@@ -17,6 +26,23 @@ import { CardFocus, CardGap, CardNext, CardSection, CardTable, EvidenceCard } fr
 /** Buckets as the temporal cube emits them, freshest first. */
 const FRESHNESS_BUCKETS = ['0-30d', '31-60d', '61-90d', '91-120d', '121-180d', '180d+'] as const;
 const HORIZON_BUCKETS = ['1-7d', '8-14d', '15-30d', '31-60d', '61-90d', '90d+'] as const;
+
+/**
+ * Qué significa cada `inventory_type` — son las formas en que el producto queda
+ * ofrecido, que es lo más cerca de "canal" que da la tabla de inventario.
+ *
+ * OJO con open_market: el archivo de inventario documenta que su visibilidad en
+ * el eShop es una HIPÓTESIS, no un hecho. No hay columna de publicación ni de
+ * listado en INVENTORY_DETAILS, así que ninguna de estas filas confirma que el
+ * comprador lo vea online.
+ */
+const TYPE_MEANING: Record<string, string> = {
+  on_hand: 'physical stock on hand',
+  open_market: 'offered on the open market — the pool the eShop draws from (not confirmed visible)',
+  prebook: 'committed forward: sold before it ships',
+  standing_order: 'recurring standing orders',
+  limited: 'restricted availability, selected customers',
+};
 
 /** Below this MaxAge the catalog cannot be listed forward. */
 const MAX_AGE_TARGET = 30;
@@ -63,7 +89,7 @@ function readMaxAge(raw: LooseRecord | null): number | null {
 }
 
 /** Rows of an inventory breakdown keyed by type or division. */
-function breakdownRows(source: unknown): ReactNode[][] {
+function breakdownRows(source: unknown, withMeaning = false): ReactNode[][] {
   const rec = asRecord(source);
   if (!rec) return [];
   return Object.entries(rec)
@@ -77,7 +103,13 @@ function breakdownRows(source: unknown): ReactNode[][] {
     }))
     .filter((r) => r.items != null && r.items > 0)
     .sort((a, b) => (b.items ?? 0) - (a.items ?? 0))
-    .map((r) => [r.name, fmtInt(r.items), fmtInt(r.products), fmtInt(r.categories), fmtInt(r.varieties), fmtInt(r.units)]);
+    .map((r) => {
+      const cells: ReactNode[] = [r.name];
+      if (withMeaning) cells.push(<span className="ev-note">{TYPE_MEANING[r.name] ?? '—'}</span>);
+      return cells.concat([
+        fmtInt(r.items), fmtInt(r.products), fmtInt(r.categories), fmtInt(r.varieties), fmtInt(r.units),
+      ]);
+    });
 }
 
 function bucketCount(group: FreshnessGroup, bucket: string): number {
@@ -112,6 +144,7 @@ export function ListCard({ ev }: { ev: AccountEvidence }) {
   const sellOffline = p ? evValue(p.sell_offline_period) : null;
 
   const inventory = list.inventory_current?.value ?? null;
+  const invAsOf = inventory?.as_of ?? null;
   const freshness = list.variety_freshness?.value ?? null;
   const forward = list.forward_inventory?.value ?? null;
   const config = list.config?.value ?? null;
@@ -153,7 +186,7 @@ export function ListCard({ ev }: { ev: AccountEvidence }) {
   </>;
 
   /* ── Inventario actual ── */
-  const typeRows = breakdownRows(inventory?.by_type);
+  const typeRows = breakdownRows(inventory?.by_type, true);
   const divisionRows = breakdownRows(inventory?.by_division);
   const totalItems = num(inventory?.totals, 'total_items');
   const totalUnits = num(inventory?.totals, 'total_units');
@@ -235,10 +268,13 @@ export function ListCard({ ev }: { ev: AccountEvidence }) {
       <CardFocus><strong>Focus:</strong> {focus}</CardFocus>
 
       {typeRows.length || divisionRows.length ? (
-        <CardSection title="Current published inventory">
+        <CardSection
+          title={`Published inventory — what is available, and how it is offered${
+            invAsOf ? ` · as of ${invAsOf}` : ''}`}
+        >
           {typeRows.length ? (
             <CardTable
-              head={['By type', 'Items', 'Products', 'Categories', 'Varieties', 'Units']}
+              head={['Listing type', 'What it means', 'Items', 'Products', 'Categories', 'Varieties', 'Units']}
               rows={typeRows}
             />
           ) : null}
@@ -250,7 +286,12 @@ export function ListCard({ ev }: { ev: AccountEvidence }) {
           ) : null}
           <CardGap>
             Total: {fmtInt(totalItems)} items · {fmtInt(totalUnits)} units.
-            Unique counts do not add up across types (they require cross deduplication).
+            This is the shelf, not the till: SELL and BUY count what actually moved through each
+            channel, this counts what is loaded and how it is offered. A variety published without a
+            sale shows up here and not there.
+            Two caveats the source carries: it is a cumulative ledger rather than a live snapshot,
+            and no column in it confirms eShop visibility — so no row here proves the buyer sees it
+            online. Unique counts do not add up across types (they need cross deduplication).
           </CardGap>
         </CardSection>
       ) : (
@@ -295,7 +336,8 @@ export function ListCard({ ev }: { ev: AccountEvidence }) {
       )}
 
       <CardNext>
-        → Continues in <strong>SELL</strong>: do its buyers convert what is already online?
+        → Continues in <strong>SELL</strong>: of everything on this shelf, how much actually sold
+        through an online channel?
       </CardNext>
     </EvidenceCard>
   );

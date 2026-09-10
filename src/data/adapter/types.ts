@@ -468,7 +468,9 @@ export interface VarietyFreshness {
 }
 
 export interface ListDomain {
-  inventory_current: Ev<{ by_type: unknown; by_division: unknown; totals: unknown; ev: EvidenceState }> | null;
+  inventory_current: Ev<{ by_type: unknown; by_division: unknown; totals: unknown;
+    /** Fecha de la foto: el inventario no sigue el selector de período. */
+    as_of: string | null; ev: EvidenceState }> | null;
   variety_freshness: Ev<VarietyFreshness> | null;
   forward_inventory: Ev<{ by_bucket: Record<string, LooseRecord>; ev: EvidenceState }> | null;
   tam_lost: null;

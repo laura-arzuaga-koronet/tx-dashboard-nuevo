@@ -765,7 +765,8 @@ export function buildList(companyId: string): ListDomain {
   const fiRows = store.temporalFIById[companyId] ?? (name ? store.temporalFIByName[name] ?? null : null);
 
   const inventoryCurrent = invRec
-    ? { by_type: invRec.by_inventory_type || null, by_division: invRec.by_inventory_division || null, totals: invRec.totals || null, ev: 'observed' as const }
+    ? { by_type: invRec.by_inventory_type || null, by_division: invRec.by_inventory_division || null,
+        totals: invRec.totals || null, as_of: store.inventoryAsOf, ev: 'observed' as const }
     : null;
 
   let varietyFreshness: VarietyFreshness | null = null;

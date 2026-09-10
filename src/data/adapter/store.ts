@@ -55,6 +55,8 @@ export interface AdapterStore {
   config: Record<string, LooseRecord>;
   hardgoods: LooseRecord[];
   skusOnlineOffline: Record<string, LooseRecord>;
+  /** Fecha de corrida de inventory_current_v1: es una FOTO, no sigue el selector. */
+  inventoryAsOf: string | null;
   /** catalog_reach_v1: alcance online del catálogo por company_id, ventana fija. */
   catalogReach: Record<string, LooseRecord>;
   /** Percentiles de cobertura de toda la red, para comparar cada cuenta. */
@@ -93,7 +95,7 @@ function emptyStore(): AdapterStore {
   return {
     loaded: false,
     accountsV3: [], sellCube: [], buyCube: [], feesCube: [], gmvPacing: [], gmvExternal: [],
-    buyers: {}, vendors: [], temporal: {}, inventory: {}, benchmarks: {}, config: {}, hardgoods: [], skusOnlineOffline: {}, catalogReach: {}, catalogNetwork: null,
+    buyers: {}, vendors: [], temporal: {}, inventory: {}, benchmarks: {}, config: {}, hardgoods: [], skusOnlineOffline: {}, catalogReach: {}, catalogNetwork: null, inventoryAsOf: null,
     cubeMeta: { sell: null, buy: null, fees: null },
     coverage: { sell: null, buy: null, fees: null, indirect: null },
     accountById: {}, idToName: {}, nameToId: {},
@@ -159,6 +161,10 @@ export function loadAll(fetcher: JsonFetcher = fetchJson): Promise<void> {
     store.vendors = Array.isArray(vendors?.companies) ? vendors.companies : [];
     store.temporal = temporal ?? {};
     store.inventory = inventory?.companies ?? {};
+    store.inventoryAsOf = typeof (inventory as { _metadata?: { generated_at?: unknown } } | undefined)
+      ?._metadata?.generated_at === 'string'
+      ? ((inventory as { _metadata: { generated_at: string } })._metadata.generated_at).slice(0, 10)
+      : null;
     store.benchmarks = benchmarks?.benchmarks ?? {};
     store.config = config?.companies ?? {};
     store.hardgoods = Array.isArray(hardgoods?.companies) ? hardgoods.companies : [];
