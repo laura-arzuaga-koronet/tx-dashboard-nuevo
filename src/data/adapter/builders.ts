@@ -516,6 +516,13 @@ export function buildPotential(companyId: string, period: Period): Potential {
     .sort()
     .pop() ?? null;
   const churned = lastSellMonth != null && lastSellMonth < period.from;
+  /* Sin NINGUNA fila de venta en todo el cubo (2024-01 en adelante), y no por
+     falta de datos: se verificó contra SALES_SV que 4 de las 5 cuentas que
+     quedaban sin explicar no tienen una sola línea de venta en la tabla, en
+     toda su historia, y la quinta tiene 2 líneas por $0. No es un hueco, es
+     una cuenta que no vende por Koronet — y la acción que corresponde es
+     comercial o de clasificación, no ir a buscar la fila que falta. */
+  const neverSold = sellRows.length === 0 || lastSellMonth == null;
   const cfgConf = (store.config[companyId]?.config ?? {}) as Record<string, unknown>;
   const feesAllOff = cfgConf.ecommerce_fee === false && cfgConf.k2k_fee === false && cfgConf.api_fee === false;
   const isK2kBuyer = indirectRows.length > 0;
@@ -542,6 +549,7 @@ export function buildPotential(companyId: string, period: Period): Potential {
          sin este caso, 37 cuentas del portafolio se leían como "falta dato". */
       [(sellAgg?.selfSale ?? 0) > 0, 'cero', 'its «sales» are its own purchases mirrored (self-sale): it does not sell through Koronet'],
       [churned, 'cero', `last sale ${lastSellMonth} — nothing in this period`],
+      [neverSold, 'cero', 'never sold through Koronet: no sell rows at all since the cube starts'],
       [true, 'gap', 'live but no sales in the period'],
     ]),
     koronet_buy_period: why(koronetBuy, [

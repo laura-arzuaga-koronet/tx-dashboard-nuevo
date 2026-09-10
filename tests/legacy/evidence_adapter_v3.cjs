@@ -1460,6 +1460,10 @@
     var lastSellMonth = _mesesConVenta.length ? _mesesConVenta[_mesesConVenta.length - 1] : null;
     var _win = _timeframeRange(timeframe);
     var churned = lastSellMonth != null && lastSellMonth < _win.from;
+    /* Sin NINGUNA fila de venta en todo el cubo. Verificado contra SALES_SV:
+       4 de las 5 cuentas que quedaban sin explicar no tienen una sola linea de
+       venta en toda su historia, y la quinta tiene 2 lineas por $0. No es hueco. */
+    var neverSold = !sellRows.length || lastSellMonth == null;
 
     var reasons = {
       gmv_reference: _why(gmvRef, [
@@ -1478,6 +1482,7 @@
            sin este caso, 37 cuentas del portafolio se leían como "falta dato". */
         [(sellAgg && sellAgg.self_sale > 0), 'cero', 'its «sales» are its own purchases mirrored (self-sale): it does not sell through Koronet'],
         [churned, 'cero', 'last sale ' + lastSellMonth + ' — nothing in this period'],
+        [neverSold, 'cero', 'never sold through Koronet: no sell rows at all since the cube starts'],
         [true, 'gap', 'live but no sales in the period']
       ]),
       koronet_buy_ytd: _why(koronetBuyYtd, [
