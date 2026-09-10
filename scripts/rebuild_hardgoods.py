@@ -5,18 +5,16 @@ Reconstruye `hardgoods_v2.json` desde SALES_SV.
 El archivo anterior era del 2026-08-05 (34 días). Se rearma la parte de HARD
 GOODS con ventas por empresa × división × canal, ene–ago 2026.
 
-LO QUE NO SE PUDO REFRESCAR
+DE DÓNDE SALE CADA DIVISIÓN
 ---------------------------
-`inventory_division` en Snowflake solo toma tres valores: Boxes, Units y
-Hard Goods. NO existe "Plants", que el archivo anterior reportaba como una
-división aparte — debe salir de otro campo (categoría o división de producto)
-que no está expuesto en el modelo semántico disponible. Los bloques de plants se
-preservan del archivo anterior y quedan marcados en `_metadata.not_refreshed`
-para que nadie los lea como frescos.
+Al principio busqué hard goods y plants en `inventory_division`, que solo toma
+Boxes / Units / Hard Goods — y ahí no hay plants. La división correcta es
+`product_category_division_name`, que toma Fresh Cut / Hard Goods / Plants. Con
+esa dimensión salen las dos mitades del archivo de una sola consulta.
 
 USO
 ---
-    python3 scripts/rebuild_hardgoods.py --sales /tmp/hardgoods_raw.json [--dry-run]
+    python3 scripts/rebuild_hardgoods.py --sales /tmp/hardgoods_div.json [--dry-run]
 """
 from __future__ import annotations
 import argparse, collections, json, pathlib, sys
@@ -38,16 +36,19 @@ def main() -> int:
     cols = blob["columns"]
     i = {c: cols.index(c) for c in cols}
 
-    por_empresa: dict[str, dict] = collections.defaultdict(
-        lambda: {"hardgoods_online": 0.0, "hardgoods_offline": 0.0})
+    DIV = {"Hard Goods": "hardgoods", "Plants": "plants"}
+    por_empresa: dict[str, dict] = collections.defaultdict(lambda: {
+        "hardgoods_online": 0.0, "hardgoods_offline": 0.0,
+        "plants_online": 0.0, "plants_offline": 0.0})
     nombres: dict[str, str] = {}
     for r in blob["data"]:
-        if r[i["INVENTORY_DIVISION"]] != "Hard Goods":
+        pref = DIV.get(r[i["PRODUCT_CATEGORY_DIVISION_NAME"]])
+        if not pref:            # Fresh Cut y el valor vacío no van a este archivo
             continue
         cid = str(r[i["COMPANY_ID"]])
         nombres[cid] = r[i["COMPANY_NAME"]]
-        key = "hardgoods_online" if r[i["SALES_CHANNEL"]] in ONLINE else "hardgoods_offline"
-        por_empresa[cid][key] += float(r[i["TOTAL_SALES"]] or 0)
+        canal = "online" if r[i["SALES_CHANNEL"]] in ONLINE else "offline"
+        por_empresa[cid][f"{pref}_{canal}"] += float(r[i["TOTAL_SALES"]] or 0)
 
     prev = json.load(open(DATA / "hardgoods_v2.json", encoding="utf-8"))
     prev_by_name = {c.get("company_name"): c for c in prev.get("companies", [])}
@@ -56,36 +57,30 @@ def main() -> int:
     for cid, v in por_empresa.items():
         nombre = nombres[cid]
         antes = prev_by_name.get(nombre, {})
-        total = v["hardgoods_online"] + v["hardgoods_offline"]
-        companies.append({
-            "company_name": nombre,
-            "company_id": cid,
-            "ct_id": antes.get("ct_id"),
-            "hardgoods_total": round(total, 2),
-            "hardgoods_online": round(v["hardgoods_online"], 2),
-            "hardgoods_offline": round(v["hardgoods_offline"], 2),
-            "hardgoods_online_pct": round(v["hardgoods_online"] / total * 100, 2) if total else 0.0,
-            # plants: sin origen en inventory_division, se preserva
-            "plants_total": antes.get("plants_total"),
-            "plants_online": antes.get("plants_online"),
-            "plants_offline": antes.get("plants_offline"),
-            "plants_online_pct": antes.get("plants_online_pct"),
-        })
-    companies.sort(key=lambda c: -(c["hardgoods_total"] or 0))
+        fila = {"company_name": nombre, "company_id": cid, "ct_id": antes.get("ct_id")}
+        for pref in ("hardgoods", "plants"):
+            on, off = v[f"{pref}_online"], v[f"{pref}_offline"]
+            tot = on + off
+            fila[f"{pref}_total"] = round(tot, 2)
+            fila[f"{pref}_online"] = round(on, 2)
+            fila[f"{pref}_offline"] = round(off, 2)
+            fila[f"{pref}_online_pct"] = round(on / tot * 100, 2) if tot else 0.0
+        companies.append(fila)
+    companies.sort(key=lambda c: -((c["hardgoods_total"] or 0) + (c["plants_total"] or 0)))
 
-    on = sum(c["hardgoods_online"] for c in companies)
-    off = sum(c["hardgoods_offline"] for c in companies)
-    tot = on + off
-    net = {
-        "hardgoods_online": round(on, 2), "hardgoods_offline": round(off, 2),
-        "hardgoods_total": round(tot, 2),
-        "hardgoods_online_pct": round(on / tot * 100, 2) if tot else 0.0,
-        "plants_online": prev.get("network_totals", {}).get("plants_online"),
-        "plants_offline": prev.get("network_totals", {}).get("plants_offline"),
-        "plants_total": prev.get("network_totals", {}).get("plants_total"),
-        "plants_online_pct": prev.get("network_totals", {}).get("plants_online_pct"),
-    }
-    pcts = sorted(c["hardgoods_online_pct"] for c in companies)
+    net = {}
+    for pref in ("hardgoods", "plants"):
+        on = sum(c[f"{pref}_online"] for c in companies)
+        off = sum(c[f"{pref}_offline"] for c in companies)
+        tot = on + off
+        net[f"{pref}_online"] = round(on, 2)
+        net[f"{pref}_offline"] = round(off, 2)
+        net[f"{pref}_total"] = round(tot, 2)
+        net[f"{pref}_online_pct"] = round(on / tot * 100, 2) if tot else 0.0
+    bench = {}
+    for pref in ("hardgoods", "plants"):
+        pcts = sorted(c[f"{pref}_online_pct"] for c in companies if c[f"{pref}_total"])
+        bench[pref] = {"median": pcts[len(pcts) // 2] if pcts else None, "n": len(pcts)}
     doc = {
         "_metadata": {
             "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -94,24 +89,21 @@ def main() -> int:
             "filters": f"ks_flag=TRUE, sales<100000 (por línea), shipping_date in {WINDOW}",
             "period": WINDOW,
             "rules_applied": ["R1 ks_flag", "R4 sales<100000", "R6 online = eCommerce+K2K+API"],
-            "not_refreshed": {
-                "fields": ["plants_total", "plants_online", "plants_offline", "plants_online_pct"],
-                "reason": ("inventory_division en Snowflake solo toma Boxes, Units y Hard Goods: "
-                           "no existe 'Plants'. Sale de otro campo no expuesto en el modelo semántico."),
-                "previous_file_generated": prev.get("_metadata", {}).get("generated"),
-            },
+            "division_source": ("product_category_division_name (Fresh Cut / Hard Goods / Plants). "
+                                "NO inventory_division, que solo toma Boxes / Units / Hard Goods "
+                                "y no tiene plants."),
+            "previous_file_generated": prev.get("_metadata", {}).get("generated"),
             "companies": len(companies),
         },
         "network_totals": net,
-        "hardgoods_online_pct_benchmark": {
-            "median": pcts[len(pcts) // 2] if pcts else None,
-            "n": len(pcts),
-        },
-        "plants_online_pct_benchmark": prev.get("plants_online_pct_benchmark"),
+        "hardgoods_online_pct_benchmark": bench["hardgoods"],
+        "plants_online_pct_benchmark": bench["plants"],
         "companies": companies,
     }
-    print(f"empresas con hard goods: {len(companies)} (antes {len(prev.get('companies', []))})")
-    print(f"red: online ${on:,.0f} / total ${tot:,.0f} = {net['hardgoods_online_pct']}%  (antes 0.14%)")
+    print(f"empresas: {len(companies)} (antes {len(prev.get('companies', []))})")
+    for pref in ("hardgoods", "plants"):
+        print(f"   {pref:10} total ${net[f'{pref}_total']:>14,.0f}  online {net[f'{pref}_online_pct']}%"
+              f"  ·  {bench[pref]['n']} empresas")
     if a.dry_run:
         print("--dry-run: no se escribió nada"); return 0
     json.dump(doc, open(DATA / "hardgoods_v2.json", "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))

@@ -32,14 +32,13 @@
 --     "proxy -- Not confirmed eShop visibility".
 --   · Regla 7: el vendor viene en blanco en algunas filas de Units, por diseño.
 --
--- ⚠ NOMBRES DE COLUMNA POR CONFIRMAR
---   No pude introspeccionar INVENTORY_DETAILS (misma razón: no hay vista
---   semántica y no puedo tocar la tabla base). Los nombres de acá salen de los
---   campos del JSON y de cómo los nombra el resto del warehouse:
---     company_id · inventory_type_code · inventory_division · product_id
---     category_name · variety_name · total_units
---   Antes de correrla, un `DESCRIBE TABLE PRODUCTION.ANALYTICS.INVENTORY_DETAILS`
---   confirma o corrige los seis. La estructura de la consulta no cambia.
+-- NOMBRES DE COLUMNA — confirmados contra el esquema real (2026-09-10)
+--   Tres de los que había inferido estaban mal:
+--     inventory_type_code → INVENTORY_TYPE        (sin sufijo _code)
+--     category_name       → PRODUCT_CATEGORY_NAME
+--     variety_name        → PRODUCT_VARIETY
+--   Y hay algo mejor: KS_FLAG y COMPANY_NAME están EN la propia tabla, así que
+--   el JOIN contra COMPANIES sobra. Una tabla, sin joins.
 --
 -- Consumido por: buildList() → inventory_current (tarjeta LIST, tablas "By type"
 -- y "By division") y por el conteo de fuentes de la tarjeta DATA COVERAGE.
@@ -51,28 +50,27 @@
 -- cortes se agregan después, en vez de pegarle dos veces a la tabla.
 WITH base AS (
     SELECT
-        i.company_id,
-        c.company_name,
-        -- El código de tipo viene NULL/'' para el on-hand. El JSON lo etiqueta
-        -- '(blank)' y lo nombra on_hand: se conserva ese contrato.
-        COALESCE(NULLIF(TRIM(i.inventory_type_code), ''), '(blank)') AS inventory_type_code,
-        i.inventory_division,
-        i.product_id,
-        i.category_name,
-        i.variety_name,
-        i.total_units
-    FROM PRODUCTION.ANALYTICS.INVENTORY_DETAILS AS i
-    JOIN PRODUCTION.ANALYTICS.COMPANIES        AS c
-      ON c.company_id = i.company_id
-    WHERE c.ks_flag = TRUE          -- Regla 1: fuera demo y test
-      AND i.total_units > 0         -- proxy de "tiene existencia"
+        COMPANY_ID,
+        COMPANY_NAME,
+        -- El tipo viene NULL/'' para el on-hand. El JSON lo etiqueta '(blank)'
+        -- y lo nombra on_hand: se conserva ese contrato.
+        COALESCE(NULLIF(TRIM(INVENTORY_TYPE), ''), '(blank)') AS inventory_type_code,
+        INVENTORY_DIVISION,
+        PRODUCT_ID,
+        PRODUCT_CATEGORY_NAME,
+        PRODUCT_VARIETY,
+        TOTAL_UNITS,
+        INVENTORY_ID
+    FROM PRODUCTION.ANALYTICS.INVENTORY_DETAILS
+    WHERE KS_FLAG = TRUE            -- Regla 1: fuera demo y test
+      AND TOTAL_UNITS > 0           -- proxy de "tiene existencia"
 ),
 
 -- ── 2. Corte por tipo de inventario ──────────────────────────────────────────
 por_tipo AS (
     SELECT
-        company_id,
-        company_name,
+        COMPANY_ID,
+        COMPANY_NAME,
         inventory_type_code,
         -- nombre que usa el JSON para cada código
         CASE inventory_type_code
@@ -83,11 +81,14 @@ por_tipo AS (
             WHEN 'S'       THEN 'standing_order'
             ELSE LOWER(inventory_type_code)
         END                                   AS bucket,
+        -- COUNT(*) reproduce el item_count del archivo anterior. Si se prefiere
+        -- contar ítems y no filas, INVENTORY_ID está disponible:
+        --   COUNT(DISTINCT INVENTORY_ID) AS item_count
         COUNT(*)                              AS item_count,
-        COUNT(DISTINCT product_id)            AS unique_products,
-        COUNT(DISTINCT category_name)         AS unique_categories,
-        COUNT(DISTINCT variety_name)          AS unique_varieties,
-        SUM(total_units)                      AS total_units
+        COUNT(DISTINCT PRODUCT_ID)            AS unique_products,
+        COUNT(DISTINCT PRODUCT_CATEGORY_NAME) AS unique_categories,
+        COUNT(DISTINCT PRODUCT_VARIETY)       AS unique_varieties,
+        SUM(TOTAL_UNITS)                      AS total_units
     FROM base
     GROUP BY 1, 2, 3, 4
 ),
@@ -95,14 +96,17 @@ por_tipo AS (
 -- ── 3. Corte por división ────────────────────────────────────────────────────
 por_division AS (
     SELECT
-        company_id,
-        company_name,
-        inventory_division,                   -- Boxes | Units | Hard Goods
+        COMPANY_ID,
+        COMPANY_NAME,
+        INVENTORY_DIVISION,                   -- Boxes | Units | Hard Goods
+        -- COUNT(*) reproduce el item_count del archivo anterior. Si se prefiere
+        -- contar ítems y no filas, INVENTORY_ID está disponible:
+        --   COUNT(DISTINCT INVENTORY_ID) AS item_count
         COUNT(*)                              AS item_count,
-        COUNT(DISTINCT product_id)            AS unique_products,
-        COUNT(DISTINCT category_name)         AS unique_categories,
-        COUNT(DISTINCT variety_name)          AS unique_varieties,
-        SUM(total_units)                      AS total_units
+        COUNT(DISTINCT PRODUCT_ID)            AS unique_products,
+        COUNT(DISTINCT PRODUCT_CATEGORY_NAME) AS unique_categories,
+        COUNT(DISTINCT PRODUCT_VARIETY)       AS unique_varieties,
+        SUM(TOTAL_UNITS)                      AS total_units
     FROM base
     GROUP BY 1, 2, 3
 )
@@ -111,7 +115,7 @@ por_division AS (
 -- `grouping` distingue las dos mitades para que el script que arma el JSON las
 -- separe sin tener que correr dos consultas.
 SELECT 'by_inventory_type' AS grouping,
-       company_id, company_name,
+       COMPANY_ID, COMPANY_NAME,
        bucket              AS bucket,
        inventory_type_code AS code,
        item_count, unique_products, unique_categories, unique_varieties, total_units
@@ -120,13 +124,13 @@ FROM por_tipo
 UNION ALL
 
 SELECT 'by_inventory_division',
-       company_id, company_name,
-       inventory_division,
+       COMPANY_ID, COMPANY_NAME,
+       INVENTORY_DIVISION,
        NULL,
        item_count, unique_products, unique_categories, unique_varieties, total_units
 FROM por_division
 
-ORDER BY company_id, grouping, bucket;
+ORDER BY COMPANY_ID, grouping, bucket;
 
 -- ============================================================================
 -- TOTALES DE RED (network_summary del JSON)
@@ -137,12 +141,12 @@ ORDER BY company_id, grouping, bucket;
 -- ============================================================================
 -- WITH base AS ( ...igual que arriba... )
 -- SELECT
---     COUNT(*)                        AS total_items,
---     COUNT(DISTINCT company_id)      AS total_companies,
---     COUNT(DISTINCT product_id)      AS total_unique_products,
---     COUNT(DISTINCT category_name)   AS total_unique_categories,
---     COUNT(DISTINCT variety_name)    AS total_unique_varieties,
---     SUM(total_units)                AS total_units
+--     COUNT(*)                              AS total_items,
+--     COUNT(DISTINCT COMPANY_ID)            AS total_companies,
+--     COUNT(DISTINCT PRODUCT_ID)            AS total_unique_products,
+--     COUNT(DISTINCT PRODUCT_CATEGORY_NAME) AS total_unique_categories,
+--     COUNT(DISTINCT PRODUCT_VARIETY)       AS total_unique_varieties,
+--     SUM(TOTAL_UNITS)                      AS total_units
 -- FROM base;
 --
 -- Referencia de la corrida 2026-08-06, para comparar cuando se re-extraiga:
