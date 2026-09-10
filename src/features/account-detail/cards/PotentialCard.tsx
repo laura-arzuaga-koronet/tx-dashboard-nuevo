@@ -24,14 +24,17 @@ function EvState({ state, label }: { state: string; label?: string }) {
  * A tautological penetration used to print "~100%", and the tilde was doing too
  * much work: read at a glance it looks like an account that moves everything
  * through us, when in fact the denominator is our own measurement and the ratio
- * could not have come out any other way. It is an identity, so the cell says so
- * instead of putting a number where a number is not an answer.
+ * could not have come out any other way.
+ *
+ * So the number stays — it is the honest 100% — and the badge says where it came
+ * from: calculated from what we measured, not compared against an outside
+ * estimate. Same shape as every other cell in the table: value on top, evidence
+ * state underneath.
  */
-function PenCell({ pct, tautological, why }: { pct: number | null; tautological: boolean; why: string }) {
+function PenCell({ pct, tautological }: { pct: number | null; tautological: boolean }) {
   if (!tautological) return <>{fmtPct(pct)}</>;
   return (
-    <><EvState state="tautological" label="identity" />
-      <div className="ev-note">{why}</div></>
+    <>{fmtPct(pct)}<br /><EvState state="tautological" label="Calculated measured" /></>
   );
 }
 
@@ -105,8 +108,7 @@ export function PotentialCard({ ev, sfdcTotals }: { ev: AccountEvidence; sfdcTot
                 ? <div className="ev-note">raised to what we measured in this window: the estimate sat below it</div>
                 : null}</>,
             fmtMoney(kSell, true),
-            <PenCell pct={sellPen} tautological={sellTautological}
-              why="the estimate is our own measurement — there is nothing independent to compare it against" />,
+            <PenCell pct={sellPen} tautological={sellTautological} />,
             fmtPct(sellOnline),
           ],
           [
@@ -120,8 +122,7 @@ export function PotentialCard({ ev, sfdcTotals }: { ev: AccountEvidence; sfdcTot
                 ? <div className="ev-note">raised to the buy measured in this window</div>
                 : null}</>,
             fmtMoney(kBuy, true),
-            <PenCell pct={buyPen} tautological={p.buy_penetration?.ev === 'tautological'}
-              why="the estimate IS the buy we measured: the 45% ratio came out below it" />,
+            <PenCell pct={buyPen} tautological={p.buy_penetration?.ev === 'tautological'} />,
             fmtPct(buyOnline),
           ],
         ]}
