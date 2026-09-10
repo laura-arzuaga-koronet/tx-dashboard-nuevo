@@ -160,27 +160,52 @@ describe('exclusiones de calidad de datos', () => {
   /* El bug: el Est GMV salía anual en los cuatro períodos, así que la columna
      no se movía con el selector y el take rate mezclaba unidades — fees de 8
      meses sobre flujo de 12. */
-  it('prorates Est GMV to the period and keeps the annual figure alongside', () => {
+  /* El bug original: el Est GMV salía anual en los cuatro períodos, así que la
+     columna no se movía con el selector y el take rate mezclaba unidades.
+     El prorrateo tiene dos reglas y hay que probar las dos por separado. */
+  it('prorates an external estimate flat, and keeps the annual figure alongside', () => {
     const ids = evidenceAdapter.getAllAccountIds()
-    const sum = (period: PeriodId, pick: 'value' | 'annual') => {
-      let t = 0
-      for (const id of ids) {
-        const g = evidenceAdapter.getAccountEvidence(id, period)?.potential?.gmv_reference
-        t += g?.[pick] ?? 0
+    // Solo estimados externos sin piso de período: ahí el reparto es anual × meses / 12.
+    const externos = (period: PeriodId) => ids.filter((id) => {
+      const g = evidenceAdapter.getAccountEvidence(id, period)?.potential?.gmv_reference
+      // is_floor también marca un estimado que ES nuestra medición, aunque el
+      // source diga otra cosa.
+      return g?.annual != null && g.annual > 0 && !g.unverified && !g.period_floored
+        && !g.is_floor && !/^(Medido|Piso)/.test(g.source ?? '')
+    })
+    const ratio = (period: PeriodId, esperado: number) => {
+      const muestra = externos(period)
+      expect(muestra.length).toBeGreaterThan(20)
+      for (const id of muestra) {
+        const g = evidenceAdapter.getAccountEvidence(id, period)!.potential!.gmv_reference
+        expect(g.value! / g.annual!).toBeCloseTo(esperado, 6)
       }
-      return t
     }
-    const annual = sum('l12m', 'annual')
-    expect(annual).toBeGreaterThan(0)
+    ratio('l12m', 1)
+    ratio('ytd', 8 / 12)
+    ratio('h1', 6 / 12)
+  })
 
-    // 12-month windows: factor 1. YTD through August: 8/12. H1: 6/12.
-    expect(sum('l12m', 'value')).toBeCloseTo(annual, -3)
-    expect(sum('ytd', 'value') / annual).toBeCloseTo(8 / 12, 3)
-    expect(sum('h1', 'value') / annual).toBeCloseTo(6 / 12, 3)
+  it('never lets the period estimate sit below what we measured in that window', () => {
+    // La regla del piso de red, aplicada a la ventana y no solo al año. Antes se
+    // topaba la penetración en 100% y el desacuerdo quedaba escondido: FreshLink
+    // arrastraba un estimado de $639 contra $3,92M medidos en 2025.
+    for (const period of ['ytd', 'h1', 'prev_year', 'l12m'] as PeriodId[]) {
+      for (const id of evidenceAdapter.getAllAccountIds()) {
+        const p = evidenceAdapter.getAccountEvidence(id, period)?.potential
+        const est = p?.gmv_reference.value, med = p?.koronet_sell_period.value
+        if (est == null || med == null) continue
+        expect(med).toBeLessThanOrEqual(est * 1.001)
+      }
+    }
+  })
 
-    // El anual NO se mueve con el período: es lo que segmenta el tamaño.
-    expect(sum('ytd', 'annual')).toBeCloseTo(annual, -3)
-    expect(sum('h1', 'annual')).toBeCloseTo(annual, -3)
+  it('keeps the annual figure invariant across periods', () => {
+    const anual = (period: PeriodId) => evidenceAdapter.getAllAccountIds()
+      .reduce((t, id) => t + (evidenceAdapter.getAccountEvidence(id, period)?.potential?.gmv_reference.annual ?? 0), 0)
+    const base = anual('l12m')
+    expect(base).toBeGreaterThan(0)
+    for (const p of ['ytd', 'h1', 'prev_year'] as PeriodId[]) expect(anual(p)).toBeCloseTo(base, -3)
   })
 
   it('keeps GMV bands stable across periods', () => {

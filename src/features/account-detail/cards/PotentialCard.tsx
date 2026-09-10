@@ -83,6 +83,9 @@ export function PotentialCard({ ev, sfdcTotals }: { ev: AccountEvidence; sfdcTot
                 ? <div className="ev-note">{fmtMoney(p.gmv_reference.annual, true)} annual, prorated to the period</div> : null}
               {p.gmv_reference?.unverified
                 ? <div className="ev-note">the sell cube measures {fmtMoney(p.gmv_reference.measured_annual, true)}/yr — the source claims to be our own measurement but does not match it</div>
+                : null}
+              {p.gmv_reference?.period_floored
+                ? <div className="ev-note">raised to what we measured in this window: the estimate sat below it</div>
                 : null}</>,
             fmtMoney(kSell, true),
             sellTautological ? '~100%' : fmtPct(sellPen),
@@ -94,7 +97,10 @@ export function PotentialCard({ ev, sfdcTotals }: { ev: AccountEvidence; sfdcTot
               state={estBuy ? (p.buy_gmv_estimated?.source === 'floor' ? 'observed' : 'model') : 'gap'}
               label={!estBuy ? 'gap'
                 : p.buy_gmv_estimated?.source === 'floor' ? 'Measured floor — exceeds the 45% ratio'
-                : 'Model — 45% ratio'} /></>,
+                : 'Model — 45% ratio'} />
+              {p.buy_gmv_estimated?.period_floored
+                ? <div className="ev-note">raised to the buy measured in this window</div>
+                : null}</>,
             fmtMoney(kBuy, true),
             p.buy_penetration?.ev === 'tautological' ? '~100%' : fmtPct(buyPen),
             fmtPct(buyOnline),

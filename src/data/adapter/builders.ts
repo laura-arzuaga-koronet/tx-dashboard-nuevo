@@ -302,13 +302,60 @@ export function buildPotential(companyId: string, period: Period): Potential {
     && Math.abs(annualizedSell - gmvRef) / gmvRef <= TAUTOLOGY_TOLERANCE;
   const estUnverified = claimsMeasured && !cubeAgrees;
 
+  /** The estimate IS our own measurement, and it checks out against the cube. */
+  const estIsMeasured = (gmvIsFloor || claimsMeasured) && !estUnverified;
+
+  /**
+   * Prorating the estimate to the period.
+   *
+   * For an estimate that comes from OUTSIDE our data (ORA, the external
+   * framework), a flat annual × months / 12 is all the source supports.
+   *
+   * But when the estimate IS our own measurement — a network floor, or a
+   * "Medido" that verified against the cube — a flat slice fights the very
+   * measurement it came from. The annual figure is computed over a FIXED
+   * trailing year so that account size does not move with the selector;
+   * slicing that evenly then understates any window where the account was
+   * busier than its yearly average, and is nonsense for a window in the past.
+   * Metropetals bought $466K in Jan–Aug 2026 against a prorated "estimate" of
+   * $371K — 126%, hidden behind the 100% cap — and a trailing-2026 floor
+   * applied to Full 2025 produced 613.066% for FreshLink, which stopped
+   * selling in 2026.
+   *
+   * So for a measured estimate, the period value IS the period measurement.
+   * `annual` keeps the fixed-window figure for the GMV bands. When the account
+   * measured nothing in the window we fall back to the flat slice, so the
+   * column still conveys scale instead of collapsing to $0.
+   */
+  const proratePeriod = (annual: number | null, measured: number | null, isMeasured: boolean): number | null => {
+    if (annual == null) return null;
+    if (isMeasured && measured && measured > 0) return measured;
+    const slice = annual * frac;
+    /* The "Piso de red" rule, applied to the WINDOW instead of only to the year:
+       an estimate can never sit below what we measured inside that same window.
+       Capping penetration at 100% instead used to bury the contradiction —
+       FreshLink carries a $639 estimate labelled "Medido" against $3.92M of
+       measured 2025 sell, and the table showed a tidy 100%. The floor rule
+       could not reach it because the account stopped selling in 2026, so the
+       fixed trailing year has no rows to annualize. */
+    return measured && measured > slice ? measured : slice;
+  };
+  const gmvRefPeriod = proratePeriod(gmvRef, koronetSell, estIsMeasured);
+  const buyGmvEstPeriod = proratePeriod(buyGmvEst, koronetBuy, buyEstSource === 'floor');
+  /** The window's own measurement had to raise the estimate: it was too low for this period. */
+  const sellPeriodFloored = !estIsMeasured && koronetSell != null && gmvRef != null
+    && koronetSell > gmvRef * frac;
+  const buyPeriodFloored = buyEstSource !== 'floor' && koronetBuy != null && buyGmvEst != null
+    && koronetBuy > buyGmvEst * frac;
+
   if (gmvRef && gmvRef > 0 && gmvSource !== 'not in Christine cascade' && gmvSource !== 'Sin dato') {
     const isTautological = claimsMeasured && cubeAgrees;
 
     if (koronetSell && koronetSell > 0) {
-      sellPenetration = isTautological ? 100 : (koronetSell / (gmvRef * frac)) * 100;
+      sellPenetration = isTautological ? 100 : (koronetSell / (gmvRefPeriod ?? gmvRef * frac)) * 100;
       sellPenEv = isTautological ? 'tautological' : estUnverified ? 'proxy' : gmvConfidence === 'Alta' ? 'model' : 'proxy';
-      sellPenNote = estUnverified ? `${gmvSource} — no verificado` : gmvSource;
+      sellPenNote = sellPeriodFloored ? `${gmvSource} — estimado por debajo de lo medido en el período`
+        : estUnverified ? `${gmvSource} — no verificado` : gmvSource;
     }
 
     if (buyGmvEst && buyGmvEst > 0 && koronetBuy && koronetBuy > 0) {
@@ -317,9 +364,10 @@ export function buildPotential(companyId: string, period: Period): Potential {
          como un 100% "logrado" con evidencia proxy invita a leerlo como un
          resultado cuando es una identidad. */
       const buyTaut = isTautological || sellPenEv === 'tautological' || buyEstSource === 'floor';
-      buyPenetration = buyTaut ? 100 : (koronetBuy / (buyGmvEst * frac)) * 100;
+      buyPenetration = buyTaut ? 100 : (koronetBuy / (buyGmvEstPeriod ?? buyGmvEst * frac)) * 100;
       buyPenEv = buyTaut ? 'tautological' : estUnverified ? 'proxy' : gmvConfidence === 'Alta' ? 'model' : 'proxy';
-      buyPenNote = estUnverified ? `${gmvSource} — no verificado` : gmvSource;
+      buyPenNote = buyPeriodFloored ? `${gmvSource} — estimado por debajo de lo comprado en el período`
+        : estUnverified ? `${gmvSource} — no verificado` : gmvSource;
     }
   }
 
@@ -330,11 +378,11 @@ export function buildPotential(companyId: string, period: Period): Potential {
   // Online % = online in the period / Est GMV of the period (same denominator as penetration)
   let sellOnlinePct: number | null = null;
   if (koronetSell && koronetSell > 0 && gmvRef && gmvRef > 0) {
-    sellOnlinePct = onlineSell > 0 ? (onlineSell / (gmvRef * frac)) * 100 : 0;
+    sellOnlinePct = onlineSell > 0 ? (onlineSell / (gmvRefPeriod ?? gmvRef * frac)) * 100 : 0;
   }
   let buyOnlinePct: number | null = null;
   if (koronetBuy && koronetBuy > 0 && buyGmvEst && buyGmvEst > 0) {
-    buyOnlinePct = onlineBuy > 0 ? (onlineBuy / (buyGmvEst * frac)) * 100 : 0;
+    buyOnlinePct = onlineBuy > 0 ? (onlineBuy / (buyGmvEstPeriod ?? buyGmvEst * frac)) * 100 : 0;
   }
   // online ⊂ total → online% ≤ penetration%
   if (sellOnlinePct != null && sellPenetration != null && sellOnlinePct > sellPenetration) sellOnlinePct = sellPenetration;
@@ -345,11 +393,6 @@ export function buildPotential(companyId: string, period: Period): Potential {
      move and was bounded by the fee rate itself. The denominator is now the
      account's whole addressable flow, so the number reads much lower — that is
      the point, not a regression. */
-  const gmvRefPeriod = gmvRef != null ? gmvRef * frac : null;
-  const buyGmvEstPeriod = buyGmvEst != null ? buyGmvEst * frac : null;
-  /** The estimate IS the sell cube — so it carries the cube's YoY movement. */
-  const estIsMeasured = gmvIsFloor || /^(Medido|Piso)/.test(gmvSource ?? '');
-
   /* Both sides of the take rate now span the same months: fees billed in the
      period over the flow estimated for that period. Against the annual
      denominator the YTD take rate came out 12/8 too low purely because of the
@@ -381,6 +424,8 @@ export function buildPotential(companyId: string, period: Period): Potential {
   const pen = (amount: number | null, denomAnnual: number | null): number | null =>
     amount == null || !denomAnnual || denomAnnual <= 0
       ? null : (amount / (denomAnnual * frac)) * 100;
+  /* La ventana anterior no tiene medición propia acá, así que conserva el
+     reparto plano: es el único denominador comparable entre las dos ventanas. */
   const priorSellPen = pen(sellPrior, gmvRef);
   let priorSellOnPct = pen(priorSellOnline, gmvRef);
   const priorBuyPen = pen(buyPrior, buyGmvEst);
@@ -477,11 +522,11 @@ export function buildPotential(companyId: string, period: Period): Potential {
   const daysObserved = paceRec ? num(paceRec.days_observed) : null;
 
   return {
-    gmv_reference: { value: gmvRefPeriod, annual: gmvRef, source: gmvSource, is_floor: gmvIsFloor, confidence: gmvConfidence, days_observed: daysObserved, unverified: estUnverified, measured_annual: annualizedSell },
+    gmv_reference: { value: gmvRefPeriod, annual: gmvRef, source: gmvSource, is_floor: gmvIsFloor, confidence: gmvConfidence, days_observed: daysObserved, unverified: estUnverified, measured_annual: annualizedSell, period_floored: sellPeriodFloored },
     gmv_pace: gmvPace,
     gmv_external: gmvExternal,
     gmv_ora: gmvOra,
-    buy_gmv_estimated: { value: buyGmvEstPeriod, annual: buyGmvEst, source: buyEstSource },
+    buy_gmv_estimated: { value: buyGmvEstPeriod, annual: buyGmvEst, source: buyEstSource, period_floored: buyPeriodFloored },
 
     koronet_sell_period: ev(koronetSell, koronetSell ? 'observed' : 'gap', 'sell cube'),
     koronet_buy_period: ev(koronetBuy, koronetBuy ? 'observed' : 'gap', 'buy cube'),

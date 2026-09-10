@@ -314,6 +314,9 @@ export interface GmvReference {
   unverified: boolean;
   /** What the sell cube actually measures over a fixed year, annualized. */
   measured_annual: number | null;
+  /** The estimate sat below what we measured inside the selected window, so the
+   *  window's own measurement replaced it. The estimate is wrong for this period. */
+  period_floored: boolean;
   source: string | null;
   is_floor: boolean;
   confidence: 'Alta' | 'Baja' | null;
@@ -337,6 +340,8 @@ export interface Potential {
     annual: number | null;
     /** 'ratio' = Est GMV × 0,45. 'floor' = lo reemplazó la compra medida, que era mayor. */
     source: 'ratio' | 'floor' | null;
+    /** La compra medida del período superaba al estimado prorrateado. */
+    period_floored: boolean;
   };
 
   /** Koronet sell / buy GMV inside the selected period. */
