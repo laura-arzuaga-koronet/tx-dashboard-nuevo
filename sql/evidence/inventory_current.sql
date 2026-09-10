@@ -2,8 +2,8 @@
 -- inventory_current  →  reemplaza public/data/inventory_current_v1.json
 -- Grano  : company × inventory_type × inventory_division
 -- Fuente : PRODUCTION.ANALYTICS.INVENTORY_DETAILS
--- Estado : ⛔ NO EJECUTABLE DESDE EL MCP DE CORTEX — ver nota abajo.
---          Referencia lista para correr con acceso directo a Snowflake.
+-- Estado : ✅ CORRIDA A MANO EL 2026-09-10 — el JSON del repo sale de esta consulta.
+--          ⛔ No ejecutable desde el MCP de Cortex — ver nota abajo.
 -- ----------------------------------------------------------------------------
 -- POR QUÉ NO SE PUEDE EJECUTAR DESDE ACÁ
 --
@@ -153,6 +153,12 @@ ORDER BY COMPANY_ID, grouping, bucket;
 --   total_items 6.702.426 · companies 436 · products 174.970
 --   categories 2.995 · varieties 49.763 · units 8.338.020.120
 --
+-- Corrida 2026-09-10 (consulta 1; la de totales todavía no se corrió):
+--   total_items 6.801.539 (+1,5%) · companies 439 (+3) · units 8.347.816.951
+--   Los dos cortes cuadran ítem por ítem, así que no hubo truncado.
+--   products/categories/varieties quedaron en null en el JSON hasta que se corra
+--   esta segunda consulta: no se pueden sumar desde el corte por empresa.
+--
 -- ============================================================================
 -- CÓMO ARMAR EL JSON DESPUÉS
 --
@@ -166,8 +172,14 @@ ORDER BY COMPANY_ID, grouping, bucket;
 --     by_inventory_division: { Boxes: {item_count, ...}, Units: {...} },
 --     totals:                { total_items, total_units, note } }
 --
--- Guardar el result set como JSON {columns, data} y pasarlo por un script
--- equivalente a scripts/rebuild_config_evidence.py. Acordarse de escribir
--- `_metadata.generated_at`: la falta de fecha en accounts_v3 fue justo lo que
--- dejó pasar meses de desfase sin que nadie lo notara.
+-- Ya está hecho: scripts/rebuild_inventory.py toma el result set (CSV o JSON) y
+-- escribe el archivo con su `_metadata.generated_at` — la falta de fecha en
+-- accounts_v3 fue justo lo que dejó pasar meses de desfase sin que nadie lo
+-- notara.
+--
+--   python3 scripts/rebuild_inventory.py --csv inventory.json [--totales tot.csv]
+--
+-- La exportación del worksheet manda los números como texto con separador de
+-- miles, COMPANY_ID incluido ("1,241"). El script lo normaliza; cualquier otro
+-- consumidor tiene que hacer lo mismo o el id no matchea con accounts_v3.
 -- ============================================================================
