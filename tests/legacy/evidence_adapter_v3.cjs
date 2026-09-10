@@ -1426,6 +1426,15 @@
       return { kind: 'gap', note: 'no data' };
     }
 
+    /* Último mes con venta en TODO el cubo, para distinguir "dejó de vender" de
+       "no sabemos". Una cuenta que facturó hasta diciembre y nada en el período
+       es un cero con historia, no un hueco de datos. */
+    var _mesesConVenta = sellRows.filter(function (r) { return (_num(r.sell_gmv) || 0) > 0; })
+      .map(function (r) { return r.month; }).sort();
+    var lastSellMonth = _mesesConVenta.length ? _mesesConVenta[_mesesConVenta.length - 1] : null;
+    var _win = _timeframeRange(timeframe);
+    var churned = lastSellMonth != null && lastSellMonth < _win.from;
+
     var reasons = {
       gmv_reference: _why(gmvRef, [
         [gmvSource === 'No vende (Koronet)', 'cero', 'does not sell through Koronet'],
@@ -1433,10 +1442,16 @@
       ]),
       koronet_sell_ytd: _why(koronetSellYtd, [
         [!estaLive, 'cero', 'not live yet'],
+        /* La cascada ya resolvió que no vende por Koronet: el cero es su
+           consecuencia, no un dato faltante. */
+        [gmvSource === 'No vende (Koronet)', 'cero', 'the Est GMV cascade records it as not selling through Koronet'],
+        /* Procurement compra por Koronet y no vende: no hay lado de venta. */
+        [acct.product_tier === 'Procurement', 'cero', 'Procurement tier: it buys through Koronet, it does not sell'],
         /* Sus filas de venta existen, pero el cliente es la propia empresa: son
            compras suyas espejadas en la tabla de ventas. Cero real, no hueco —
            sin este caso, 37 cuentas del portafolio se leían como "falta dato". */
         [(sellAgg && sellAgg.self_sale > 0), 'cero', 'its «sales» are its own purchases mirrored (self-sale): it does not sell through Koronet'],
+        [churned, 'cero', 'last sale ' + lastSellMonth + ' — nothing in this period'],
         [true, 'gap', 'live but no sales in the period']
       ]),
       koronet_buy_ytd: _why(koronetBuyYtd, [

@@ -470,6 +470,16 @@ export function buildPotential(companyId: string, period: Period): Potential {
   /* Why a metric is empty. "$0" and "no data" read the same in a table and are
      very different decisions: an account with no online sales genuinely earns
      no fee, and that is not a gap. */
+  /* Último mes con venta en TODO el cubo, para distinguir "dejó de vender" de
+     "no sabemos". Una cuenta que facturó hasta diciembre y nada en el período
+     es un cero con historia, no un hueco de datos: lo que hay que revisar es
+     por qué paró, no si falta la fila. */
+  const lastSellMonth = sellRows
+    .filter((r) => (num(r.sell_gmv) ?? 0) > 0)
+    .map((r) => r.month)
+    .sort()
+    .pop() ?? null;
+  const churned = lastSellMonth != null && lastSellMonth < period.from;
   const cfgConf = (store.config[companyId]?.config ?? {}) as Record<string, unknown>;
   const feesAllOff = cfgConf.ecommerce_fee === false && cfgConf.k2k_fee === false && cfgConf.api_fee === false;
   const isK2kBuyer = indirectRows.length > 0;
@@ -486,10 +496,16 @@ export function buildPotential(companyId: string, period: Period): Potential {
     ]),
     koronet_sell_period: why(koronetSell, [
       [!isLive, 'cero', 'not live yet'],
+      /* La cascada de Est GMV ya resolvió que esta cuenta no vende por Koronet;
+         el cero de la columna de venta es su consecuencia, no un dato faltante. */
+      [gmvSource === 'No vende (Koronet)', 'cero', 'the Est GMV cascade records it as not selling through Koronet'],
+      /* Procurement compra por Koronet y no vende: no tiene lado de venta que medir. */
+      [acct.product_tier === 'Procurement', 'cero', 'Procurement tier: it buys through Koronet, it does not sell'],
       /* Sus filas de venta existen, pero el cliente es la propia empresa: son
          compras suyas espejadas en la tabla de ventas. Cero real, no hueco —
          sin este caso, 37 cuentas del portafolio se leían como "falta dato". */
       [(sellAgg?.selfSale ?? 0) > 0, 'cero', 'its «sales» are its own purchases mirrored (self-sale): it does not sell through Koronet'],
+      [churned, 'cero', `last sale ${lastSellMonth} — nothing in this period`],
       [true, 'gap', 'live but no sales in the period'],
     ]),
     koronet_buy_period: why(koronetBuy, [
