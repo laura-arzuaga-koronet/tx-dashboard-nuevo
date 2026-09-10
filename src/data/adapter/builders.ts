@@ -806,6 +806,7 @@ export function buildList(companyId: string): ListDomain {
     : null;
 
   return {
+    freshness_benchmark: store.freshnessBenchmark,
     inventory_current: inventoryCurrent ? ev(inventoryCurrent, 'observed', 'inventory_current_v1') : null,
     variety_freshness: varietyFreshness ? ev(varietyFreshness, 'observed', 'temporal variety_freshness') : null,
     forward_inventory: forwardInventory ? ev(forwardInventory, 'observed', 'temporal forward_inventory_depth') : null,

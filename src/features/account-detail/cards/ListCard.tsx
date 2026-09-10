@@ -22,6 +22,7 @@ import type { ReactNode } from 'react';
 import type { AccountEvidence, FreshnessGroup, LooseRecord } from '../../../data/adapter/types';
 import { evValue, fmtInt, fmtMoney, fmtPct } from '../../../domain/format';
 import { CardFocus, CardGap, CardNext, CardSection, CardTable, EvidenceCard } from '../EvidenceCard';
+import { CatalogReachTable } from './CatalogReachTable';
 
 /** Buckets as the temporal cube emits them, freshest first. */
 const FRESHNESS_BUCKETS = ['0-30d', '31-60d', '61-90d', '91-120d', '121-180d', '180d+'] as const;
@@ -132,6 +133,11 @@ function share(part: number, total: number): number | null {
 export function ListCard({ ev }: { ev: AccountEvidence }) {
   const list = ev.list;
   const p = ev.potential;
+  /* La comparación "online vs what they sell" vive acá y no en SELL: pregunta
+     por la VISIBILIDAD del catálogo, que es de lo que trata esta tarjeta.
+     SELL responde por la demanda — compradores, GMV, conversión. Es también
+     donde la tiene el dashboard legacy, y el equipo ya la busca en la card 4. */
+  const reach = ev.sell?.catalog_reach?.value ?? null;
 
   if (!list) {
     return (
@@ -192,6 +198,10 @@ export function ListCard({ ev }: { ev: AccountEvidence }) {
   const totalUnits = num(inventory?.totals, 'total_units');
 
   /* ── Frescura de variedades ── */
+  /* La comparación de frescura suma dos columnas de referencia: la mediana de
+     la red y el techo del rango — la cuenta más fresca con catálogo comparable.
+     Sin ellas un "24% del catálogo a 121-180d" no se sabe si está bien o mal. */
+  const bench = list.freshness_benchmark;
   const freshnessRows = freshness && (freshness.online || freshness.offline)
     ? FRESHNESS_BUCKETS.map((b) => {
         const on = freshness.online ? bucketCount(freshness.online, b) : 0;
@@ -200,6 +210,8 @@ export function ListCard({ ev }: { ev: AccountEvidence }) {
           b,
           freshness.online ? `${fmtInt(on)} (${fmtPct(share(on, freshness.online.total_varieties), 0)})` : '—',
           freshness.offline ? `${fmtInt(off)} (${fmtPct(share(off, freshness.offline.total_varieties), 0)})` : '—',
+          bench ? fmtPct(bench.median[b] ?? null, 0) : '—',
+          bench ? fmtPct(bench.best.shares[b] ?? null, 0) : '—',
         ];
       })
     : [];
@@ -267,6 +279,8 @@ export function ListCard({ ev }: { ev: AccountEvidence }) {
     <EvidenceCard label="Card 4 · LIST" headline={headline}>
       <CardFocus><strong>Focus:</strong> {focus}</CardFocus>
 
+      {reach ? <CatalogReachTable reach={reach} side="sell" /> : null}
+
       {typeRows.length || divisionRows.length ? (
         <CardSection
           title={`Published inventory — what is available, and how it is offered${
@@ -300,12 +314,23 @@ export function ListCard({ ev }: { ev: AccountEvidence }) {
 
       {freshnessRows.length ? (
         <CardSection title="Variety freshness — when each variety last sold">
-          <CardTable head={['Age', 'Online (varieties)', 'Offline (varieties)']} rows={freshnessRows} />
+          <CardTable
+            head={['Age', 'Online (varieties)', 'Offline (varieties)', 'Network median', 'Top of range']}
+            rows={freshnessRows}
+          />
           <CardGap>
             {fmtInt(onlineVar)} online varieties vs {fmtInt(offlineVar)} offline
             {varietyGap ? ` — ${fmtInt(varietyGap)} gap` : ''}.
             {staleOnline != null ? ` ${fmtPct(staleOnline, 0)} of the online catalog has gone 90+ days without selling` : ''}
             {staleOffline != null ? `, ${fmtPct(staleOffline, 0)} of the offline one` : ''}.
+            {bench ? (
+              <> Top of range is {bench.best.company_name ?? bench.best.company_id}:{' '}
+                {fmtPct((bench.best.shares['0-30d'] ?? 0) + (bench.best.shares['31-60d'] ?? 0), 0)} of its
+                online catalog sold in the last 60 days, over {fmtInt(bench.best.total_varieties)} varieties.
+                Median and ceiling are computed over the {bench.n} accounts with{' '}
+                {bench.min_varieties}+ online varieties — below that the split is decided by a handful
+                of varieties and the &ldquo;best&rdquo; is a fluke, not a target.</>
+            ) : null}
           </CardGap>
         </CardSection>
       ) : null}

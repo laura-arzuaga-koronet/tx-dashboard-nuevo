@@ -991,6 +991,7 @@
       });
 
       _buildLookups();
+      _freshnessBenchmark = _buildFreshnessBenchmark();
       _state.loaded = true;
     });
 
@@ -1776,6 +1777,60 @@
     return _ev(out, 'observed', side === 'sell' ? 'SALES_SV catalog reach' : 'PROCUREMENTS_SV catalog reach');
   }
 
+  /* ── BENCHMARK DE FRESCURA ───────────────────────────────────────────────
+     Mediana de la red por bucket y el techo del rango (la cuenta más fresca).
+     Solo sobre cuentas con 100+ variedades online: por debajo de eso gana
+     siempre alguna con tres variedades y una venta reciente. */
+  var FRESHNESS_BUCKETS_BM = ['0-30d', '31-60d', '61-90d', '91-120d', '121-180d', '180d+'];
+  var FRESHNESS_MIN_VARIETIES = 100;
+  var _freshnessBenchmark = null;
+
+  function _median(xs) {
+    if (!xs.length) return null;
+    var s = xs.slice().sort(function (a, b) { return a - b; });
+    var m = Math.floor(s.length / 2);
+    return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2;
+  }
+
+  function _buildFreshnessBenchmark() {
+    var rows = (_state.temporal && _state.temporal.variety_freshness) ? _state.temporal.variety_freshness.data : null;
+    if (!rows || !rows.length) return null;
+    var by = {};
+    rows.forEach(function (r) {
+      if (r.channel_type !== 'online') return;
+      var id = _sid(r.company_id);
+      var b = typeof r.freshness_bucket === 'string' ? r.freshness_bucket : null;
+      if (!id || !b) return;
+      var c = by[id] || (by[id] = { name: r.company_name || null, buckets: {}, total: 0 });
+      var n = Number(r.variety_count) || 0;
+      c.buckets[b] = (c.buckets[b] || 0) + n;
+      c.total += n;
+    });
+    var elig = Object.keys(by).filter(function (k) { return by[k].total >= FRESHNESS_MIN_VARIETIES; });
+    if (!elig.length) return null;
+
+    var medians = {};
+    FRESHNESS_BUCKETS_BM.forEach(function (b) {
+      var m = _median(elig.map(function (k) { return (by[k].buckets[b] || 0) / by[k].total * 100; }));
+      if (m != null) medians[b] = Math.round(m * 10) / 10;
+    });
+
+    var fresh = function (c) { return ((c.buckets['0-30d'] || 0) + (c.buckets['31-60d'] || 0)) / c.total; };
+    var bestId = elig.reduce(function (a, b) { return fresh(by[b]) > fresh(by[a]) ? b : a; });
+    var best = by[bestId];
+    var shares = {};
+    FRESHNESS_BUCKETS_BM.forEach(function (b) {
+      shares[b] = Math.round((best.buckets[b] || 0) / best.total * 1000) / 10;
+    });
+
+    return {
+      median: medians,
+      best: { company_id: bestId, company_name: best.name, shares: shares, total_varieties: best.total },
+      n: elig.length,
+      min_varieties: FRESHNESS_MIN_VARIETIES,
+    };
+  }
+
   /** LIST DOMAIN — inventory, variety freshness, config (from V2) */
   function _buildList(companyId) {
     var id   = _sid(companyId);
@@ -1849,6 +1904,7 @@
     }
 
     return {
+      freshness_benchmark: _freshnessBenchmark,
       inventory_current: inventoryCurrent ? _ev(inventoryCurrent, 'observed', 'inventory_current_v1') : null,
       variety_freshness: varietyFreshness  ? _ev(varietyFreshness, 'observed', 'temporal variety_freshness') : null,
       forward_inventory: forwardInventory ? _ev(forwardInventory, 'observed', 'temporal forward_inventory_depth') : null,

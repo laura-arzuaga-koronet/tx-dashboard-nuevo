@@ -38,6 +38,9 @@ function VsNetwork({ dim }: { dim: CatalogDim }) {
 }
 
 export function CatalogReachTable({ reach, side }: { reach: CatalogReach; side: 'sell' | 'buy' }) {
+  /* El título es el del dashboard legacy — "online vs what they sell" — porque
+     es como el equipo ya llama a esta comparación. Lo que cambia adentro es la
+     aritmética del gap, no la pregunta. */
   const rows: [string, CatalogDim][] = [
     ['Categories', reach.categories],
     ['Varieties', reach.varieties],
@@ -53,7 +56,9 @@ export function CatalogReachTable({ reach, side }: { reach: CatalogReach; side: 
   const shallow = cats != null && skus != null && cats - skus >= 25 && cats >= 50;
 
   return (
-    <CardSection title={`Catalog reach · ${verb} through an online channel · ${reach.window}`}>
+    <CardSection
+      title={`Online vs what they ${side === 'sell' ? 'sell' : 'buy'} · ${verb} through an online channel · ${reach.window}`}
+    >
       <CardTable
         head={['', 'Total', 'Online', 'Offline-only', 'Coverage', 'Network median']}
         rows={rows.map(([label, d]) => [

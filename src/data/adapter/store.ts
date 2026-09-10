@@ -7,6 +7,7 @@
 import { DATA_FILES, EXCLUDED_COMPANY_IDS, fetchJson, isBadCubeRow } from './files';
 import { sid } from './helpers';
 import type {
+  FreshnessBenchmark,
   Benchmark,
   BenchmarksFile,
   BuyCubeRow,
@@ -55,6 +56,13 @@ export interface AdapterStore {
   config: Record<string, LooseRecord>;
   hardgoods: LooseRecord[];
   skusOnlineOffline: Record<string, LooseRecord>;
+  /**
+   * Referencia de red para la frescura del catálogo online: la mediana por
+   * bucket y la cuenta que está en el techo del rango. Se calcula una sola vez
+   * al cargar, sobre cuentas con 100+ variedades online — por debajo de eso el
+   * reparto lo decide un puñado de variedades y el "mejor" es una casualidad.
+   */
+  freshnessBenchmark: FreshnessBenchmark | null;
   /** Fecha de corrida de inventory_current_v1: es una FOTO, no sigue el selector. */
   inventoryAsOf: string | null;
   /** catalog_reach_v1: alcance online del catálogo por company_id, ventana fija. */
@@ -95,7 +103,7 @@ function emptyStore(): AdapterStore {
   return {
     loaded: false,
     accountsV3: [], sellCube: [], buyCube: [], feesCube: [], gmvPacing: [], gmvExternal: [],
-    buyers: {}, vendors: [], temporal: {}, inventory: {}, benchmarks: {}, config: {}, hardgoods: [], skusOnlineOffline: {}, catalogReach: {}, catalogNetwork: null, inventoryAsOf: null,
+    buyers: {}, vendors: [], temporal: {}, inventory: {}, benchmarks: {}, config: {}, hardgoods: [], skusOnlineOffline: {}, catalogReach: {}, catalogNetwork: null, inventoryAsOf: null, freshnessBenchmark: null,
     cubeMeta: { sell: null, buy: null, fees: null },
     coverage: { sell: null, buy: null, fees: null, indirect: null },
     accountById: {}, idToName: {}, nameToId: {},
@@ -207,6 +215,65 @@ function pushTo<T>(map: Record<string, T[]>, key: string, row: T) {
   (map[key] ??= []).push(row);
 }
 
+/** Buckets de frescura, del más fresco al más viejo. */
+const FRESHNESS_BUCKETS = ['0-30d', '31-60d', '61-90d', '91-120d', '121-180d', '180d+'];
+/** Por debajo de esto el reparto por bucket lo decide un puñado de variedades. */
+const FRESHNESS_MIN_VARIETIES = 100;
+
+function median(xs: number[]): number | null {
+  if (!xs.length) return null;
+  const s = [...xs].sort((a, b) => a - b);
+  const m = Math.floor(s.length / 2);
+  return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2;
+}
+
+/**
+ * Referencia de red para la frescura del catálogo online.
+ *
+ * `best` es literalmente el techo del rango: la cuenta con mayor proporción de
+ * su catálogo vendida en los últimos 60 días. Se limita a cuentas con 100+
+ * variedades porque si no gana siempre alguna con tres variedades y una venta
+ * reciente, que no es un objetivo sino ruido.
+ */
+function buildFreshnessBenchmark(): FreshnessBenchmark | null {
+  const rows = store.temporal.variety_freshness?.data;
+  if (!Array.isArray(rows) || !rows.length) return null;
+
+  const byCompany: Record<string, { name: string | null; buckets: Record<string, number>; total: number }> = {};
+  for (const r of rows) {
+    if (r.channel_type !== 'online') continue;
+    const id = sid(r.company_id);
+    const bucket = typeof r.freshness_bucket === 'string' ? r.freshness_bucket : null;
+    if (!id || !bucket) continue;
+    const n = Number(r.variety_count) || 0;
+    const c = byCompany[id] ?? (byCompany[id] = { name: r.company_name ?? null, buckets: {}, total: 0 });
+    c.buckets[bucket] = (c.buckets[bucket] ?? 0) + n;
+    c.total += n;
+  }
+
+  const eligible = Object.entries(byCompany).filter(([, c]) => c.total >= FRESHNESS_MIN_VARIETIES);
+  if (!eligible.length) return null;
+
+  const medians: Record<string, number> = {};
+  for (const b of FRESHNESS_BUCKETS) {
+    const m = median(eligible.map(([, c]) => ((c.buckets[b] ?? 0) / c.total) * 100));
+    if (m != null) medians[b] = Math.round(m * 10) / 10;
+  }
+
+  const fresh = (c: { buckets: Record<string, number>; total: number }) =>
+    ((c.buckets['0-30d'] ?? 0) + (c.buckets['31-60d'] ?? 0)) / c.total;
+  const [bestId, best] = eligible.reduce((a, b) => (fresh(b[1]) > fresh(a[1]) ? b : a));
+  const bestShares: Record<string, number> = {};
+  for (const b of FRESHNESS_BUCKETS) bestShares[b] = Math.round(((best.buckets[b] ?? 0) / best.total) * 1000) / 10;
+
+  return {
+    median: medians,
+    best: { company_id: bestId, company_name: best.name, shares: bestShares, total_varieties: best.total },
+    n: eligible.length,
+    min_varieties: FRESHNESS_MIN_VARIETIES,
+  };
+}
+
 function buildLookups(): void {
   // accounts_v3 → accountById / idToName / nameToId
   for (const rec of store.accountsV3) {
@@ -267,4 +334,5 @@ function buildLookups(): void {
   indexTemporal(store.temporal.sell_anticipation?.data, store.temporalSAByName, store.temporalSAById);
   indexTemporal(store.temporal.variety_freshness?.data, store.temporalVFByName, store.temporalVFById);
   indexTemporal(store.temporal.forward_inventory_depth?.data, store.temporalFIByName, store.temporalFIById);
+  store.freshnessBenchmark = buildFreshnessBenchmark();
 }

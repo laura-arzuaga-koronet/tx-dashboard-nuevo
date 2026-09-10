@@ -235,6 +235,21 @@ export interface TemporalFile {
  * lo que dejó 4.014 cuentas sin config), y `network` trae los percentiles de
  * cobertura de toda la red para poder comparar cada cuenta contra la mediana.
  */
+/** Referencia de red para la frescura del catálogo online. */
+export interface FreshnessBenchmark {
+  /** % mediano de variedades en cada bucket, sobre las cuentas elegibles. */
+  median: Record<string, number>;
+  /** El techo del rango: la cuenta más fresca que supera el mínimo de variedades. */
+  best: {
+    company_id: string;
+    company_name: string | null;
+    shares: Record<string, number>;
+    total_varieties: number;
+  };
+  n: number;
+  min_varieties: number;
+}
+
 export interface CatalogReachFile {
   _metadata?: LooseRecord;
   network?: LooseRecord;
@@ -468,6 +483,7 @@ export interface VarietyFreshness {
 }
 
 export interface ListDomain {
+  freshness_benchmark: FreshnessBenchmark | null;
   inventory_current: Ev<{ by_type: unknown; by_division: unknown; totals: unknown;
     /** Fecha de la foto: el inventario no sigue el selector de período. */
     as_of: string | null; ev: EvidenceState }> | null;
