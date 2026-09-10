@@ -7,6 +7,7 @@
 import { DATA_FILES, EXCLUDED_COMPANY_IDS, fetchJson, isBadCubeRow } from './files';
 import { sid } from './helpers';
 import type {
+  CatalogReachFile,
   FreshnessBenchmark,
   Benchmark,
   BenchmarksFile,
@@ -169,10 +170,10 @@ export function loadAll(fetcher: JsonFetcher = fetchJson): Promise<void> {
     store.vendors = Array.isArray(vendors?.companies) ? vendors.companies : [];
     store.temporal = temporal ?? {};
     store.inventory = inventory?.companies ?? {};
-    store.inventoryAsOf = typeof (inventory as { _metadata?: { generated_at?: unknown } } | undefined)
-      ?._metadata?.generated_at === 'string'
-      ? ((inventory as { _metadata: { generated_at: string } })._metadata.generated_at).slice(0, 10)
-      : null;
+    /* La fecha de la foto: `_metadata` viene tipado como Record<string, unknown>,
+       así que se lee el campo y se comprueba que sea texto antes de recortarlo. */
+    const invGeneratedAt = inventory?._metadata?.generated_at;
+    store.inventoryAsOf = typeof invGeneratedAt === 'string' ? invGeneratedAt.slice(0, 10) : null;
     store.benchmarks = benchmarks?.benchmarks ?? {};
     store.config = config?.companies ?? {};
     store.hardgoods = Array.isArray(hardgoods?.companies) ? hardgoods.companies : [];

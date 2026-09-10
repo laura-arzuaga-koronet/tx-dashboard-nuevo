@@ -37,6 +37,7 @@ import type {
   CatalogReach,
   BuyersTable,
   ConfigEvidence,
+  Ev,
   EvidenceState,
   Freshness,
   FreshnessGroup,
