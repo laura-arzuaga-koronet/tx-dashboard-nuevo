@@ -16,16 +16,17 @@ dashboard tome datos de Snowflake / Salesforce (vía Lovable + Supabase). El obj
 | `temporal_evidence_v2.json` · sell_anticipation | `evidence/temporal_sell_anticipation.sql` | `SALE_DETAILS` | ⏳ Pegar |
 | `temporal_evidence_v2.json` · variety_freshness | `evidence/temporal_variety_freshness.sql` | `SALE_DETAILS` | ⏳ Pegar |
 | `temporal_evidence_v2.json` · forward_inventory_depth | `evidence/temporal_forward_inventory.sql` | `PREBOOK_DETAILS` | ⏳ Pegar |
-| `inventory_current_v1.json` | `evidence/inventory_current.sql` | `INVENTORY_DETAILS` | ⏳ Pegar |
-| `config_evidence_v2.json` | `evidence/config_evidence.sql` | `COMPANIES_SV` + `SALES_SV` | ⏳ Pegar |
-| `hardgoods_v2.json` | `evidence/hardgoods.sql` | `SALES_SV` | ⏳ Pegar |
+| `inventory_current_v1.json` | `evidence/inventory_current.sql` | `INVENTORY_DETAILS` | ⛔ **Bloqueado**: no hay vista semántica de inventario en el MCP de Cortex, y `sql_exec_tool` no ejecuta contra tablas base. Requiere acceso directo. Archivo del 2026-08-06 |
+| `config_evidence_v2.json` | `evidence/config_evidence.sql` | `COMPANIES` + `COMPANY_SETTINGS` + `SALES_SV` | ✅ **Re-extraído 2026-09-10** vía `scripts/rebuild_config_evidence.py`. Ojo: las tarifas están en `COMPANIES`, no en `COMPANIES_SV`; maxAge y future-sales están en `COMPANY_SETTINGS` como pares nombre/valor **en camelCase** |
+| `hardgoods_v2.json` | `evidence/hardgoods.sql` | `SALES_SV` | ⚠ **Re-extraído parcial 2026-09-10** vía `scripts/rebuild_hardgoods.py`. `inventory_division` solo tiene Boxes/Units/Hard Goods: los bloques de **plants** se preservaron del archivo viejo |
 | `skus_online_offline.json` | `evidence/skus_online_offline.sql` | `SALE_DETAILS` | ⏳ Pegar |
-| `gmv_pacing.json` | `evidence/gmv_pacing.sql` | derivado de sell_monthly | ✅ Borrador (CTE) |
-| `benchmarks_v2.json` | `evidence/benchmarks.sql` | derivado | 📝 Decisión: SQL vs adapter |
+| `gmv_pacing.json` | `evidence/gmv_pacing.sql` | derivado de sell_monthly | ✅ **Regenerado 2026-09-10** vía `scripts/rebuild_derived.py` (no necesita Snowflake) |
+| `benchmarks_v2.json` | `evidence/benchmarks.sql` | derivado | ✅ **Regenerado 2026-09-10** vía `scripts/rebuild_derived.py`. Cohorte = toda la red (no el portafolio): restringirla subía la mediana de online % de 13% a 100% |
 | `sfdc_open_opportunities_v1.json` | `salesforce/open_opportunities.soql` | Salesforce `Opportunity` | ✅ Lista |
 | `accounts_v3.json` (columnas de sistema) | `salesforce/accounts_system_fields.soql` | Salesforce `Account` + `COMPANIES` | 📝 Borrador — confirmar join key |
 | `accounts_v3.json` (columnas manuales) | `manual/schema.sql` → `tx_account_overrides` | Hoja de Christine + criterio humano | ✅ Esquema listo · seed pendiente |
-| `gmv_estimates_external.json` | `manual/schema.sql` → `tx_gmv_estimates_external` | Investigación externa | ✅ Esquema listo · seed pendiente |
+| `accounts_v3.json` (cascada de Est GMV) | `scripts/rebuild_accounts_gmv.py` | cubo de sell | ✅ **Recalculado 2026-09-10**. La definición de "Medido" quedó explícita en el script: no era reproducible desde el archivo viejo |
+| `gmv_estimates_external.json` | `manual/schema.sql` → `tx_gmv_estimates_external` | Investigación externa | 🚫 **No re-extraíble**: es investigación manual (headcount, ubicaciones, revenue de agregadores), no sale de Snowflake. Solo se renueva rehaciendo la investigación |
 | IDs excluidos (hardcoded) | `manual/schema.sql` → `tx_excluded_company_ids` | — | ✅ Con datos |
 
 ## Reglas del modelo (aplican a toda query)
