@@ -1,0 +1,118 @@
+# Refresco diario de los datos del dashboard.
+#
+# BORRADOR: no corre hasta que existan los secrets de Snowflake. Ver
+# docs/automatizacion.md para qué pedir y a quién.
+#
+# La cadena es: extraer → reconstruir → validar → correr los tests CONTRA los
+# datos nuevos → recién ahí publicar. El paso de tests es el que hace que esto
+# sea seguro: adapter.periods.test.ts cruza cada período contra sumas crudas de
+# los cubos y adapter.parity.test.ts corre el adapter entero sobre las ~4.000
+# cuentas. Si la extracción salió mal, el deploy no ocurre.
+name: Refresh data
+
+on:
+  schedule:
+    # 10:00 UTC de lunes a viernes ≈ 6:00 en Miami. Diario alcanza: los cubos
+    # son mensuales y lo único que se mueve a diario es el mes en curso, que
+    # además sigue reexpresándose (~7% de crecimiento medido en julio entre dos
+    # extracciones). Cada 5 minutos solo agregaría ruido y costo de warehouse.
+    - cron: '0 10 * * 1-5'
+  workflow_dispatch:
+    inputs:
+      publicar:
+        description: 'pr = abre PR con el diff · directo = commitea a main'
+        type: choice
+        options: [pr, directo]
+        default: pr
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: refresh-data
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      # Copia de los datos actuales: es la base contra la que valida el paso 4.
+      - name: Guardar la versión anterior
+        run: cp -r public/data /tmp/base
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install 'snowflake-connector-python[secure-local-storage]'
+
+      - name: 1 · Extraer de Snowflake
+        env:
+          SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+          SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
+          SNOWFLAKE_ROLE: ${{ secrets.SNOWFLAKE_ROLE }}
+          SNOWFLAKE_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
+          SNOWFLAKE_PRIVATE_KEY: ${{ secrets.SNOWFLAKE_PRIVATE_KEY }}
+          SNOWFLAKE_PRIVATE_KEY_PASSPHRASE: ${{ secrets.SNOWFLAKE_PRIVATE_KEY_PASSPHRASE }}
+        run: python3 scripts/extract_snowflake.py --out /tmp/staging
+
+      - name: 2 · Reconstruir los JSON
+        run: |
+          python3 scripts/rebuild_catalog_reach.py --sell /tmp/staging/catalog_sell.json \
+                                                   --buy  /tmp/staging/catalog_buy.json
+          python3 scripts/rebuild_inventory.py --csv /tmp/staging/inventory.json
+          python3 scripts/rebuild_accounts_gmv.py
+          python3 scripts/rebuild_derived.py
+
+      - name: 3 · Validar contra la corrida anterior
+        run: python3 scripts/validate_data.py --nuevos public/data --anteriores /tmp/base
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      # Los mismos cuatro pasos que corre CI, pero sobre los datos nuevos.
+      # Acá es donde se atrapa una extracción que pasó las validaciones de forma
+      # pero rompe una regla del modelo.
+      - name: 4 · npm run check sobre los datos nuevos
+        run: npm run check
+
+      - name: 5 · Resumen del cambio
+        id: resumen
+        run: |
+          {
+            echo '## Refresco de datos'
+            echo
+            echo '```'
+            git diff --stat -- public/data || true
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          echo "hay_cambios=$(git diff --quiet -- public/data && echo no || echo si)" >> "$GITHUB_OUTPUT"
+
+      - name: 6a · Abrir PR
+        if: steps.resumen.outputs.hay_cambios == 'si' && inputs.publicar != 'directo'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: datos/refresco-automatico
+          title: 'data: refresco automático'
+          commit-message: 'data: refresco automático'
+          body: |
+            Refresco automático. Pasó extracción, validación y `npm run check`.
+
+            Mirá el diff de `public/data` antes de mergear: las validaciones
+            detectan que la corrida se rompió, no que un número esté mal.
+          delete-branch: true
+
+      - name: 6b · Commit directo
+        if: steps.resumen.outputs.hay_cambios == 'si' && inputs.publicar == 'directo'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add public/data
+          git commit -m 'data: refresco automático'
+          git push
