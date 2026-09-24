@@ -84,6 +84,17 @@ CATEGORY_KEYS = ("free_text", "network_code")
 BENCH_MIN_TOTAL = 10
 
 
+def num(v) -> int:
+    """'1,488' → 1488.
+
+    La exportación del worksheet manda TODOS los números como texto con
+    separador de miles, no solo el company_id. Es la segunda vez que muerde en
+    este proyecto, así que acá pasa por una sola función en vez de un int()
+    suelto por columna.
+    """
+    return int(float(str(v).replace(",", "").strip() or 0))
+
+
 def _tiene(lado: dict[str, dict], periodo: str) -> bool:
     """El archivo viejo solo trae l12m; no inventamos percentiles de lo que no hay."""
     return any(periodo in c for c in lado.values())
@@ -123,8 +134,8 @@ def leer(path: str) -> dict[str, dict]:
             suf = f"_{per}" if por_periodo else ""
             bloque = {}
             for dim, prefix in zip(DIMS, ("cat", "var", "sku")):
-                total = int(row[idx[f"{prefix}_total{suf}"]])
-                online = int(row[idx[f"{prefix}_online{suf}"]])
+                total = num(row[idx[f"{prefix}_total{suf}"]])
+                online = num(row[idx[f"{prefix}_online{suf}"]])
                 if online > total:  # imposible: el online es un subconjunto
                     raise SystemExit(f"{path}: {cid}/{per} tiene {prefix} online {online} > total {total}")
                 bloque[dim] = {
