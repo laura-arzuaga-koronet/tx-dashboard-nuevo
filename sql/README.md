@@ -4,6 +4,32 @@ Mapa de cada JSON que hoy lee el adapter (`public/data/`) a la query que lo reem
 dashboard tome datos de Snowflake / Salesforce (vía Lovable + Supabase). El objetivo es que
 `src/data/adapter/builders.ts` no cambie: cada query devuelve las **mismas columnas** que el JSON.
 
+### Regla de categorías
+
+**Toda métrica sobre categorías se agrupa por `PRODUCTS.category_network_code_id`, nunca por
+`product_category_name`.**
+
+`product_category_name` es texto libre por empresa: 3.997 nombres distintos en la red, 2.739 de
+ellos usados por una sola empresa, y el núcleo lleno de variantes del mismo concepto — `Rose`,
+`Roses`, `ROSE` y `ROSES` son cuatro filas, y `Rose Spray` vs `Spray Rose` agrega el orden de
+palabras. Solo entre los 136 nombres que usan 20+ empresas, normalizar colapsa a 89.
+
+Dentro de cada empresa la grafía es consistente (1 par de 17.432 colapsa al normalizar), así que un
+conteo **por cuenta** es correcto. Lo que se rompe es cualquier comparación **entre** empresas: sin
+el código canónico, inventa diferencias que son de ortografía.
+
+El código canónico vive en `PRODUCTS` (1274 = "Rosa"). **Ni `SALES_SV` ni `PROCUREMENTS_SV` lo
+exponen**, pero las dos tienen `product_id`, así que el join siempre está disponible — al precio de
+salir del alcance del MCP de Cortex.
+
+Cada archivo que cuente categorías declara en su `_metadata` la clave que usó
+(`category_key: free_text | network_code`), y la UI advierte mientras diga `free_text`. No es
+documentación: es el dato diciendo de dónde viene.
+
+Pendiente de revisar con el mismo criterio: `product_variety` y `product_description` también son
+texto libre y alimentan las filas de variedades y SKUs. No se midió cuánto arrastran.
+
+
 ## Estado
 
 | JSON actual | Reemplazo | Fuente | Estado |

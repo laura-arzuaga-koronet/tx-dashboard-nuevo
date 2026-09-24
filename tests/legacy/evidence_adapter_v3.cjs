@@ -58,6 +58,7 @@
     catalogReach: {},         // catalog_reach_v1.json .companies (company_id → obj)
     catalogNetwork: null,     // catalog_reach_v1.json .network (percentiles de la red)
     catalogWindow: null,      // catalog_reach_v1.json ._metadata.window
+    catalogCategoryKey: null, // free_text | network_code
 
     // ── Derived lookup maps ──
     accountById: {},          // company_id → accounts_v3 record
@@ -989,6 +990,8 @@
             _state.catalogNetwork = (r.data && r.data.network)   ? r.data.network   : null;
             _state.catalogWindow  = (r.data && r.data._metadata && typeof r.data._metadata.window === 'string')
               ? r.data._metadata.window : null;
+            _state.catalogCategoryKey = (r.data && r.data._metadata && typeof r.data._metadata.category_key === 'string')
+              ? r.data._metadata.category_key : null;
             break;
         }
       });
@@ -1776,7 +1779,8 @@
     var lado = rec ? rec[side] : null;
     if (!lado) return null;
     var net = _state.catalogNetwork ? _state.catalogNetwork[side] : null;
-    var out = { window: _state.catalogWindow || CATALOG_WINDOW_FALLBACK };
+    var out = { window: _state.catalogWindow || CATALOG_WINDOW_FALLBACK,
+                category_key: _state.catalogCategoryKey || null };
     for (var i = 0; i < CATALOG_DIMS.length; i++) {
       var d = _catalogDim(lado[CATALOG_DIMS[i]], net ? net[CATALOG_DIMS[i]] : null);
       if (!d) return null;

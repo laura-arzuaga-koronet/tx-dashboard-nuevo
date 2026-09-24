@@ -696,7 +696,8 @@ function buildCatalogReach(companyId: string, side: 'sell' | 'buy'): Ev<CatalogR
     dims[d] = dim;
   }
   return ev(
-    { window: store.catalogWindow ?? CATALOG_WINDOW_FALLBACK, categories: dims.categories!, varieties: dims.varieties!, skus: dims.skus! },
+    { window: store.catalogWindow ?? CATALOG_WINDOW_FALLBACK,
+      category_key: store.catalogCategoryKey, categories: dims.categories!, varieties: dims.varieties!, skus: dims.skus! },
     'observed',
     side === 'sell' ? 'SALES_SV catalog reach' : 'PROCUREMENTS_SV catalog reach',
   );

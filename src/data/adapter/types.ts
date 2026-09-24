@@ -528,6 +528,8 @@ export interface CatalogDim {
 export interface CatalogReach {
   /** Ventana fija de 12 meses cerrados: no sigue el selector de período. */
   window: string;
+  /** 'free_text' | 'network_code' — ver el comentario en store.catalogCategoryKey. */
+  category_key: string | null;
   categories: CatalogDim;
   varieties: CatalogDim;
   skus: CatalogDim;

@@ -36,8 +36,15 @@ import { CardSection, CardTable } from '../EvidenceCard';
 /** Below this the account is behind most of the network on that width. */
 const BEHIND_MARGIN = 10;
 
-function VsNetwork({ dim }: { dim: CatalogDim }) {
+function VsNetwork({ dim, unreliable }: { dim: CatalogDim; unreliable?: boolean }) {
   if (dim.coverage_pct == null || dim.network_median == null) return <>—</>;
+  /* Con categorías de texto libre la mediana de la red compara etiquetas, no
+     surtido: quien etiqueta fino parece más ancho. Se muestra igual —el número
+     existe— pero sin el chip de distancia, que es lo que invita a leerlo como
+     un veredicto. */
+  if (unreliable) {
+    return <>{fmtPct(dim.network_median, 0)} <span className="ev-state proxy">labels, not categories</span></>;
+  }
   const d = dim.coverage_pct - dim.network_median;
   const tone = d <= -BEHIND_MARGIN ? 'gap' : d >= BEHIND_MARGIN ? 'observed' : 'proxy';
   const sign = d > 0 ? '+' : '';
@@ -66,6 +73,11 @@ export function CatalogReachTable({ reach, side }: { reach: CatalogReach; side: 
   const cats = reach.categories.coverage_pct;
   const skus = reach.skus.coverage_pct;
   const shallow = cats != null && skus != null && cats - skus >= 25 && cats >= 50;
+  /* Mientras la extracción agrupe por product_category_name, la fila de
+     categorías cuenta etiquetas propias de cada empresa y no la taxonomía de
+     red. El dato lo declara en su metadata, así que el aviso se apaga solo
+     cuando se regenere con category_network_code_id. */
+  const freeText = reach.category_key !== 'network_code';
 
   return (
     <CardSection
@@ -81,9 +93,19 @@ export function CatalogReachTable({ reach, side }: { reach: CatalogReach; side: 
             ? <span className="ev-state gap">{fmtInt(d.offline_only)}</span>
             : '—',
           fmtPct(d.coverage_pct, 0),
-          <VsNetwork dim={d} />,
+          <VsNetwork dim={d} unreliable={freeText && label === 'Categories'} />,
         ])}
       />
+      {freeText ? (
+        <p className="ev-note">
+          Categories are counted from each company's own free-text labels, so the network
+          comparison on that row measures labelling style as much as assortment: 3,997 distinct
+          names exist network-wide and Rose, Roses, ROSE and ROSES are four of them. The per
+          account count is sound — each company spells consistently. Regenerating the extract on
+          the canonical network code clears this.
+        </p>
+      ) : null}
+
       {shallow ? (
         <p className="ev-note">
           Wide but shallow: {fmtPct(cats, 0)} of the categories reach an online channel but only{' '}

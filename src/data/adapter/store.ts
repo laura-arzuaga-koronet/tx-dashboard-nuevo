@@ -72,6 +72,12 @@ export interface AdapterStore {
   catalogNetwork: LooseRecord | null;
   /** Ventana que declara catalog_reach_v1, leida del archivo y no hardcodeada. */
   catalogWindow: string | null;
+  /**
+   * Con qué clave se agruparon las categorías: 'free_text' (product_category_name,
+   * distinto por empresa) o 'network_code' (la taxonomía canónica de PRODUCTS).
+   * Decide si la tarjeta advierte sobre la comparación contra la red.
+   */
+  catalogCategoryKey: string | null;
 
   // Cube metadata (used by the UI to derive the data period instead of hardcoding it)
   cubeMeta: { sell: CubeMeta | null; buy: CubeMeta | null; fees: CubeMeta | null };
@@ -106,7 +112,7 @@ function emptyStore(): AdapterStore {
   return {
     loaded: false,
     accountsV3: [], sellCube: [], buyCube: [], feesCube: [], gmvPacing: [], gmvExternal: [],
-    buyers: {}, vendors: [], temporal: {}, inventory: {}, benchmarks: {}, config: {}, hardgoods: [], skusOnlineOffline: {}, catalogReach: {}, catalogNetwork: null, catalogWindow: null, inventoryAsOf: null, freshnessBenchmark: null,
+    buyers: {}, vendors: [], temporal: {}, inventory: {}, benchmarks: {}, config: {}, hardgoods: [], skusOnlineOffline: {}, catalogReach: {}, catalogNetwork: null, catalogWindow: null, catalogCategoryKey: null, inventoryAsOf: null, freshnessBenchmark: null,
     cubeMeta: { sell: null, buy: null, fees: null },
     coverage: { sell: null, buy: null, fees: null, indirect: null },
     accountById: {}, idToName: {}, nameToId: {},
@@ -184,6 +190,8 @@ export function loadAll(fetcher: JsonFetcher = fetchJson): Promise<void> {
     store.catalogNetwork = catalog?.network ?? null;
     const catWindow = catalog?._metadata?.window;
     store.catalogWindow = typeof catWindow === 'string' ? catWindow : null;
+    const catKey = catalog?._metadata?.category_key;
+    store.catalogCategoryKey = typeof catKey === 'string' ? catKey : null;
     store.cubeMeta = { sell: sell?._meta ?? null, buy: buy?._meta ?? null, fees: fees?._meta ?? null };
 
     buildLookups();
