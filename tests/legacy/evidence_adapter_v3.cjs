@@ -57,7 +57,7 @@
     skusOnlineOffline: {},    // skus_online_offline.json .companies (name → obj)
     catalogReach: {},         // catalog_reach_v1.json .companies (company_id → obj)
     catalogNetwork: null,     // catalog_reach_v1.json .network (percentiles de la red)
-    catalogWindow: null,      // catalog_reach_v1.json ._metadata.window
+    catalogPeriods: {},       // catalog_reach_v1.json ._metadata.periods
     catalogCategoryKey: null, // free_text | network_code
 
     // ── Derived lookup maps ──
@@ -988,8 +988,8 @@
           case 'catalogReach':
             _state.catalogReach   = (r.data && r.data.companies) ? r.data.companies : {};
             _state.catalogNetwork = (r.data && r.data.network)   ? r.data.network   : null;
-            _state.catalogWindow  = (r.data && r.data._metadata && typeof r.data._metadata.window === 'string')
-              ? r.data._metadata.window : null;
+            _state.catalogPeriods = (r.data && r.data._metadata && r.data._metadata.periods)
+              ? r.data._metadata.periods : {};
             _state.catalogCategoryKey = (r.data && r.data._metadata && typeof r.data._metadata.category_key === 'string')
               ? r.data._metadata.category_key : null;
             break;
@@ -1746,7 +1746,7 @@
       categories_top20:     categoriesTop20 ? _ev(categoriesTop20, 'observed', 'vendors_evidence_v2') : null,
       leakage:              leakage ? _ev(leakage, 'observed', 'vendors_evidence_v2') : null,
       skus_online_offline:  skusRec ? _ev(skusRec, 'observed', 'skus_online_offline') : null,
-      catalog_reach:        _buildCatalogReach(id, 'buy'),
+      catalog_reach:        _buildCatalogReach(id, 'buy', timeframe),
     };
   }
 
@@ -1774,12 +1774,19 @@
     };
   }
 
-  function _buildCatalogReach(id, side) {
+  function _buildCatalogReach(id, side, periodId) {
     var rec = _state.catalogReach ? _state.catalogReach[id] : null;
-    var lado = rec ? rec[side] : null;
+    var porPeriodo = rec ? rec[side] : null;
+    if (!porPeriodo) return null;
+    /* El archivo viejo solo trae l12m: se cae a esa ventana y el titulo lo dice,
+       en vez de dejar que seis meses se lean como doce. */
+    var usado = (periodId && porPeriodo[periodId]) ? periodId : 'l12m';
+    var lado = porPeriodo[usado];
     if (!lado) return null;
-    var net = _state.catalogNetwork ? _state.catalogNetwork[side] : null;
-    var out = { window: _state.catalogWindow || CATALOG_WINDOW_FALLBACK,
+    var netLado = _state.catalogNetwork ? _state.catalogNetwork[side] : null;
+    var net = netLado ? netLado[usado] : null;
+    var out = { window: (_state.catalogPeriods && _state.catalogPeriods[usado]) || CATALOG_WINDOW_FALLBACK,
+                period_id: usado,
                 category_key: _state.catalogCategoryKey || null };
     for (var i = 0; i < CATALOG_DIMS.length; i++) {
       var d = _catalogDim(lado[CATALOG_DIMS[i]], net ? net[CATALOG_DIMS[i]] : null);
@@ -2006,7 +2013,7 @@
       sell_online_ytd:  _ev(sellOnlineYtd,  sellOnlineYtd  ? 'observed' : 'gap', null),
       sell_offline_ytd: _ev(sellOfflineYtd, sellOfflineYtd ? 'observed' : 'gap', null),
       sell_total_ytd:   _ev(sellTotalYtd,   sellTotalYtd   ? 'observed' : 'gap', null),
-      catalog_reach:    _buildCatalogReach(id, 'sell'),
+      catalog_reach:    _buildCatalogReach(id, 'sell', timeframe),
       monthly_series:   monthlyTotals.length ? _ev(monthlyTotals, 'observed', 'sell cube') : null,
       current_month:    currentMonth || null,
       prior_month:      priorMonth   || null,

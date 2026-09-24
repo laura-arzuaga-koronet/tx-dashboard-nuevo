@@ -13,9 +13,13 @@
  * counted twice and cancels — so that number came out negative for 141 of 330
  * accounts. Here it is `total − online`: what never touched an online channel.
  *
- * The window is fixed (12 closed months) and does not follow the period
- * selector: catalog width is a function of window length, so comparing H1 to
- * YTD would measure the window rather than the account.
+ * The table follows the period selector like everything else. Two things to keep
+ * straight about that: COVERAGE % is comparable across all four periods, because
+ * it is a ratio inside one window — the window length hits numerator and
+ * denominator alike. ABSOLUTE COUNTS are only comparable between windows of the
+ * same length: prev_year and l12m are both 12 months, ytd is 8 and h1 is 6. The
+ * title carries the window so nobody compares six months against twelve without
+ * noticing.
  *
  * CATEGORIES COUNTS LABELS, NOT CANONICAL CATEGORIES
  * `product_category_name` is free text per company: 3,997 distinct names, 2,739
@@ -56,7 +60,9 @@ function VsNetwork({ dim, unreliable }: { dim: CatalogDim; unreliable?: boolean 
   );
 }
 
-export function CatalogReachTable({ reach, side }: { reach: CatalogReach; side: 'sell' | 'buy' }) {
+export function CatalogReachTable(
+  { reach, side, periodId }: { reach: CatalogReach; side: 'sell' | 'buy'; periodId: string },
+) {
   /* El título es el del dashboard legacy — "online vs what they sell" — porque
      es como el equipo ya llama a esta comparación. Lo que cambia adentro es la
      aritmética del gap, no la pregunta. */
@@ -78,6 +84,10 @@ export function CatalogReachTable({ reach, side }: { reach: CatalogReach; side: 
      red. El dato lo declara en su metadata, así que el aviso se apaga solo
      cuando se regenere con category_network_code_id. */
   const freeText = reach.category_key !== 'network_code';
+  /* El archivo puede no traer el período elegido (los extractos viejos solo
+     tienen l12m). Se muestra lo que hay y se dice, en vez de dejar que se lea
+     como si fuera el período del selector. */
+  const otroPeriodo = reach.period_id !== periodId;
 
   return (
     <CardSection
@@ -96,6 +106,13 @@ export function CatalogReachTable({ reach, side }: { reach: CatalogReach; side: 
           <VsNetwork dim={d} unreliable={freeText && label === 'Categories'} />,
         ])}
       />
+      {otroPeriodo ? (
+        <p className="ev-note">
+          This extract does not carry the selected period, so the numbers above are for{' '}
+          {reach.window}. Re-running the extract on the four-period queries fixes it.
+        </p>
+      ) : null}
+
       {freeText ? (
         <p className="ev-note">
           Categories are counted from each company's own free-text labels, so the network

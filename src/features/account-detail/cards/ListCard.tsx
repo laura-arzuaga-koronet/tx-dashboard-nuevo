@@ -279,7 +279,7 @@ export function ListCard({ ev }: { ev: AccountEvidence }) {
     <EvidenceCard label="Card 4 · LIST" headline={headline}>
       <CardFocus><strong>Focus:</strong> {focus}</CardFocus>
 
-      {reach ? <CatalogReachTable reach={reach} side="sell" /> : null}
+      {reach ? <CatalogReachTable reach={reach} side="sell" periodId={ev._period.id} /> : null}
 
       {typeRows.length || divisionRows.length ? (
         <CardSection

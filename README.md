@@ -101,7 +101,7 @@ dejó 4.014 cuentas sin fila de config en una reconstrucción anterior.
 |---|---|---|
 | **Sigue el período** | los 4 cubos mensuales | tienen grano mensual real |
 | **Prorrateado** | Est GMV, Est Buy | la cascada emite una cifra anual sin serie mensual: se reparte plano (anual × meses/12) |
-| **Ventana fija** | `catalog_reach_v1` (12 meses cerrados) | la amplitud de catálogo depende del largo de la ventana; seguir el selector inventaría una caída de catálogo |
+| **Sigue el período** | `catalog_reach_v1` | se extraen los cuatro. La **cobertura %** es comparable entre todos (ratio dentro de la misma ventana); los **conteos absolutos** solo entre ventanas del mismo largo — `prev_year` y `l12m` miden 12 meses, `ytd` 8 y `h1` 6. El título de la tarjeta lleva la ventana |
 | **Foto con fecha** | inventory, buyers, vendors, config, benchmarks, temporal | son snapshots; cada uno se etiqueta con su `generated_at` en la tarjeta |
 
 ## Refrescar los datos

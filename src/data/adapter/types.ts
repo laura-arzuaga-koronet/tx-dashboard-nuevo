@@ -526,8 +526,10 @@ export interface CatalogDim {
 }
 
 export interface CatalogReach {
-  /** Ventana fija de 12 meses cerrados: no sigue el selector de período. */
+  /** Ventana del período que se está mostrando, p. ej. '2026-01..2026-08'. */
   window: string;
+  /** Período efectivamente usado: puede no ser el pedido si el archivo no lo trae. */
+  period_id: string;
   /** 'free_text' | 'network_code' — ver el comentario en store.catalogCategoryKey. */
   category_key: string | null;
   categories: CatalogDim;

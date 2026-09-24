@@ -254,7 +254,7 @@ export function BuyCard({ ev }: { ev: AccountEvidence }) {
         </CardSection>
       ) : null}
 
-      {reach ? <CatalogReachTable reach={reach} side="buy" /> : null}
+      {reach ? <CatalogReachTable reach={reach} side="buy" periodId={ev._period.id} /> : null}
 
       {catRows.length ? (
         <CardSection title={`Top categories bought (top ${TOP_CATEGORIES} of the 20 surveyed)`}>

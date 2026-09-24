@@ -682,12 +682,18 @@ function catalogDim(raw: unknown, bench: unknown): CatalogDim | null {
   };
 }
 
-function buildCatalogReach(companyId: string, side: 'sell' | 'buy'): Ev<CatalogReach> | null {
+function buildCatalogReach(companyId: string, side: 'sell' | 'buy', periodId: string): Ev<CatalogReach> | null {
   const rec = store.catalogReach[companyId] as Record<string, unknown> | undefined;
-  const lado = rec?.[side] as Record<string, unknown> | null | undefined;
+  const porPeriodo = rec?.[side] as Record<string, unknown> | null | undefined;
+  if (!porPeriodo) return null;
+  /* El archivo viejo solo trae l12m. Se cae a esa ventana en vez de no mostrar
+     nada, y el título de la tarjeta dice cuál se está mirando — que es lo que
+     evita comparar seis meses contra doce sin darse cuenta. */
+  const usado = periodId in porPeriodo ? periodId : 'l12m';
+  const lado = porPeriodo[usado] as Record<string, unknown> | null | undefined;
   if (!lado) return null;
-  const net = (store.catalogNetwork as Record<string, unknown> | null)?.[side] as
-    Record<string, unknown> | undefined;
+  const net = ((store.catalogNetwork as Record<string, unknown> | null)?.[side] as
+    Record<string, unknown> | undefined)?.[usado] as Record<string, unknown> | undefined;
 
   const dims: Partial<Record<(typeof CATALOG_DIMS)[number], CatalogDim>> = {};
   for (const d of CATALOG_DIMS) {
@@ -696,8 +702,10 @@ function buildCatalogReach(companyId: string, side: 'sell' | 'buy'): Ev<CatalogR
     dims[d] = dim;
   }
   return ev(
-    { window: store.catalogWindow ?? CATALOG_WINDOW_FALLBACK,
-      category_key: store.catalogCategoryKey, categories: dims.categories!, varieties: dims.varieties!, skus: dims.skus! },
+    { window: store.catalogPeriods[usado] ?? CATALOG_WINDOW_FALLBACK,
+      period_id: usado,
+      category_key: store.catalogCategoryKey,
+      categories: dims.categories!, varieties: dims.varieties!, skus: dims.skus! },
     'observed',
     side === 'sell' ? 'SALES_SV catalog reach' : 'PROCUREMENTS_SV catalog reach',
   );
@@ -755,7 +763,7 @@ export function buildBuy(companyId: string, period: Period): BuyDomain {
     categories_top20: categoriesTop20 ? ev(categoriesTop20, 'observed', 'vendors_evidence_v2') : null,
     leakage: leakage ? ev(leakage, 'observed', 'vendors_evidence_v2') : null,
     skus_online_offline: skusRec ? ev(skusRec, 'observed', 'skus_online_offline') : null,
-    catalog_reach: buildCatalogReach(companyId, 'buy'),
+    catalog_reach: buildCatalogReach(companyId, 'buy', period.id),
   };
 }
 
@@ -896,7 +904,7 @@ export function buildSell(companyId: string, period: Period): SellDomain {
     sell_online_period: ev(sellOnline, sellOnline ? 'observed' : 'gap'),
     sell_offline_period: ev(sellOffline, sellOffline ? 'observed' : 'gap'),
     sell_total_period: ev(sellTotal, sellTotal ? 'observed' : 'gap'),
-    catalog_reach: buildCatalogReach(companyId, 'sell'),
+    catalog_reach: buildCatalogReach(companyId, 'sell', period.id),
     monthly_series: monthly.length ? ev(monthly, 'observed', 'sell cube') : null,
     current_month: currentMonth,
     prior_month: priorMonth,

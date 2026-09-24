@@ -70,8 +70,8 @@ export interface AdapterStore {
   catalogReach: Record<string, LooseRecord>;
   /** Percentiles de cobertura de toda la red, para comparar cada cuenta. */
   catalogNetwork: LooseRecord | null;
-  /** Ventana que declara catalog_reach_v1, leida del archivo y no hardcodeada. */
-  catalogWindow: string | null;
+  /** Ventanas por período que declara catalog_reach_v1, leídas del archivo. */
+  catalogPeriods: Record<string, string>;
   /**
    * Con qué clave se agruparon las categorías: 'free_text' (product_category_name,
    * distinto por empresa) o 'network_code' (la taxonomía canónica de PRODUCTS).
@@ -112,7 +112,7 @@ function emptyStore(): AdapterStore {
   return {
     loaded: false,
     accountsV3: [], sellCube: [], buyCube: [], feesCube: [], gmvPacing: [], gmvExternal: [],
-    buyers: {}, vendors: [], temporal: {}, inventory: {}, benchmarks: {}, config: {}, hardgoods: [], skusOnlineOffline: {}, catalogReach: {}, catalogNetwork: null, catalogWindow: null, catalogCategoryKey: null, inventoryAsOf: null, freshnessBenchmark: null,
+    buyers: {}, vendors: [], temporal: {}, inventory: {}, benchmarks: {}, config: {}, hardgoods: [], skusOnlineOffline: {}, catalogReach: {}, catalogNetwork: null, catalogPeriods: {}, catalogCategoryKey: null, inventoryAsOf: null, freshnessBenchmark: null,
     cubeMeta: { sell: null, buy: null, fees: null },
     coverage: { sell: null, buy: null, fees: null, indirect: null },
     accountById: {}, idToName: {}, nameToId: {},
@@ -188,8 +188,9 @@ export function loadAll(fetcher: JsonFetcher = fetchJson): Promise<void> {
     store.skusOnlineOffline = skus?.companies ?? {};
     store.catalogReach = catalog?.companies ?? {};
     store.catalogNetwork = catalog?.network ?? null;
-    const catWindow = catalog?._metadata?.window;
-    store.catalogWindow = typeof catWindow === 'string' ? catWindow : null;
+    const catPeriods = catalog?._metadata?.periods;
+    store.catalogPeriods = catPeriods && typeof catPeriods === 'object'
+      ? (catPeriods as Record<string, string>) : {};
     const catKey = catalog?._metadata?.category_key;
     store.catalogCategoryKey = typeof catKey === 'string' ? catKey : null;
     store.cubeMeta = { sell: sell?._meta ?? null, buy: buy?._meta ?? null, fees: fees?._meta ?? null };

@@ -66,7 +66,14 @@ from datetime import datetime, timezone
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 DATA = ROOT / "public" / "data"
 
-WINDOW = "2025-09..2026-08"
+#: Los cuatro períodos del dashboard, con su ventana. Tienen que coincidir con
+#: src/data/adapter/period.ts: si allá cambia el ancla, acá cambian las fechas.
+PERIODOS = {
+    "ytd":       "2026-01..2026-08",
+    "h1":        "2026-01..2026-06",
+    "prev_year": "2025-01..2025-12",
+    "l12m":      "2025-09..2026-08",
+}
 DIMS = ("categories", "varieties", "skus")
 #: Claves válidas para declarar con qué se agruparon las categorías. Es un flag
 #: y no una constante a propósito: lo decide quien corre la extracción, y una
@@ -75,6 +82,11 @@ CATEGORY_KEYS = ("free_text", "network_code")
 #: Catálogos por debajo de esto no dicen nada de cobertura: una finca con 1
 #: categoría vendida online da 100% y arrastra la mediana de toda la red.
 BENCH_MIN_TOTAL = 10
+
+
+def _tiene(lado: dict[str, dict], periodo: str) -> bool:
+    """El archivo viejo solo trae l12m; no inventamos percentiles de lo que no hay."""
+    return any(periodo in c for c in lado.values())
 
 
 def pct(values: list[float], q: float):
@@ -90,35 +102,51 @@ def pct(values: list[float], q: float):
 
 
 def leer(path: str) -> dict[str, dict]:
-    """Result set de Cortex → {company_id: {dim: {total, online, offline_only, coverage_pct}}}."""
+    """Result set → {company_id: {periodo: {dim: {total, online, offline_only, coverage_pct}}}}.
+
+    Acepta las dos formas: las consultas por período traen columnas con sufijo
+    (cat_total_ytd, cat_online_h1…) y las viejas, de una sola ventana, vienen sin
+    sufijo. Si no hay sufijos se asume que todo el archivo es l12m, que es la
+    ventana que usaban.
+    """
     blob = json.loads(pathlib.Path(path).read_text(encoding="utf-8"))
     cols = [c.lower() for c in blob["columns"]]
     idx = {c: i for i, c in enumerate(cols)}
+    por_periodo = any(f"cat_total_{p}" in idx for p in PERIODOS)
+    periodos = list(PERIODOS) if por_periodo else ["l12m"]
+
     out: dict[str, dict] = {}
     for row in blob["data"]:
         cid = str(row[idx["company_id"]]).replace(",", "").strip()
-        rec = {}
-        for dim, prefix in zip(DIMS, ("cat", "var", "sku")):
-            total = int(row[idx[f"{prefix}_total"]])
-            online = int(row[idx[f"{prefix}_online"]])
-            if online > total:  # imposible: el online es un subconjunto
-                raise SystemExit(f"{path}: {cid} tiene {prefix} online {online} > total {total}")
-            rec[dim] = {
-                "total": total,
-                "online": online,
-                # conjunto, no resta de conteos: lo que nunca tocó un canal online
-                "offline_only": total - online,
-                "coverage_pct": round(online / total * 100, 1) if total else None,
-            }
+        rec: dict[str, dict] = {}
+        for per in periodos:
+            suf = f"_{per}" if por_periodo else ""
+            bloque = {}
+            for dim, prefix in zip(DIMS, ("cat", "var", "sku")):
+                total = int(row[idx[f"{prefix}_total{suf}"]])
+                online = int(row[idx[f"{prefix}_online{suf}"]])
+                if online > total:  # imposible: el online es un subconjunto
+                    raise SystemExit(f"{path}: {cid}/{per} tiene {prefix} online {online} > total {total}")
+                bloque[dim] = {
+                    "total": total,
+                    "online": online,
+                    # conjunto, no resta de conteos: lo que nunca tocó un canal online
+                    "offline_only": total - online,
+                    "coverage_pct": round(online / total * 100, 1) if total else None,
+                }
+            rec[per] = bloque
         out[cid] = rec
     return out
 
 
-def benchmarks(lado: dict[str, dict]) -> dict:
+def benchmarks(lado: dict[str, dict], periodo: str) -> dict:
+    """Percentiles de la red DENTRO de un período: comparar cuentas medidas sobre
+    ventanas distintas sería el mismo error que la tarjeta advierte."""
     out = {}
     for dim in DIMS:
-        vals = [c[dim]["coverage_pct"] for c in lado.values()
-                if c[dim]["total"] >= BENCH_MIN_TOTAL and c[dim]["coverage_pct"] is not None]
+        vals = [c[periodo][dim]["coverage_pct"] for c in lado.values()
+                if periodo in c and c[periodo][dim]["total"] >= BENCH_MIN_TOTAL
+                and c[periodo][dim]["coverage_pct"] is not None]
         out[dim] = {
             "coverage_median": pct(vals, 0.50),
             "coverage_p75": pct(vals, 0.75),
@@ -150,10 +178,11 @@ def main() -> int:
             "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
             "generated_by": "scripts/rebuild_catalog_reach.py",
             "query": "sql/evidence/catalog_reach.sql",
-            "window": WINDOW,
-            "window_note": ("ventana fija de 12 meses cerrados, NO sigue el selector de período: "
-                            "la amplitud de catálogo depende del largo de la ventana, así que "
-                            "compararla entre períodos de distinto largo mide la ventana, no la cuenta"),
+            "periods": PERIODOS,
+            "period_note": ("los cuatro períodos del selector. La COBERTURA % es comparable entre "
+                            "todos (es un ratio dentro de la misma ventana); los CONTEOS absolutos "
+                            "solo entre ventanas del mismo largo — prev_year y l12m miden 12 meses "
+                            "los dos, ytd 8 y h1 6"),
             "sources": {
                 "sell": {"view": "PRODUCTION.ANALYTICS.SALES_SV",
                          "online": "sales_channel IN ('eCommerce','K2K','API')",
@@ -180,17 +209,21 @@ def main() -> int:
             "rules_applied": ["R1 ks_flag", "R4 sales<100000 por línea", "R6 online = eCommerce+K2K+API (venta)"],
             "companies": len(companies),
         },
-        "network": {"sell": benchmarks(sell), "buy": benchmarks(buy)},
+        "network": {
+            "sell": {per: benchmarks(sell, per) for per in PERIODOS if _tiene(sell, per)},
+            "buy": {per: benchmarks(buy, per) for per in PERIODOS if _tiene(buy, per)},
+        },
         "companies": companies,
     }
 
     print(f"empresas: {len(companies)}  (venta {len(sell)} · compra {len(buy)} · ambas {len(set(sell) & set(buy))})")
     for lado in ("sell", "buy"):
-        print(f"\n{lado}:")
-        for dim in DIMS:
-            b = doc["network"][lado][dim]
-            print(f"  {dim:11} mediana {str(b['coverage_median']) + '%':>7}  p75 {str(b['coverage_p75']) + '%':>7}"
-                  f"  p90 {str(b['coverage_p90']) + '%':>7}  n={b['n']:<4} cero-online={b['zero_online']}")
+        for per, b_per in doc["network"][lado].items():
+            print(f"\n{lado} · {per} ({PERIODOS[per]}):")
+            for dim in DIMS:
+                b = b_per[dim]
+                print(f"  {dim:11} mediana {str(b['coverage_median']) + '%':>7}  p75 {str(b['coverage_p75']) + '%':>7}"
+                      f"  p90 {str(b['coverage_p90']) + '%':>7}  n={b['n']:<4} cero-online={b['zero_online']}")
 
     if a.dry_run:
         print("\n--dry-run: no se escribió nada")

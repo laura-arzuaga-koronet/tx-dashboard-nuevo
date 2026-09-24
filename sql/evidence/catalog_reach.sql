@@ -104,95 +104,141 @@ FROM SEMANTIC_VIEW(
 );
 
 -- ============================================================================
--- ⭐ VERSIÓN CANÓNICA — ESTAS SON LAS QUE HAY QUE CORRER
+-- ⭐ LAS QUE HAY QUE CORRER — código canónico y los cuatro períodos
 --
--- Las dos consultas de arriba agrupan por `product_category_name`, que es TEXTO
--- LIBRE por empresa. Sirven para el conteo por cuenta (dentro de cada empresa la
--- grafía es consistente: 1 par de 17.432 colapsa al normalizar), pero DISTORSIONAN
--- la comparación contra la mediana de la red: quien etiqueta fino (Rose Garden /
--- Rose Spray / Rose) parece más ancho que quien etiqueta grueso (Rosa) con el
--- mismo surtido real. 3.997 nombres distintos en la red, 2.739 de ellos usados
--- por una sola empresa.
+-- POR QUÉ POR PERÍODO Y NO UNA VENTANA FIJA
 --
--- La taxonomía canónica es PRODUCTS.category_network_code_id — el código 1274 =
--- "Rosa" agrupa Rose Garden, Rose Spray, Rose, ROSES ECUADOR, Roses y las demás.
--- NO es alcanzable desde SALES_SV ni desde PROCUREMENTS_SV, pero las dos tienen
--- product_id, así que el join siempre está disponible. Eso las saca del alcance
--- del MCP de Cortex: van a mano en un worksheet, o por el pipeline.
+-- La primera versión de esto usaba una sola ventana de 12 meses, con el
+-- argumento de que el ancho de catálogo depende del largo de la ventana y por
+-- lo tanto comparar H1 contra YTD mide la ventana y no la cuenta.
 --
--- Devuelven exactamente las mismas columnas que las versiones de arriba, así que
--- el script las consume igual:
+-- Eso vale para los CONTEOS ABSOLUTOS y sigue valiendo. Pero la conclusión era
+-- de más, por dos razones:
+--
+--   · La COBERTURA % es un ratio dentro de la misma ventana. "En H1 vendió 300
+--     categorías, 180 online = 60%" es una afirmación válida sobre H1: el largo
+--     de la ventana afecta numerador y denominador por igual.
+--   · `prev_year` (todo 2025) y `l12m` (sep 2025–ago 2026) miden los dos 12
+--     meses. Esos dos son comparables en todo, conteos incluidos, y ahí hay una
+--     lectura de evolución de catálogo que la ventana fija tiraba.
+--
+-- Así que se extraen los cuatro períodos y la tarjeta sigue el selector como el
+-- resto del dashboard. Lo que NO se puede comparar —conteos absolutos entre
+-- ventanas de distinto largo— se resuelve etiquetando el período, no
+-- escondiéndolo. Una excepción a cómo se comporta todo lo demás cuesta más de
+-- lo que parece.
+--
+-- Los cuatro períodos son los de src/data/adapter/period.ts, ancladas en
+-- 2026-08 (último mes cerrado del cubo de sell). Si el ancla cambia, cambian
+-- las fechas de acá.
+--
+-- SOBRE EL CÓDIGO CANÓNICO: `product_category_name` es texto libre por empresa
+-- (3.997 nombres, 2.739 de ellos de una sola empresa; Rose/Roses/ROSE/ROSES son
+-- cuatro). PRODUCTS.category_network_code_id es la taxonomía de red — 1274 =
+-- "Rosa" agrupa todas sus variantes. Ni SALES_SV ni PROCUREMENTS_SV lo exponen,
+-- pero las dos tienen product_id, así que el join está disponible al precio de
+-- salir del alcance del MCP de Cortex: estas van a mano o por el pipeline.
 --
 --   python3 scripts/rebuild_catalog_reach.py --sell venta.json --buy compra.json \
 --                                            --category-key network_code
 --
--- Ese flag es el que apaga la advertencia de la tarjeta. No lo pongas si corriste
--- las consultas de arriba: el aviso está para que nadie lea la comparación contra
--- la red como si fuera surtido cuando es ortografía.
+-- NOTA: `product_variety` y `product_description` también son texto libre y
+-- arrastran el mismo problema. No se midió cuánto.
 -- ============================================================================
 
--- ── 3. VENTA, por código canónico ───────────────────────────────────────────
+-- ── 5. VENTA: código canónico × los cuatro períodos ─────────────────────
+WITH base AS (
+    SELECT
+        sd.company_id,
+        p.category_network_code_id,
+        sd.product_variety,
+        sd.product_description,
+        sd.sales_channel,
+        sd.shipping_date >= '2026-01-01' AND sd.shipping_date < '2026-09-01' AS ytd_win,   -- ene–ago 2026
+        sd.shipping_date >= '2026-01-01' AND sd.shipping_date < '2026-07-01' AS h1_win,   -- ene–jun 2026
+        sd.shipping_date >= '2025-01-01' AND sd.shipping_date < '2026-01-01' AS prev_year_win,   -- todo 2025
+        sd.shipping_date >= '2025-09-01' AND sd.shipping_date < '2026-09-01' AS l12m_win    -- sep 2025–ago 2026
+    FROM PRODUCTION.ANALYTICS.SALE_DETAILS sd
+    JOIN PRODUCTION.ANALYTICS.PRODUCTS  p ON p.product_id = sd.product_id
+    JOIN PRODUCTION.ANALYTICS.COMPANIES c ON c.company_id = sd.company_id
+    WHERE c.ks_flag = TRUE                       -- R1
+      AND sd.sales < 100000                   -- R4, por línea
+      AND sd.shipping_date >= '2025-01-01'    -- cubre prev_year, el más viejo
+      AND sd.shipping_date <  '2026-09-01'
+)
 SELECT
-    sd.company_id,
-    COUNT(DISTINCT p.category_network_code_id) AS cat_total,
-    COUNT(DISTINCT CASE WHEN sd.sales_channel IN ('eCommerce', 'K2K', 'API')
-                        THEN p.category_network_code_id END) AS cat_online,
-    COUNT(DISTINCT sd.product_variety)  AS var_total,
-    COUNT(DISTINCT CASE WHEN sd.sales_channel IN ('eCommerce', 'K2K', 'API')
-                        THEN sd.product_variety END) AS var_online,
-    COUNT(DISTINCT sd.product_description) AS sku_total,
-    COUNT(DISTINCT CASE WHEN sd.sales_channel IN ('eCommerce', 'K2K', 'API')
-                        THEN sd.product_description END) AS sku_online
-FROM PRODUCTION.ANALYTICS.SALE_DETAILS sd
-JOIN PRODUCTION.ANALYTICS.PRODUCTS     p ON p.product_id = sd.product_id
-JOIN PRODUCTION.ANALYTICS.COMPANIES    c ON c.company_id = sd.company_id
-WHERE c.ks_flag = TRUE                       -- R1
-  AND sd.sales < 100000                      -- R4, por línea
-  AND sd.shipping_date >= '2025-09-01'
-  AND sd.shipping_date <  '2026-09-01'
-GROUP BY sd.company_id;
+    company_id,
+    COUNT(DISTINCT CASE WHEN ytd_win THEN category_network_code_id END) AS cat_total_ytd,
+    COUNT(DISTINCT CASE WHEN ytd_win AND sales_channel IN ('eCommerce', 'K2K', 'API') THEN category_network_code_id END) AS cat_online_ytd,
+    COUNT(DISTINCT CASE WHEN ytd_win THEN product_variety END) AS var_total_ytd,
+    COUNT(DISTINCT CASE WHEN ytd_win AND sales_channel IN ('eCommerce', 'K2K', 'API') THEN product_variety END) AS var_online_ytd,
+    COUNT(DISTINCT CASE WHEN ytd_win THEN product_description END) AS sku_total_ytd,
+    COUNT(DISTINCT CASE WHEN ytd_win AND sales_channel IN ('eCommerce', 'K2K', 'API') THEN product_description END) AS sku_online_ytd,
+    COUNT(DISTINCT CASE WHEN h1_win THEN category_network_code_id END) AS cat_total_h1,
+    COUNT(DISTINCT CASE WHEN h1_win AND sales_channel IN ('eCommerce', 'K2K', 'API') THEN category_network_code_id END) AS cat_online_h1,
+    COUNT(DISTINCT CASE WHEN h1_win THEN product_variety END) AS var_total_h1,
+    COUNT(DISTINCT CASE WHEN h1_win AND sales_channel IN ('eCommerce', 'K2K', 'API') THEN product_variety END) AS var_online_h1,
+    COUNT(DISTINCT CASE WHEN h1_win THEN product_description END) AS sku_total_h1,
+    COUNT(DISTINCT CASE WHEN h1_win AND sales_channel IN ('eCommerce', 'K2K', 'API') THEN product_description END) AS sku_online_h1,
+    COUNT(DISTINCT CASE WHEN prev_year_win THEN category_network_code_id END) AS cat_total_prev_year,
+    COUNT(DISTINCT CASE WHEN prev_year_win AND sales_channel IN ('eCommerce', 'K2K', 'API') THEN category_network_code_id END) AS cat_online_prev_year,
+    COUNT(DISTINCT CASE WHEN prev_year_win THEN product_variety END) AS var_total_prev_year,
+    COUNT(DISTINCT CASE WHEN prev_year_win AND sales_channel IN ('eCommerce', 'K2K', 'API') THEN product_variety END) AS var_online_prev_year,
+    COUNT(DISTINCT CASE WHEN prev_year_win THEN product_description END) AS sku_total_prev_year,
+    COUNT(DISTINCT CASE WHEN prev_year_win AND sales_channel IN ('eCommerce', 'K2K', 'API') THEN product_description END) AS sku_online_prev_year,
+    COUNT(DISTINCT CASE WHEN l12m_win THEN category_network_code_id END) AS cat_total_l12m,
+    COUNT(DISTINCT CASE WHEN l12m_win AND sales_channel IN ('eCommerce', 'K2K', 'API') THEN category_network_code_id END) AS cat_online_l12m,
+    COUNT(DISTINCT CASE WHEN l12m_win THEN product_variety END) AS var_total_l12m,
+    COUNT(DISTINCT CASE WHEN l12m_win AND sales_channel IN ('eCommerce', 'K2K', 'API') THEN product_variety END) AS var_online_l12m,
+    COUNT(DISTINCT CASE WHEN l12m_win THEN product_description END) AS sku_total_l12m,
+    COUNT(DISTINCT CASE WHEN l12m_win AND sales_channel IN ('eCommerce', 'K2K', 'API') THEN product_description END) AS sku_online_l12m
+FROM base
+GROUP BY company_id;
 
--- ── 4. COMPRA, por código canónico ──────────────────────────────────────────
+-- ── 6. COMPRA: código canónico × los cuatro períodos ─────────────────────
+WITH base AS (
+    SELECT
+        pd.company_id,
+        p.category_network_code_id,
+        pd.product_variety,
+        pd.product_description,
+        pd.sales_channel,
+        pd.shipping_date >= '2026-01-01' AND pd.shipping_date < '2026-09-01' AS ytd_win,   -- ene–ago 2026
+        pd.shipping_date >= '2026-01-01' AND pd.shipping_date < '2026-07-01' AS h1_win,   -- ene–jun 2026
+        pd.shipping_date >= '2025-01-01' AND pd.shipping_date < '2026-01-01' AS prev_year_win,   -- todo 2025
+        pd.shipping_date >= '2025-09-01' AND pd.shipping_date < '2026-09-01' AS l12m_win    -- sep 2025–ago 2026
+    FROM PRODUCTION.ANALYTICS.PROCUREMENT_DETAILS pd
+    JOIN PRODUCTION.ANALYTICS.PRODUCTS  p ON p.product_id = pd.product_id
+    JOIN PRODUCTION.ANALYTICS.COMPANIES c ON c.company_id = pd.company_id
+    WHERE c.ks_flag = TRUE                       -- R1
+      AND pd.shipping_date >= '2025-01-01'    -- cubre prev_year, el más viejo
+      AND pd.shipping_date <  '2026-09-01'
+)
 SELECT
-    pd.company_id,
-    COUNT(DISTINCT p.category_network_code_id) AS cat_total,
-    COUNT(DISTINCT CASE WHEN pd.sales_channel IN ('Web', 'Procurement', 'API')
-                        THEN p.category_network_code_id END) AS cat_online,
-    COUNT(DISTINCT pd.product_variety)  AS var_total,
-    COUNT(DISTINCT CASE WHEN pd.sales_channel IN ('Web', 'Procurement', 'API')
-                        THEN pd.product_variety END) AS var_online,
-    COUNT(DISTINCT pd.product_description) AS sku_total,
-    COUNT(DISTINCT CASE WHEN pd.sales_channel IN ('Web', 'Procurement', 'API')
-                        THEN pd.product_description END) AS sku_online
-FROM PRODUCTION.ANALYTICS.PROCUREMENT_DETAILS pd
-JOIN PRODUCTION.ANALYTICS.PRODUCTS  p ON p.product_id = pd.product_id
-JOIN PRODUCTION.ANALYTICS.COMPANIES c ON c.company_id = pd.company_id
-WHERE c.ks_flag = TRUE
-  AND pd.shipping_date >= '2025-09-01'
-  AND pd.shipping_date <  '2026-09-01'
-GROUP BY pd.company_id;
-
--- ── NOTA sobre variedades y SKUs ─────────────────────────────────────────────
--- `product_variety` y `product_description` TAMBIÉN son texto libre y arrastran
--- el mismo problema. No se midió cuánto. Antes de comparar esas dos filas entre
--- empresas conviene repetir el ejercicio que se hizo con categorías, no asumir
--- que están mejor: esa suposición es justo la que hubo que corregir acá.
--- ============================================================================
--- CÓMO ARMAR EL JSON
---
---   python3 scripts/rebuild_catalog_reach.py --sell venta.json --buy compra.json
---
--- El script calcula offline_only y coverage_pct por dimensión, y los percentiles
--- de cobertura de toda la red para poder comparar cada cuenta contra la mediana.
---
--- Los percentiles se calculan solo sobre cuentas con 10+ ítems en esa dimensión:
--- una finca con 1 categoría vendida online da 100% y arrastra la mediana.
---
--- Referencia de la corrida 2026-09-10 (mediana de cobertura, red):
---   venta   categorías 87,9% · variedades 62,8% · SKUs 55,2%
---   compra  categorías 51,1% · variedades  2,3% · SKUs  0,4%
---
--- El p90 da 100% en las seis: la distribución es BIMODAL — o la cuenta tiene
--- todo online o no tiene nada. Por eso la tarjeta compara contra la mediana y
--- no contra el p90: el techo no discrimina.
--- ============================================================================
+    company_id,
+    COUNT(DISTINCT CASE WHEN ytd_win THEN category_network_code_id END) AS cat_total_ytd,
+    COUNT(DISTINCT CASE WHEN ytd_win AND sales_channel IN ('Web', 'Procurement', 'API') THEN category_network_code_id END) AS cat_online_ytd,
+    COUNT(DISTINCT CASE WHEN ytd_win THEN product_variety END) AS var_total_ytd,
+    COUNT(DISTINCT CASE WHEN ytd_win AND sales_channel IN ('Web', 'Procurement', 'API') THEN product_variety END) AS var_online_ytd,
+    COUNT(DISTINCT CASE WHEN ytd_win THEN product_description END) AS sku_total_ytd,
+    COUNT(DISTINCT CASE WHEN ytd_win AND sales_channel IN ('Web', 'Procurement', 'API') THEN product_description END) AS sku_online_ytd,
+    COUNT(DISTINCT CASE WHEN h1_win THEN category_network_code_id END) AS cat_total_h1,
+    COUNT(DISTINCT CASE WHEN h1_win AND sales_channel IN ('Web', 'Procurement', 'API') THEN category_network_code_id END) AS cat_online_h1,
+    COUNT(DISTINCT CASE WHEN h1_win THEN product_variety END) AS var_total_h1,
+    COUNT(DISTINCT CASE WHEN h1_win AND sales_channel IN ('Web', 'Procurement', 'API') THEN product_variety END) AS var_online_h1,
+    COUNT(DISTINCT CASE WHEN h1_win THEN product_description END) AS sku_total_h1,
+    COUNT(DISTINCT CASE WHEN h1_win AND sales_channel IN ('Web', 'Procurement', 'API') THEN product_description END) AS sku_online_h1,
+    COUNT(DISTINCT CASE WHEN prev_year_win THEN category_network_code_id END) AS cat_total_prev_year,
+    COUNT(DISTINCT CASE WHEN prev_year_win AND sales_channel IN ('Web', 'Procurement', 'API') THEN category_network_code_id END) AS cat_online_prev_year,
+    COUNT(DISTINCT CASE WHEN prev_year_win THEN product_variety END) AS var_total_prev_year,
+    COUNT(DISTINCT CASE WHEN prev_year_win AND sales_channel IN ('Web', 'Procurement', 'API') THEN product_variety END) AS var_online_prev_year,
+    COUNT(DISTINCT CASE WHEN prev_year_win THEN product_description END) AS sku_total_prev_year,
+    COUNT(DISTINCT CASE WHEN prev_year_win AND sales_channel IN ('Web', 'Procurement', 'API') THEN product_description END) AS sku_online_prev_year,
+    COUNT(DISTINCT CASE WHEN l12m_win THEN category_network_code_id END) AS cat_total_l12m,
+    COUNT(DISTINCT CASE WHEN l12m_win AND sales_channel IN ('Web', 'Procurement', 'API') THEN category_network_code_id END) AS cat_online_l12m,
+    COUNT(DISTINCT CASE WHEN l12m_win THEN product_variety END) AS var_total_l12m,
+    COUNT(DISTINCT CASE WHEN l12m_win AND sales_channel IN ('Web', 'Procurement', 'API') THEN product_variety END) AS var_online_l12m,
+    COUNT(DISTINCT CASE WHEN l12m_win THEN product_description END) AS sku_total_l12m,
+    COUNT(DISTINCT CASE WHEN l12m_win AND sales_channel IN ('Web', 'Procurement', 'API') THEN product_description END) AS sku_online_l12m
+FROM base
+GROUP BY company_id;
