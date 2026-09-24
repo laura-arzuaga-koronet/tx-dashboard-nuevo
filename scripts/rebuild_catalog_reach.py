@@ -21,6 +21,23 @@ Acá el gap es `total − online`, que sí es un conjunto: lo que nunca pasó po
 online. Sale directo de COUNT(DISTINCT CASE WHEN canal online THEN x END) contra
 COUNT(DISTINCT x), sin restas entre conteos solapados.
 
+CAVEAT DE LA FILA "CATEGORIES"  ← leer antes de comparar entre empresas
+------------------------------------------------------------------------
+`product_category_name` es texto libre por empresa, no una taxonomía. Medido:
+3.997 nombres distintos, 2.739 usados por una sola empresa, y el núcleo lleno
+de variantes (Rose / Roses / ROSE / ROSES son cuatro). DENTRO de cada empresa
+la grafía es consistente —solo 1 par de 17.432 colapsa al normalizar— así que
+el conteo por cuenta es correcto: dice cuántas ETIQUETAS usa.
+
+Lo que queda distorsionado es la comparación contra la mediana de la red: una
+empresa que etiqueta fino (Rose Garden / Rose Spray / Rose) parece más ancha
+que una que etiqueta grueso (Rosa), con el mismo surtido real.
+
+La taxonomía canónica existe: PRODUCTS.category_network_code_id (1274 = "Rosa"
+agrupa todas las variantes de rosa). No es alcanzable desde SALES_SV, hay que
+ir por product_id contra PRODUCTS — ver sql/evidence/assortment_gap.sql. Cuando
+haya acceso directo, esta fila debería recalcularse sobre el código canónico.
+
 VENTANA FIJA, A PROPÓSITO
 -------------------------
 Los 12 meses cerrados del cubo (2025-09..2026-08), no el selector de período. La

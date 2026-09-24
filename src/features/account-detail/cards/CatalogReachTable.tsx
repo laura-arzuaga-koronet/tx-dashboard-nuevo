@@ -16,6 +16,18 @@
  * The window is fixed (12 closed months) and does not follow the period
  * selector: catalog width is a function of window length, so comparing H1 to
  * YTD would measure the window rather than the account.
+ *
+ * CATEGORIES COUNTS LABELS, NOT CANONICAL CATEGORIES
+ * `product_category_name` is free text per company: 3,997 distinct names, 2,739
+ * of them used by a single company, and the core is full of variants of the
+ * same thing (Rose / Roses / ROSE / ROSES are four). Each company is internally
+ * consistent — only 1 pair in 17,432 collapses when normalized — so the per
+ * account number is right: it counts the labels that account uses. What is
+ * distorted is the network-median column: a company that labels finely looks
+ * broader than one that labels coarsely, at the same real assortment.
+ * The canonical taxonomy exists (PRODUCTS.category_network_code_id, 1274 =
+ * "Rosa"); it is not reachable from SALES_SV, so recomputing this row on it
+ * needs the join in sql/evidence/assortment_gap.sql.
  */
 import type { CatalogDim, CatalogReach } from '../../../data/adapter/types';
 import { fmtInt, fmtPct } from '../../../domain/format';
