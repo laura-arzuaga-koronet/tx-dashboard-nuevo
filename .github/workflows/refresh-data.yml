@@ -1,7 +1,10 @@
 # Refresco diario de los datos del dashboard.
 #
-# BORRADOR: no corre hasta que existan los secrets de Snowflake. Ver
-# docs/automatizacion.md para qué pedir y a quién.
+# DORMIDO HASTA QUE EXISTAN LOS SECRETS. El cron queda programado apenas este
+# archivo llega a main, así que sin credenciales el job fallaría todos los días
+# y mandaría mail de fallo cada vez. El paso 0 lo detecta y sale limpio; el día
+# que se carguen los secrets arranca solo, sin tocar nada.
+# Qué pedir y a quién: docs/automatizacion.md
 #
 # La cadena es: extraer → reconstruir → validar → correr los tests CONTRA los
 # datos nuevos → recién ahí publicar. El paso de tests es el que hace que esto
@@ -38,18 +41,42 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - name: 0 · ¿Hay credenciales?
+        id: gate
+        env:
+          CUENTA: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+        run: |
+          if [ -z "$CUENTA" ]; then
+            echo "listo=no" >> "$GITHUB_OUTPUT"
+            {
+              echo '## Refresco dormido'
+              echo
+              echo 'No hay `SNOWFLAKE_ACCOUNT` cargado, así que no hay nada que extraer.'
+              echo 'Ver `docs/automatizacion.md` para qué pedirle a quien administra Snowflake.'
+            } >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "listo=si" >> "$GITHUB_OUTPUT"
+          fi
 
-      # Copia de los datos actuales: es la base contra la que valida el paso 4.
+      - uses: actions/checkout@v4
+        if: steps.gate.outputs.listo == 'si'
+
+      # Copia de los datos actuales: es la base contra la que valida el paso 3.
       - name: Guardar la versión anterior
+        if: steps.gate.outputs.listo == 'si'
         run: cp -r public/data /tmp/base
 
       - uses: actions/setup-python@v5
+        if: steps.gate.outputs.listo == 'si'
         with:
           python-version: '3.12'
-      - run: pip install 'snowflake-connector-python[secure-local-storage]'
+
+      - name: Instalar el conector
+        if: steps.gate.outputs.listo == 'si'
+        run: pip install 'snowflake-connector-python[secure-local-storage]'
 
       - name: 1 · Extraer de Snowflake
+        if: steps.gate.outputs.listo == 'si'
         env:
           SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
           SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
@@ -60,6 +87,7 @@ jobs:
         run: python3 scripts/extract_snowflake.py --out /tmp/staging
 
       - name: 2 · Reconstruir los JSON
+        if: steps.gate.outputs.listo == 'si'
         run: |
           python3 scripts/rebuild_catalog_reach.py --sell /tmp/staging/catalog_sell.json \
                                                    --buy  /tmp/staging/catalog_buy.json
@@ -68,22 +96,29 @@ jobs:
           python3 scripts/rebuild_derived.py
 
       - name: 3 · Validar contra la corrida anterior
+        if: steps.gate.outputs.listo == 'si'
         run: python3 scripts/validate_data.py --nuevos public/data --anteriores /tmp/base
 
       - uses: actions/setup-node@v4
+        if: steps.gate.outputs.listo == 'si'
         with:
           node-version: 22
           cache: npm
-      - run: npm ci
 
-      # Los mismos cuatro pasos que corre CI, pero sobre los datos nuevos.
-      # Acá es donde se atrapa una extracción que pasó las validaciones de forma
-      # pero rompe una regla del modelo.
+      - name: Instalar dependencias
+        if: steps.gate.outputs.listo == 'si'
+        run: npm ci
+
+      # Los mismos cuatro pasos que corre CI, pero sobre los datos nuevos. Acá
+      # se atrapa una extracción que pasó las validaciones de forma pero rompe
+      # una regla del modelo.
       - name: 4 · npm run check sobre los datos nuevos
+        if: steps.gate.outputs.listo == 'si'
         run: npm run check
 
       - name: 5 · Resumen del cambio
         id: resumen
+        if: steps.gate.outputs.listo == 'si'
         run: |
           {
             echo '## Refresco de datos'
@@ -95,7 +130,7 @@ jobs:
           echo "hay_cambios=$(git diff --quiet -- public/data && echo no || echo si)" >> "$GITHUB_OUTPUT"
 
       - name: 6a · Abrir PR
-        if: steps.resumen.outputs.hay_cambios == 'si' && inputs.publicar != 'directo'
+        if: steps.gate.outputs.listo == 'si' && steps.resumen.outputs.hay_cambios == 'si' && inputs.publicar != 'directo'
         uses: peter-evans/create-pull-request@v6
         with:
           branch: datos/refresco-automatico
@@ -109,7 +144,7 @@ jobs:
           delete-branch: true
 
       - name: 6b · Commit directo
-        if: steps.resumen.outputs.hay_cambios == 'si' && inputs.publicar == 'directo'
+        if: steps.gate.outputs.listo == 'si' && steps.resumen.outputs.hay_cambios == 'si' && inputs.publicar == 'directo'
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
