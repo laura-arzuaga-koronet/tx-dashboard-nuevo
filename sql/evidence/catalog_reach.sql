@@ -242,3 +242,50 @@ SELECT
     COUNT(DISTINCT CASE WHEN l12m_win AND sales_channel IN ('Web', 'Procurement', 'API') THEN product_description END) AS sku_online_l12m
 FROM base
 GROUP BY company_id;
+
+
+-- ----------------------------------------------------------------------------
+-- 7. ¿Cuánto del surtido NO tiene código canónico?
+--
+-- La fila de categorías ahora cuenta COUNT(DISTINCT category_network_code_id).
+-- COUNT DISTINCT ignora los NULL, así que una línea cuyo producto no está
+-- mapeado a la taxonomía de red simplemente desaparece del numerador y del
+-- denominador: no baja la cobertura, se vuelve invisible.
+--
+-- Medido sobre PRODUCTS (24-sep-2026): 3.436.269 de 21.457.321 filas (16%) no
+-- tienen código —NULL o 0—, y entre las 675 empresas con 100+ productos hay 55
+-- con 90%+ del catálogo sin mapear y 46 más entre 50% y 90%. Para esas ~100
+-- cuentas la fila de categorías no mide surtido angosto: mide mapeo faltante.
+--
+-- Esta consulta lleva esa medición a las líneas de venta de la ventana, que es
+-- lo que la tarjeta realmente cuenta. La salida alimenta un umbral: por encima
+-- de cierto % sin código, la fila de categorías se marca como no confiable
+-- igual que se marcaba el texto libre.
+--
+-- No corre por MCP (el modelo semántico no expone el join a PRODUCTS).
+-- Va en un worksheet, igual que las consultas 5 y 6.
+-- ----------------------------------------------------------------------------
+WITH base AS (
+    SELECT DISTINCT
+        sd.sale_item_id,
+        sd.company_id,
+        p.category_network_code_id
+    FROM PRODUCTION.ANALYTICS.SALE_DETAILS sd
+    JOIN PRODUCTION.ANALYTICS.PRODUCTS  p ON p.product_id = sd.product_id
+    JOIN PRODUCTION.ANALYTICS.COMPANIES c ON c.company_id = sd.company_id
+    WHERE c.ks_flag = TRUE                    -- R1
+      AND sd.sales < 100000                   -- R4, por línea
+      AND sd.shipping_date >= '2025-01-01'
+      AND sd.shipping_date <  '2026-09-01'
+)
+SELECT
+    company_id,
+    COUNT(*) AS lineas,
+    COUNT(CASE WHEN category_network_code_id IS NULL
+                 OR category_network_code_id = 0 THEN 1 END) AS lineas_sin_codigo,
+    ROUND(100.0 * COUNT(CASE WHEN category_network_code_id IS NULL
+                               OR category_network_code_id = 0 THEN 1 END)
+          / NULLIF(COUNT(*), 0), 1) AS pct_sin_codigo
+FROM base
+GROUP BY company_id
+ORDER BY pct_sin_codigo DESC;

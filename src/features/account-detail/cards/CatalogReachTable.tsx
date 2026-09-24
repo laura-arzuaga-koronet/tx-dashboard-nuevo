@@ -21,17 +21,26 @@
  * title carries the window so nobody compares six months against twelve without
  * noticing.
  *
- * CATEGORIES COUNTS LABELS, NOT CANONICAL CATEGORIES
- * `product_category_name` is free text per company: 3,997 distinct names, 2,739
- * of them used by a single company, and the core is full of variants of the
- * same thing (Rose / Roses / ROSE / ROSES are four). Each company is internally
- * consistent — only 1 pair in 17,432 collapses when normalized — so the per
- * account number is right: it counts the labels that account uses. What is
- * distorted is the network-median column: a company that labels finely looks
- * broader than one that labels coarsely, at the same real assortment.
- * The canonical taxonomy exists (PRODUCTS.category_network_code_id, 1274 =
- * "Rosa"); it is not reachable from SALES_SV, so recomputing this row on it
- * needs the join in sql/evidence/assortment_gap.sql.
+ * QUE SE CUENTA EN CADA FILA, Y CON QUE CONFIANZA
+ * Categorias: category_network_code_id, la taxonomia de red (1274 = "Rosa").
+ * Es un codigo compartido, asi que la mediana de la red compara surtido de
+ * verdad. Dos avisos: el codigo es grueso —vender una rosa online marca "Rosa"
+ * cubierta, y por eso la mediana de cobertura salta de 87,9% con etiquetas a
+ * 100,0% con codigos, con el 51% de las cuentas clavadas en 100%—, y el 16% de
+ * las filas de PRODUCTS no tiene codigo (NULL o 0). COUNT DISTINCT ignora los
+ * NULL, asi que esas lineas no bajan la cobertura: desaparecen. Entre las 675
+ * empresas con 100+ productos, 55 tienen 90%+ del catalogo sin mapear y 46 mas
+ * entre 50% y 90%. La consulta 7 de catalog_reach.sql mide eso sobre las lineas
+ * de la ventana para poder marcar esas cuentas.
+ *
+ * Variedades y SKUs: product_variety y product_description, texto libre por
+ * empresa, y ahi no hay arreglo disponible. 399.658 cadenas distintas de
+ * product_variety, 260.414 de ellas usadas por una sola empresa. El codigo
+ * canonico a nivel producto existe (product_network_code_id) pero esta vacio en
+ * el 75% de las filas, asi que no sirve como clave. El conteo por cuenta es
+ * solido —cada empresa escribe consistente, igual que con las categorias— pero
+ * la mediana de la red en esas dos filas compara estilos de nomenclatura tanto
+ * como surtido, y se muestra sin el chip de distancia por eso.
  */
 import type { CatalogDim, CatalogReach } from '../../../data/adapter/types';
 import { fmtInt, fmtPct } from '../../../domain/format';
@@ -40,14 +49,16 @@ import { CardSection, CardTable } from '../EvidenceCard';
 /** Below this the account is behind most of the network on that width. */
 const BEHIND_MARGIN = 10;
 
-function VsNetwork({ dim, unreliable }: { dim: CatalogDim; unreliable?: boolean }) {
+function VsNetwork(
+  { dim, unreliable }: { dim: CatalogDim; unreliable?: false | string },
+) {
   if (dim.coverage_pct == null || dim.network_median == null) return <>—</>;
   /* Con categorías de texto libre la mediana de la red compara etiquetas, no
      surtido: quien etiqueta fino parece más ancho. Se muestra igual —el número
      existe— pero sin el chip de distancia, que es lo que invita a leerlo como
      un veredicto. */
   if (unreliable) {
-    return <>{fmtPct(dim.network_median, 0)} <span className="ev-state proxy">labels, not categories</span></>;
+    return <>{fmtPct(dim.network_median, 0)} <span className="ev-state proxy">{unreliable}</span></>;
   }
   const d = dim.coverage_pct - dim.network_median;
   const tone = d <= -BEHIND_MARGIN ? 'gap' : d >= BEHIND_MARGIN ? 'observed' : 'proxy';
@@ -103,7 +114,12 @@ export function CatalogReachTable(
             ? <span className="ev-state gap">{fmtInt(d.offline_only)}</span>
             : '—',
           fmtPct(d.coverage_pct, 0),
-          <VsNetwork dim={d} unreliable={freeText && label === 'Categories'} />,
+          <VsNetwork
+            dim={d}
+            unreliable={label === 'Categories'
+              ? (freeText && 'labels, not categories')
+              : 'free text, not a shared key'}
+          />,
         ])}
       />
       {otroPeriodo ? (
@@ -122,6 +138,14 @@ export function CatalogReachTable(
           the canonical network code clears this.
         </p>
       ) : null}
+
+      <p className="ev-note">
+        Varieties and SKUs are each company's own free-text strings — 399,658 distinct variety
+        names exist network-wide, 260,414 of them used by a single company — so the per account
+        counts are sound but the network comparison on those two rows measures naming style as
+        much as assortment. There is no canonical key to switch to: the product-level network
+        code is empty on 75% of rows.
+      </p>
 
       {shallow ? (
         <p className="ev-note">
