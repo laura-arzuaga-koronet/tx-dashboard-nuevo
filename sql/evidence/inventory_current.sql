@@ -31,6 +31,14 @@
 --     confirmar visibilidad real en el eShop. Por eso el label del JSON dice
 --     "proxy -- Not confirmed eShop visibility".
 --   · Regla 7: el vendor viene en blanco en algunas filas de Units, por diseño.
+--   · `unique_categories` cuenta PRODUCT_CATEGORY_NAME, que es texto libre por
+--     empresa (3.997 nombres en la red, 2.739 de ellos de una sola empresa; Rose,
+--     Roses, ROSE y ROSES son cuatro). Acá molesta menos que en catalog_reach
+--     porque el número se muestra por cuenta y no contra una mediana de red, así
+--     que dice "cuántas etiquetas usa" y eso es cierto. Si alguna vez se compara
+--     entre empresas, hay que pasar por el código canónico: INVENTORY_DETAILS
+--     tiene PRODUCT_ID, así que el join a PRODUCTS está disponible —
+--     COUNT(DISTINCT p.category_network_code_id) en vez del nombre.
 --
 -- NOMBRES DE COLUMNA — confirmados contra el esquema real (2026-09-10)
 --   Tres de los que había inferido estaban mal:

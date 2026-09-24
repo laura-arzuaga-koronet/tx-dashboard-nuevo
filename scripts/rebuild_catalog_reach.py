@@ -68,9 +68,10 @@ DATA = ROOT / "public" / "data"
 
 WINDOW = "2025-09..2026-08"
 DIMS = ("categories", "varieties", "skus")
-#: Con qué clave se agruparon las categorías en la extracción que alimenta este
-#: script. Cambiar a 'network_code' al pasar a la consulta canónica.
-CATEGORY_KEY = "free_text"
+#: Claves válidas para declarar con qué se agruparon las categorías. Es un flag
+#: y no una constante a propósito: lo decide quien corre la extracción, y una
+#: constante en el código se olvida de editar justo el día que cambia.
+CATEGORY_KEYS = ("free_text", "network_code")
 #: Catálogos por debajo de esto no dicen nada de cobertura: una finca con 1
 #: categoría vendida online da 100% y arrastra la mediana de toda la red.
 BENCH_MIN_TOTAL = 10
@@ -132,6 +133,10 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--sell", required=True)
     ap.add_argument("--buy", required=True)
+    ap.add_argument("--category-key", choices=CATEGORY_KEYS, default="free_text",
+                    help="network_code si la extracción salió de las consultas 3 y 4 "
+                         "de catalog_reach.sql (las que hacen el join a PRODUCTS). "
+                         "Apaga la advertencia de la tarjeta.")
     ap.add_argument("--dry-run", action="store_true")
     a = ap.parse_args()
 
@@ -171,7 +176,7 @@ def main() -> int:
             # 'network_code' = agrupado por PRODUCTS.category_network_code_id.
             # La tarjeta muestra la advertencia solo mientras diga free_text, así
             # que al regenerar con la versión canónica desaparece sola.
-            "category_key": CATEGORY_KEY,
+            "category_key": a.category_key,
             "rules_applied": ["R1 ks_flag", "R4 sales<100000 por línea", "R6 online = eCommerce+K2K+API (venta)"],
             "companies": len(companies),
         },

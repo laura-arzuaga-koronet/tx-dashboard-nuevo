@@ -104,53 +104,79 @@ FROM SEMANTIC_VIEW(
 );
 
 -- ============================================================================
--- ⚠ VERSIÓN CANÓNICA — usar esta en cuanto haya acceso directo
+-- ⭐ VERSIÓN CANÓNICA — ESTAS SON LAS QUE HAY QUE CORRER
 --
 -- Las dos consultas de arriba agrupan por `product_category_name`, que es TEXTO
--- LIBRE por empresa. Sirve para el conteo por cuenta (dentro de cada empresa la
--- grafía es consistente: 1 par de 17.432 colapsa al normalizar), pero DISTORSIONA
+-- LIBRE por empresa. Sirven para el conteo por cuenta (dentro de cada empresa la
+-- grafía es consistente: 1 par de 17.432 colapsa al normalizar), pero DISTORSIONAN
 -- la comparación contra la mediana de la red: quien etiqueta fino (Rose Garden /
 -- Rose Spray / Rose) parece más ancho que quien etiqueta grueso (Rosa) con el
--- mismo surtido real.
+-- mismo surtido real. 3.997 nombres distintos en la red, 2.739 de ellos usados
+-- por una sola empresa.
 --
--- La taxonomía canónica es PRODUCTS.category_network_code_id (1274 = "Rosa"
--- agrupa todas las variantes de rosa). NO es alcanzable desde SALES_SV ni desde
--- PROCUREMENTS_SV: hay que ir por product_id, que sí está en las dos.
+-- La taxonomía canónica es PRODUCTS.category_network_code_id — el código 1274 =
+-- "Rosa" agrupa Rose Garden, Rose Spray, Rose, ROSES ECUADOR, Roses y las demás.
+-- NO es alcanzable desde SALES_SV ni desde PROCUREMENTS_SV, pero las dos tienen
+-- product_id, así que el join siempre está disponible. Eso las saca del alcance
+-- del MCP de Cortex: van a mano en un worksheet, o por el pipeline.
 --
--- Se dejan las dos versiones a propósito. La de arriba corre HOY desde el MCP de
--- Cortex; esta no (el join la saca de su alcance). Cambiar una por otra antes de
--- tener el service account sería canjear un refresco que funciona por uno
--- correcto que nadie puede ejecutar.
+-- Devuelven exactamente las mismas columnas que las versiones de arriba, así que
+-- el script las consume igual:
 --
--- El script escribe `category_key` en el _metadata según cuál se haya usado, y
--- la tarjeta muestra la advertencia solo mientras diga 'free_text'. Cuando se
--- regenere con esta versión, la advertencia desaparece sola.
+--   python3 scripts/rebuild_catalog_reach.py --sell venta.json --buy compra.json \
+--                                            --category-key network_code
 --
--- VENTA — reemplaza la consulta 1
---   SELECT sd.company_id,
---          COUNT(DISTINCT p.category_network_code_id) AS cat_total,
---          COUNT(DISTINCT CASE WHEN sd.sales_channel IN ('eCommerce','K2K','API')
---                              THEN p.category_network_code_id END) AS cat_online,
---          COUNT(DISTINCT sd.product_variety)    AS var_total,
---          COUNT(DISTINCT CASE WHEN sd.sales_channel IN ('eCommerce','K2K','API')
---                              THEN sd.product_variety END)    AS var_online,
---          COUNT(DISTINCT sd.product_description) AS sku_total,
---          COUNT(DISTINCT CASE WHEN sd.sales_channel IN ('eCommerce','K2K','API')
---                              THEN sd.product_description END) AS sku_online
---   FROM PRODUCTION.ANALYTICS.SALE_DETAILS sd
---   JOIN PRODUCTION.ANALYTICS.PRODUCTS  p ON p.product_id = sd.product_id
---   JOIN PRODUCTION.ANALYTICS.COMPANIES c ON c.company_id = sd.company_id
---   WHERE c.ks_flag = TRUE AND sd.sales < 100000
---     AND sd.shipping_date >= '2025-09-01' AND sd.shipping_date < '2026-09-01'
---   GROUP BY sd.company_id;
---
--- COMPRA — igual, contra PROCUREMENT_DETAILS y con los canales Web/Procurement/API.
---
--- NOTA sobre variedades y SKUs: `product_variety` y `product_description` también
--- son texto libre y arrastran el mismo problema. No se midió cuánto. Antes de
--- comparar esas dos filas entre empresas conviene repetir el ejercicio que se
--- hizo con categorías, no asumir que están mejor.
---
+-- Ese flag es el que apaga la advertencia de la tarjeta. No lo pongas si corriste
+-- las consultas de arriba: el aviso está para que nadie lea la comparación contra
+-- la red como si fuera surtido cuando es ortografía.
+-- ============================================================================
+
+-- ── 3. VENTA, por código canónico ───────────────────────────────────────────
+SELECT
+    sd.company_id,
+    COUNT(DISTINCT p.category_network_code_id) AS cat_total,
+    COUNT(DISTINCT CASE WHEN sd.sales_channel IN ('eCommerce', 'K2K', 'API')
+                        THEN p.category_network_code_id END) AS cat_online,
+    COUNT(DISTINCT sd.product_variety)  AS var_total,
+    COUNT(DISTINCT CASE WHEN sd.sales_channel IN ('eCommerce', 'K2K', 'API')
+                        THEN sd.product_variety END) AS var_online,
+    COUNT(DISTINCT sd.product_description) AS sku_total,
+    COUNT(DISTINCT CASE WHEN sd.sales_channel IN ('eCommerce', 'K2K', 'API')
+                        THEN sd.product_description END) AS sku_online
+FROM PRODUCTION.ANALYTICS.SALE_DETAILS sd
+JOIN PRODUCTION.ANALYTICS.PRODUCTS     p ON p.product_id = sd.product_id
+JOIN PRODUCTION.ANALYTICS.COMPANIES    c ON c.company_id = sd.company_id
+WHERE c.ks_flag = TRUE                       -- R1
+  AND sd.sales < 100000                      -- R4, por línea
+  AND sd.shipping_date >= '2025-09-01'
+  AND sd.shipping_date <  '2026-09-01'
+GROUP BY sd.company_id;
+
+-- ── 4. COMPRA, por código canónico ──────────────────────────────────────────
+SELECT
+    pd.company_id,
+    COUNT(DISTINCT p.category_network_code_id) AS cat_total,
+    COUNT(DISTINCT CASE WHEN pd.sales_channel IN ('Web', 'Procurement', 'API')
+                        THEN p.category_network_code_id END) AS cat_online,
+    COUNT(DISTINCT pd.product_variety)  AS var_total,
+    COUNT(DISTINCT CASE WHEN pd.sales_channel IN ('Web', 'Procurement', 'API')
+                        THEN pd.product_variety END) AS var_online,
+    COUNT(DISTINCT pd.product_description) AS sku_total,
+    COUNT(DISTINCT CASE WHEN pd.sales_channel IN ('Web', 'Procurement', 'API')
+                        THEN pd.product_description END) AS sku_online
+FROM PRODUCTION.ANALYTICS.PROCUREMENT_DETAILS pd
+JOIN PRODUCTION.ANALYTICS.PRODUCTS  p ON p.product_id = pd.product_id
+JOIN PRODUCTION.ANALYTICS.COMPANIES c ON c.company_id = pd.company_id
+WHERE c.ks_flag = TRUE
+  AND pd.shipping_date >= '2025-09-01'
+  AND pd.shipping_date <  '2026-09-01'
+GROUP BY pd.company_id;
+
+-- ── NOTA sobre variedades y SKUs ─────────────────────────────────────────────
+-- `product_variety` y `product_description` TAMBIÉN son texto libre y arrastran
+-- el mismo problema. No se midió cuánto. Antes de comparar esas dos filas entre
+-- empresas conviene repetir el ejercicio que se hizo con categorías, no asumir
+-- que están mejor: esa suposición es justo la que hubo que corregir acá.
 -- ============================================================================
 -- CÓMO ARMAR EL JSON
 --
