@@ -79,6 +79,7 @@ EXTERNAL_SOURCES = {
     "Estimado",
     "Estimado (verificar)",
     "Estimado (AnnualRevenue×0.11)",
+    "Annual Total Sales",
     "ORA",
     "FCS",
 }
