@@ -92,6 +92,7 @@ jobs:
           python3 scripts/rebuild_catalog_reach.py --sell /tmp/staging/catalog_sell.json \
                                                    --buy  /tmp/staging/catalog_buy.json
           python3 scripts/rebuild_inventory.py --csv /tmp/staging/inventory.json
+          python3 scripts/rebuild_companies_universe.py --staging /tmp/staging/companies_universe.json
           python3 scripts/rebuild_accounts_gmv.py
           python3 scripts/rebuild_derived.py
 

@@ -1,0 +1,6221 @@
+{
+"_metadata": {
+"generated_at": "2026-09-25",
+"source": "PRODUCTION.ANALYTICS.COMPANIES (ks_flag = TRUE)",
+"query": "sql/evidence/companies_universe.sql",
+"snowflake_query_id": "01c74f8c-000f-deb2-0001-83021050632a",
+"rows": 621
+},
+"companies": [
+{
+"company_id": "1241",
+"sfdc_id": "001G000001DW4PTIA1",
+"company_name": "Farm To Canada",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "1573",
+"sfdc_id": "001G000001DW4PsIAL",
+"company_name": "Flowerfinders International, LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "1614",
+"sfdc_id": "001G000001DW4QJIA1",
+"company_name": "-Groflowers",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "2516",
+"sfdc_id": "001G000001DW4OWIA1",
+"company_name": "Brightland Farms",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "6554",
+"sfdc_id": "001G000001DW4QOIA1",
+"company_name": "Valley Springs LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "6864",
+"sfdc_id": "001G000001DW4T1IAL",
+"company_name": "Sofi's Flowers",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "7030",
+"sfdc_id": "001G000001DVt5TIAT",
+"company_name": "Bill Doran Company",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 82600000.0
+},
+{
+"company_id": "7631",
+"sfdc_id": "001G000001DW4TQIA1",
+"company_name": "* Trilogy Floral",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 9000000.0
+},
+{
+"company_id": "12941",
+"sfdc_id": "001G000001DW4SoIAL",
+"company_name": "Rosaprima International, LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 68600000.0
+},
+{
+"company_id": "13982",
+"sfdc_id": "001G000001DW4OkIAL",
+"company_name": "Servicios Chilfresh Ltda.",
+"company_industry": "Floral - Grower",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "13989",
+"sfdc_id": "001G000001DW4SeIAL",
+"company_name": "Pronto Farms LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "14422",
+"sfdc_id": "001G000001DW4SSIA1",
+"company_name": "PAT FLOR SCARL",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "17503",
+"sfdc_id": "001G000001DW4T3IAL",
+"company_name": "SOS Floral",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "17789",
+"sfdc_id": "001G000001DW4OKIA1",
+"company_name": "Bella Blossom LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "18322",
+"sfdc_id": "001G000001DW4QWIA1",
+"company_name": "* Jet Fresh Flower Distributors Inc.",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 35500000.0
+},
+{
+"company_id": "20749",
+"sfdc_id": "001G000001DW4PPIA1",
+"company_name": "EF FLOWERS",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "20769",
+"sfdc_id": "001G000001DW4O5IAL",
+"company_name": "AmeriLink Floratrader",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 4600000.0
+},
+{
+"company_id": "22143",
+"sfdc_id": "001G000001DW4SpIAL",
+"company_name": "Royal Flowers Inc., Domestic",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "22218",
+"sfdc_id": "001G000001DW4TAIA1",
+"company_name": "Sunburst Farms",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "25120",
+"sfdc_id": "001G000001DW4QdIAL",
+"company_name": "Kennicott Kuts",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "25489",
+"sfdc_id": "001G000001DW4T2IAL",
+"company_name": "-Sole Farms",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 44000000.0
+},
+{
+"company_id": "33023",
+"sfdc_id": "001G000001DW4SbIAL",
+"company_name": "Prime Petals LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "33986",
+"sfdc_id": "001G000001DXD6JIAX",
+"company_name": "Royal Flowers Inc, International",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "35266",
+"sfdc_id": "001G000001K7URpIAN",
+"company_name": "Liberty Blooms",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "37745",
+"sfdc_id": "001G000001Tssa3IAB",
+"company_name": "Floral Cooperative Purchasing Group LLC",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Temporary Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "38477",
+"sfdc_id": "0011600001xGH4yAAG",
+"company_name": "Sofia Flowers USA LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "38582",
+"sfdc_id": "001G000001DW4PFIA1",
+"company_name": "Gala Roses",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 13823689.0
+},
+{
+"company_id": "39124",
+"sfdc_id": "001G000001XIVGOIA5",
+"company_name": "Herradura Growers",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "41934",
+"sfdc_id": "001G000001DW4OtIAL",
+"company_name": "Continental Floral LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 69200000.0
+},
+{
+"company_id": "44150",
+"sfdc_id": "001G000001H3CrIIAV",
+"company_name": "Kennicott Brothers Company",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 127000000.0
+},
+{
+"company_id": "44225",
+"sfdc_id": "001G000001evx5aIAA",
+"company_name": "Pinnacle Flowers, LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 7000000.0
+},
+{
+"company_id": "46206",
+"sfdc_id": "001G000001V8C6jIAF",
+"company_name": "FLORISOL& CO FLOWER TRADING LLC DBA MARVEL FLOWERS",
+"company_industry": "Floral - Grower",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 2735622.0
+},
+{
+"company_id": "54343",
+"sfdc_id": "001G000001jjTb0IAE",
+"company_name": "**Wafex USA",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "73730",
+"sfdc_id": "001G000001DW4OuIAL",
+"company_name": "Allure Farms",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 15000000.0
+},
+{
+"company_id": "75802",
+"sfdc_id": "0011600001ndasZAAQ",
+"company_name": "Royal Flowers Global",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "77300",
+"sfdc_id": "001G000001DW4QCIA1",
+"company_name": "Golden Flowers",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "77787",
+"sfdc_id": "001G000001JbAIjIAN",
+"company_name": "Zoom-Bloom",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "103078",
+"sfdc_id": "001G000001DW4R3IAL",
+"company_name": "Mayesh Wholesale Florist Inc",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 194000000.0
+},
+{
+"company_id": "103112",
+"sfdc_id": "001G000001DW4PzIAL",
+"company_name": "Fresca Farms",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 59000000.0
+},
+{
+"company_id": "130337",
+"sfdc_id": "001G000001DW4PKIA1",
+"company_name": "EQR USA",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 52800000.0
+},
+{
+"company_id": "130506",
+"sfdc_id": "0011L000028UJe9QAG",
+"company_name": "Royal Flowers B.V,",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Prospect",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "133965",
+"sfdc_id": "0011600001lhfCzAAI",
+"company_name": "CI CULTIVOS SAYONARA SAS",
+"company_industry": "Floral - Grower",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "139851",
+"sfdc_id": "0011600001uUbL8AAK",
+"company_name": "Floral Chain Direct",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 7700225.0
+},
+{
+"company_id": "144192",
+"sfdc_id": "0011600001uUw5EAAS",
+"company_name": "INTERNATIONAL TRADING AND SERVICES INC",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "144369",
+"sfdc_id": "0011600001lgY6YAAU",
+"company_name": "Premium Greens Australia LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 1500000.0
+},
+{
+"company_id": "146183",
+"sfdc_id": "0011600001zrCXXAA2",
+"company_name": "EPIC FARMS USA LLC",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "146846",
+"sfdc_id": "001G000001UTWVuIAP",
+"company_name": "Continental Flowers",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "152602",
+"sfdc_id": "001G000001TsGEcIAN",
+"company_name": "Lubbock Wholesale",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "153031",
+"sfdc_id": "0011600001ncRipAAE",
+"company_name": "FloraLink",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 2600000.0
+},
+{
+"company_id": "153536",
+"sfdc_id": "0011600001uUyJlAAK",
+"company_name": "Fair Trade Floral Inc.",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "154025",
+"sfdc_id": "0011600001lhfKBAAY",
+"company_name": "Sande Flowers",
+"company_industry": "Floral - Grower",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "159761",
+"sfdc_id": "001G000001TsgdSIAR",
+"company_name": "Cleveland Plant & Flower Co.",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "166363",
+"sfdc_id": "0011600001uSo7OAAS",
+"company_name": "Guamito S.A.S NIT 900116641-5",
+"company_industry": "Floral - Grower",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "182870",
+"sfdc_id": "0011600001lhZANAA2",
+"company_name": "Cananvalle USA LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 5772183.0
+},
+{
+"company_id": "182872",
+"sfdc_id": "0011600001zsxbOAAQ",
+"company_name": "The Elite Flower",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "188968",
+"sfdc_id": "001160000223WK5AAM",
+"company_name": "Global Flowers",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "189002",
+"sfdc_id": "00116000025JAqTAAW",
+"company_name": "Royal Flowers S.A",
+"company_industry": "Floral - Grower",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "189419",
+"sfdc_id": "001G000001DW4QmIAL",
+"company_name": "Legacy Flowers",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 16000000.0
+},
+{
+"company_id": "189608",
+"sfdc_id": "00116000021ANJcAAO",
+"company_name": "Zieger & Sons Inc. Wholesale Florists",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "189685",
+"sfdc_id": "00116000020LCvJAAW",
+"company_name": "Farm Fresh Exports INC",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "193828",
+"sfdc_id": "00116000023rB8qAAE",
+"company_name": "Arizona Family Florist",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "193829",
+"sfdc_id": "0011600001lg8CAAAY",
+"company_name": "Muchflowers Inc.",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 3070423.0
+},
+{
+"company_id": "193886",
+"sfdc_id": "0011600001zVGSVAA4",
+"company_name": "Import Flowers Nashville LLC",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "194206",
+"sfdc_id": "00116000023rUnKAAU",
+"company_name": "H&F Greens Inc (Mariposa Growers)",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "196051",
+"sfdc_id": "001G000001V7QQwIAN",
+"company_name": "Aussie Direct",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Prospect",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "198117",
+"sfdc_id": "001G000001DW4OsIAL",
+"company_name": "* Continental Farms",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 22000000.0
+},
+{
+"company_id": "198180",
+"sfdc_id": "0011L00002gcMh4QAE",
+"company_name": "Misty Flowers",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "199908",
+"sfdc_id": "0011600001uRq3BAAS",
+"company_name": "Bloomistics",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 1734201.0
+},
+{
+"company_id": "200279",
+"sfdc_id": "00116000026VeXIAA0",
+"company_name": "DP Flowers Corp",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "200503",
+"sfdc_id": "00116000026WjjWAAS",
+"company_name": "Stellar Farms",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 11000000.0
+},
+{
+"company_id": "257477",
+"sfdc_id": "0011L000026fmYoQAI",
+"company_name": "Mayta International LLC / Native Blooms",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "295294",
+"sfdc_id": "0011600001uSoWFAA0",
+"company_name": "Rosamina SAS",
+"company_industry": "Floral - Grower",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "295299",
+"sfdc_id": "0011L000028SPvlQAG",
+"company_name": "American Floral Cargo/Splendor Proteas, LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "295412",
+"sfdc_id": "0011600001lgayHAAQ",
+"company_name": "BLC Miami / Byfod USA",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Prospect",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "296456",
+"sfdc_id": "001160000221ktcAAA",
+"company_name": "Produce Junction Inc",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Prospect",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "296458",
+"sfdc_id": "0011L000027XBWKQA4",
+"company_name": "Florimex Toronto Corp.",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "313164",
+"sfdc_id": "0011L000028F9SYQA0",
+"company_name": "Bunches Direct Blumenimport GmbH",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "315007",
+"sfdc_id": "0011600001uTSvRAAW",
+"company_name": "The Queens Flowers Corp",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "319143",
+"sfdc_id": "0011L000029aO9sQAE",
+"company_name": "FloraCo, Inc",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "321023",
+"sfdc_id": "001G000001TtEaaIAF",
+"company_name": "Bill Doran Company (2)",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 21000000.0
+},
+{
+"company_id": "321907",
+"sfdc_id": "0011L00002BInj0QAD",
+"company_name": "Greens and Flowers Connection",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "322928",
+"sfdc_id": "0011600001uRssiAAC",
+"company_name": "Inversiones Napy S.A",
+"company_industry": "Floral - Grower",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "327132",
+"sfdc_id": "001160000276ptzAAA",
+"company_name": "Royal Flower Import Group Inc.",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "341499",
+"sfdc_id": "001G000001DW4OlIAL",
+"company_name": "Choice Farms",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 14000000.0
+},
+{
+"company_id": "343614",
+"sfdc_id": "001G000001bpcuyIAA",
+"company_name": "Galleria Farms",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "375054",
+"sfdc_id": "001G000001DW4RwIAL",
+"company_name": "Miaflora Farms",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "377256",
+"sfdc_id": "001G000001f8bp1IAA",
+"company_name": "Multiflora Corporation",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 1201336.0
+},
+{
+"company_id": "378242",
+"sfdc_id": "001G000001DW4SZIA1",
+"company_name": "Premium Flowers",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "378264",
+"sfdc_id": "0011L00002Sbi4xQAB",
+"company_name": "Dynamic Farms",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "393475",
+"sfdc_id": "001G000001IYgNpIAL",
+"company_name": "American Agroproducts",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "394783",
+"sfdc_id": "0011L000028TahoQAC",
+"company_name": "Metro Flower Market LLC",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "395159",
+"sfdc_id": "001G000001DW4OEIA1",
+"company_name": "Equiflor LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "395224",
+"sfdc_id": "001160000219N0AAAU",
+"company_name": "John G Hofland Ltd.",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Prospect",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "395357",
+"sfdc_id": "001G000001TsIbtIAF",
+"company_name": "Pikes Peak Floral",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "395382",
+"sfdc_id": "0011600001uRt3EAAS",
+"company_name": "Naranjo Farms LLC",
+"company_industry": "Floral - Grower",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 4148978.0
+},
+{
+"company_id": "397194",
+"sfdc_id": "0011L000028V2EyQAK",
+"company_name": "Charleston Wholesale Florist",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "397789",
+"sfdc_id": "0011L00002WOF1LQAX",
+"company_name": "Dreaming Roses Corp",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "398856",
+"sfdc_id": "0011L00002WOu1fQAD",
+"company_name": "National Floral Supply",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "399493",
+"sfdc_id": "0011L00002WPFw9QAH",
+"company_name": "Pacific Blooms, Inc.",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "399890",
+"sfdc_id": "0011L00002SaN5JQAV",
+"company_name": "Patagonia Sun",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "400013",
+"sfdc_id": "00116000021BDnbAAG",
+"company_name": "Washington Floral Service, Inc",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 18400000.0
+},
+{
+"company_id": "400914",
+"sfdc_id": "00116000023XoIIAA0",
+"company_name": "SKY FLOWERS S.A.S",
+"company_industry": "Floral - Grower",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 5000000.0
+},
+{
+"company_id": "401680",
+"sfdc_id": "001G000001f8XFWIA2",
+"company_name": "FLORISOL & COMPANY FLOWER TRADING LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "412951",
+"sfdc_id": "001G000001aIv6EIAS",
+"company_name": "KBC Cooler Account",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 3000000000.0
+},
+{
+"company_id": "449344",
+"sfdc_id": "0011L00001zzDYPQA2",
+"company_name": "Southern Floral Co",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "449683",
+"sfdc_id": "001G000001DW4PgIAL",
+"company_name": "Floreco, Inc",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "453081",
+"sfdc_id": "001160000221mrNAAQ",
+"company_name": "* Welyflor / PROFILE FLOWERS",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 22000000.0
+},
+{
+"company_id": "453766",
+"sfdc_id": "0011L00002dFBdxQAG",
+"company_name": "Continental Floral WA LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "453769",
+"sfdc_id": "0011L00002dFBcfQAG",
+"company_name": "Continental Floral FL LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 67000000.0
+},
+{
+"company_id": "453771",
+"sfdc_id": "0011L00002dFBf0QAG",
+"company_name": "Continental Floral CA LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 5000000.0
+},
+{
+"company_id": "454290",
+"sfdc_id": "0011L00002dPwPoQAK",
+"company_name": "TRADEWINDS INTL LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "454705",
+"sfdc_id": "0011L00002dPqOxQAK",
+"company_name": "South Florals Imports LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "466757",
+"sfdc_id": "0011L00002dP4tDQAS",
+"company_name": "LATAM IMPORT & EXPORT S.A.",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "467802",
+"sfdc_id": "001G000001DW4SfIAL",
+"company_name": "Protean Farms US",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "468041",
+"sfdc_id": "0011600001ygzykAAA",
+"company_name": "U.S. Greens Corp",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 20000000.0
+},
+{
+"company_id": "469713",
+"sfdc_id": "00116000027KCBbAAO",
+"company_name": "KD & Company",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "470249",
+"sfdc_id": "0011L00002fOHhdQAG",
+"company_name": "ACME Testing, Inc.",
+"company_industry": null,
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": null,
+"annual_total_sales": null
+},
+{
+"company_id": "470768",
+"sfdc_id": "0011600001lhStIAAU",
+"company_name": "Alcock Wholesale",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Implementation - Not Live",
+"record_type_name": "Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": 2000000.0
+},
+{
+"company_id": "470794",
+"sfdc_id": "0011L00002Y8j3vQAB",
+"company_name": "* AquaRose",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "471458",
+"sfdc_id": "0011L00002fOqChQAK",
+"company_name": "Continental Floral OR LLC",
+"company_industry": "Floral - Grower",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 5300000.0
+},
+{
+"company_id": "473329",
+"sfdc_id": "0011L00002gzWkiQAE",
+"company_name": "CAREX",
+"company_industry": null,
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": null,
+"annual_total_sales": null
+},
+{
+"company_id": "474847",
+"sfdc_id": "0011L00002h0CH9QAM",
+"company_name": "Vosz Floral LLC",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "475084",
+"sfdc_id": "001G000001DW4TWIA1",
+"company_name": "Valleflor USA",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 548561.0
+},
+{
+"company_id": "475168",
+"sfdc_id": "001G000001TsJj3IAF",
+"company_name": "South Carolina Specialty Cut",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "475809",
+"sfdc_id": "0011600001mLdK1AAK",
+"company_name": "Ponte Tresa USA LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": 1563954.0
+},
+{
+"company_id": "476379",
+"sfdc_id": "00116000025JsB2AAK",
+"company_name": "Lone Star Flower Market",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "476679",
+"sfdc_id": "001G000001TsJNiIAN",
+"company_name": "Taylor Wholesale Florist",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 5000000.0
+},
+{
+"company_id": "477128",
+"sfdc_id": "0011600001mLcyvAAC",
+"company_name": "Arizona Floral Exchange",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 3500000.0
+},
+{
+"company_id": "477673",
+"sfdc_id": "0011600001mLv33AAC",
+"company_name": "ECOROSES LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 228436.0
+},
+{
+"company_id": "483642",
+"sfdc_id": "0011L00002h0i8vQAA",
+"company_name": "Premium Greens Australia B.V.",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "484037",
+"sfdc_id": "001G000001TtDnBIAV",
+"company_name": "Georgia State Floral Distributors",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 500000.0
+},
+{
+"company_id": "488495",
+"sfdc_id": "0011L000028F0KvQAK",
+"company_name": "Sierra Flower Trading",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "489148",
+"sfdc_id": "0011L00002jVSxCQAW",
+"company_name": "FLOWERMART CORP",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "491757",
+"sfdc_id": "0011L00002lkwakQAA",
+"company_name": "Del Alma Group",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "492201",
+"sfdc_id": "00116000026Vdd4AAC",
+"company_name": "Forest Flowers",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "492219",
+"sfdc_id": "0011L00002kvsqiQAA",
+"company_name": "Interflor LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "493143",
+"sfdc_id": "0011L00002p3RB4QAM",
+"company_name": "Brightland Floral Distributors",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "496600",
+"sfdc_id": "0011L00002rCC5zQAG",
+"company_name": "Floristcentric, LLC",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "498769",
+"sfdc_id": "001G000001DW4R6IAL",
+"company_name": "Melody Farms LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "498842",
+"sfdc_id": "0014p00001lNPUzAAO",
+"company_name": "SUNRITE FARMS COLLECTIONS CORP",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "498865",
+"sfdc_id": "0011L00002p55GMQAY",
+"company_name": "H&T Wholesale Flowers",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 7000000.0
+},
+{
+"company_id": "498992",
+"sfdc_id": "0011L00002rFEJwQAO",
+"company_name": "CANTIZA FLORAL DBA NFD",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "499023",
+"sfdc_id": "001G000001DW4SUIA1",
+"company_name": "Pennock Floral Distributors",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "503075",
+"sfdc_id": "00116000025sMRVAA2",
+"company_name": "HANAYA FARMS",
+"company_industry": "Floral - Grower",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "505063",
+"sfdc_id": "0011600001zF6GkAAK",
+"company_name": "Andean Fresh LLC",
+"company_industry": "Floral - Grower",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "505603",
+"sfdc_id": "0011L00002aTOTFQA4",
+"company_name": "MGA Flowers",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "505896",
+"sfdc_id": "0014p00001lOEl6AAG",
+"company_name": "Continental Floral PNW LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 36200000.0
+},
+{
+"company_id": "507479",
+"sfdc_id": "0011L00002WO3HUQA1",
+"company_name": "Ashland Addison",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "507518",
+"sfdc_id": "0011600001zW56mAAC",
+"company_name": "Anton Spaargaren B.V.",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "508421",
+"sfdc_id": "001G000001DW4Q6IAL",
+"company_name": "Gardens America Inc.",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 8800000.0
+},
+{
+"company_id": "508576",
+"sfdc_id": "0014p00001lR1gMAAS",
+"company_name": "Old Mill Wholesale Flowers, LLC",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "509751",
+"sfdc_id": "0011600001zFAH3AAO",
+"company_name": "Best Miami Growers LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "518813",
+"sfdc_id": "0014p00001lQoCEAA0",
+"company_name": "Sun Valley Floral Farm",
+"company_industry": "Floral - Grower",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": 95000000.0
+},
+{
+"company_id": "521854",
+"sfdc_id": "0011600001xHhmfAAC",
+"company_name": "Albin Hagstrom & Son, Inc.",
+"company_industry": "Floral - Grower",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "529464",
+"sfdc_id": "001G000001DW4P4IAL",
+"company_name": "Direct Farms, LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "529514",
+"sfdc_id": "0011L00002DO9nVQAT",
+"company_name": "Global Bouquet, LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "529854",
+"sfdc_id": "0014p00001ncYLuAAM",
+"company_name": "Petaldriven, LLC",
+"company_industry": "Floral - Broker",
+"komet_status": "Deactivated",
+"record_type_name": "Prospect",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "530493",
+"sfdc_id": "0014p00001nd9sQAAQ",
+"company_name": "The Flower Co, LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "533116",
+"sfdc_id": "001G000001DW4ThIAL",
+"company_name": "Zion Flowers INC",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "533372",
+"sfdc_id": "0014p00001lQH8KAAW",
+"company_name": "Pipo's Petals",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "534902",
+"sfdc_id": "001160000279CXUAA2",
+"company_name": "Vivofloral",
+"company_industry": "Floral - Grower",
+"komet_status": "Temporary Deactivated",
+"record_type_name": "Prospect",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "535575",
+"sfdc_id": "0014p00001sIhzoAAC",
+"company_name": "Sienna's Wholesale Flowers",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "536956",
+"sfdc_id": "0014p00001sHtlXAAS",
+"company_name": "MAGNIFICA FLOWERS",
+"company_industry": "Floral - Grower",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "537092",
+"sfdc_id": "0014p00001lORHxAAO",
+"company_name": "Tropical Blooms Inc.",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "537236",
+"sfdc_id": "0011600001oYHO4AAO",
+"company_name": "Symphony Flowers Corp",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "539627",
+"sfdc_id": "0011L000028Ush9QAC",
+"company_name": "Texas Flowers USA",
+"company_industry": "Floral - Grower",
+"komet_status": "Deactivated",
+"record_type_name": "Prospect",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "541260",
+"sfdc_id": "0014p00001ss9q8AAA",
+"company_name": "SAGAT INTERNATIONAL LLC",
+"company_industry": "Floral - Grower",
+"komet_status": "Deactivated",
+"record_type_name": "Prospect",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "541415",
+"sfdc_id": "001G000001DW4QnIAL",
+"company_name": "Len Busch Roses",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "541854",
+"sfdc_id": "0014p00001so6ueAAA",
+"company_name": "Fletch Wholesale llc",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 3000000.0
+},
+{
+"company_id": "543610",
+"sfdc_id": "0011600001uTH0wAAG",
+"company_name": "Frank Adams Wholesale Florist",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 10000000.0
+},
+{
+"company_id": "544995",
+"sfdc_id": "0011L00002e9F7CQAU",
+"company_name": "Savannah Flowers Corp CA",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Prospect",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "552759",
+"sfdc_id": "0011600001uSdGFAA0",
+"company_name": "Kings Wholesale",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "554187",
+"sfdc_id": "0014p00001v3oKUAAY",
+"company_name": "IRIS ROSES LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "554905",
+"sfdc_id": "001G000001TsIedIAF",
+"company_name": "Quinlan-Wasserman, Inc",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "555280",
+"sfdc_id": "0011600001uSOIGAA4",
+"company_name": "Golden State Flowers Inc",
+"company_industry": "Floral - Grower",
+"komet_status": "Deactivated",
+"record_type_name": "Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": 2900000.0
+},
+{
+"company_id": "557903",
+"sfdc_id": "00116000020LDINAA4",
+"company_name": "Roots Peru",
+"company_industry": "Floral - Grower",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "558589",
+"sfdc_id": "0014p00001vyXTqAAM",
+"company_name": "Ecuagarden Flowers Inc",
+"company_industry": "Floral - Grower",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "560072",
+"sfdc_id": "0014p00001wXZDiAAO",
+"company_name": "Continental Floral NC LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 3200000.0
+},
+{
+"company_id": "561230",
+"sfdc_id": "0011600001mNfpDAAS",
+"company_name": "Bloomit Corp.",
+"company_industry": "Floral - Grower",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "561353",
+"sfdc_id": "0014p00001x5IFPAA2",
+"company_name": "Arizona Family Florist - Training Account",
+"company_industry": null,
+"komet_status": "Deactivated",
+"record_type_name": "Prospect",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "561453",
+"sfdc_id": "00116000021c3HoAAI",
+"company_name": "A Florist First",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "561518",
+"sfdc_id": "0014p00001ueJDCAA2",
+"company_name": "Floramix, Inc.",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "562923",
+"sfdc_id": "0014p00001x08lnAAA",
+"company_name": "Ron's Wholesale Flowers",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Prospect",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "565262",
+"sfdc_id": "001G000001TsJRRIA3",
+"company_name": "Best In Bloom Inc.",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Prospect",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "565522",
+"sfdc_id": "0014p00001y2T51AAE",
+"company_name": "Belle Bloom Enterprises",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "568020",
+"sfdc_id": "001G000001DW4PfIAL",
+"company_name": "Floraxis Cut Flowers, Inc",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "568330",
+"sfdc_id": "0014p00001xytt6AAA",
+"company_name": "Flowerfull DBA Flower the Box",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Prospect",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "569309",
+"sfdc_id": "0014p00001t5gUtAAI",
+"company_name": "Castle Hayne Farms",
+"company_industry": "Floral - Grower",
+"komet_status": "Production - Live",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "569345",
+"sfdc_id": "0014p00001ycNxQAAU",
+"company_name": "UrbanStems",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "570553",
+"sfdc_id": "0014p00001ycFDVAA2",
+"company_name": "Uniflora Overseas Florida Inc.",
+"company_industry": "Floral - Grower",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "571220",
+"sfdc_id": "001G000001DW4PAIA1",
+"company_name": "Dramm & Echter, Inc",
+"company_industry": "Floral - Grower",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "571542",
+"sfdc_id": "0014p00001y5aemAAA",
+"company_name": "Geny's Flowers",
+"company_industry": "Floral - Retailer",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 2000000.0
+},
+{
+"company_id": "571846",
+"sfdc_id": "0014p00001yqVUqAAM",
+"company_name": "Magnaflor Corp",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "571990",
+"sfdc_id": "0011600001uSC9HAAW",
+"company_name": "Floraroma S.A.",
+"company_industry": "Floral - Grower",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "572900",
+"sfdc_id": "0014p00001xzL4bAAE",
+"company_name": "IKEBANA CO SAS",
+"company_industry": "Floral - Grower",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 604569.0
+},
+{
+"company_id": "573160",
+"sfdc_id": "0014p00001z7pq0AAA",
+"company_name": "Premier Wholesale INC",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": 5500000.0
+},
+{
+"company_id": "573661",
+"sfdc_id": "0014p00001zAsAQAA0",
+"company_name": "J&E Greens",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "575427",
+"sfdc_id": "0014p00001z7pWNAAY",
+"company_name": "FLORMARKET INV CORP",
+"company_industry": "Floral - Broker",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "575819",
+"sfdc_id": "001G000001fjeOcIAI",
+"company_name": "LA TOSCANA FARMS",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 2750000.0
+},
+{
+"company_id": "577566",
+"sfdc_id": "0014p00001y6Ac0AAE",
+"company_name": "FLEUPHORIA S.A.S",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "577847",
+"sfdc_id": "001G000001echXWIAY",
+"company_name": "Holland Flower Market inc",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": 10000000.0
+},
+{
+"company_id": "578192",
+"sfdc_id": "00116000021AL5gAAG",
+"company_name": "Americana, Inc. - MIA",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": 1100000.0
+},
+{
+"company_id": "578194",
+"sfdc_id": "00116000023sYATAA2",
+"company_name": "Flowers Direct Inc",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "579932",
+"sfdc_id": "0011600001uSI8QAAW",
+"company_name": "Tutuli Flower Farms",
+"company_industry": "Floral - Grower",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 1200000.0
+},
+{
+"company_id": "584972",
+"sfdc_id": "0014p00001zdXhfAAE",
+"company_name": "* Flowers' International Group",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": 1200000.0
+},
+{
+"company_id": "584973",
+"sfdc_id": "0014p00001zAFqOAAW",
+"company_name": "Flores de la Hacienda",
+"company_industry": "Floral - Grower",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 4000000.0
+},
+{
+"company_id": "585613",
+"sfdc_id": "001G000001DW4SyIAL",
+"company_name": "Sieck Floral Distributing, Inc",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 8100000.0
+},
+{
+"company_id": "585950",
+"sfdc_id": "0014p00001zue6wAAA",
+"company_name": "Quinde Flowers",
+"company_industry": "Floral - Grower",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": 2400000.0
+},
+{
+"company_id": "586784",
+"sfdc_id": "001G000001TsFyvIAF",
+"company_name": "Louisiana Wholesale Florist",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 4000000.0
+},
+{
+"company_id": "587095",
+"sfdc_id": "0014p00001zwh2QAAQ",
+"company_name": "MAGICAL COLOMBIA PTE LTD",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Prospect",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "588171",
+"sfdc_id": "0014p00001z9zUXAAY",
+"company_name": "Magnolia Wholesale Florist Inc",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "588212",
+"sfdc_id": "0014p00001zdp73AAA",
+"company_name": "Wholesale-orchid.com",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": 1000000.0
+},
+{
+"company_id": "588417",
+"sfdc_id": "0014p00001zwoT5AAI",
+"company_name": "SHAW LAKE FARMS INC.",
+"company_industry": "Floral - Grower",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 3000000.0
+},
+{
+"company_id": "590675",
+"sfdc_id": "0014p00001zy3KeAAI",
+"company_name": "FernTrust Inc.",
+"company_industry": "Floral - Grower",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 9210000.0
+},
+{
+"company_id": "590728",
+"sfdc_id": "0014p000020wmRFAAY",
+"company_name": "DC FLOWERS DIRECT",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 2500000.0
+},
+{
+"company_id": "591665",
+"sfdc_id": "0014p000020vycQAAQ",
+"company_name": "Natural Flowers, Inc",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 16000000.0
+},
+{
+"company_id": "591877",
+"sfdc_id": "00116000021Z8FtAAK",
+"company_name": "Claymore C. Sieck Wholesale Florist",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 8000000.0
+},
+{
+"company_id": "592061",
+"sfdc_id": "0014p000020wEBoAAM",
+"company_name": "Americana Members",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": 1500000.0
+},
+{
+"company_id": "592345",
+"sfdc_id": "0011L00001zzDR9QAM",
+"company_name": "Orlando Wholesale Florist",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 5000000.0
+},
+{
+"company_id": "592615",
+"sfdc_id": "0014p000020wDaDAAU",
+"company_name": "NYC FLORAL GREENS",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 400000.0
+},
+{
+"company_id": "592638",
+"sfdc_id": "0014p00001zy7laAAA",
+"company_name": "GUAISA",
+"company_industry": "Floral - Grower",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": 8000000.0
+},
+{
+"company_id": "592806",
+"sfdc_id": "0014p00001waeZYAAY",
+"company_name": "Aurum Farms LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 700000.0
+},
+{
+"company_id": "594981",
+"sfdc_id": "0014p000021IdyjAAC",
+"company_name": "Evergreen Plant Company",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 2900000.0
+},
+{
+"company_id": "595610",
+"sfdc_id": "0014p000021HypoAAC",
+"company_name": "ASI IMPORTS LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": 1700000.0
+},
+{
+"company_id": "598944",
+"sfdc_id": "001G000001TsE8iIAF",
+"company_name": "Las Vegas Floral Wholesale",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 5000000.0
+},
+{
+"company_id": "599702",
+"sfdc_id": "0014p000021dvxlAAA",
+"company_name": "CIRCASIA & VUELVEN",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": 13000000.0
+},
+{
+"company_id": "600370",
+"sfdc_id": "0014p00001zanUFAAY",
+"company_name": "GOMEZ B.V.",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 279000.0
+},
+{
+"company_id": "600486",
+"sfdc_id": "0014p000021KshqAAC",
+"company_name": "Cascade Stems LLC",
+"company_industry": "Floral - Grower",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": 1000000.0
+},
+{
+"company_id": "600558",
+"sfdc_id": "0014p000021fXK6AAM",
+"company_name": "Metropetals",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 500000.0
+},
+{
+"company_id": "600910",
+"sfdc_id": "0014p000020tateAAA",
+"company_name": "Sieck Wright Floral Products",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 20000000.0
+},
+{
+"company_id": "601280",
+"sfdc_id": "0011600001uRrj9AAC",
+"company_name": "Flores Silvestres",
+"company_industry": "Floral - Grower",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "601414",
+"sfdc_id": "0014p000021yGEXAA2",
+"company_name": "Americana, Inc. - CAL",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": 63500.0
+},
+{
+"company_id": "601450",
+"sfdc_id": "0014p000021yH4UAAU",
+"company_name": "Kitayama Brothers Inc.",
+"company_industry": "Floral - Grower",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": 10000000.0
+},
+{
+"company_id": "601933",
+"sfdc_id": "001G000001TsqcLIAR",
+"company_name": "Flora Fresh Inc",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 20000000.0
+},
+{
+"company_id": "601982",
+"sfdc_id": "0014p000021xdmjAAA",
+"company_name": "Greenrose",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": 12000000.0
+},
+{
+"company_id": "603102",
+"sfdc_id": "0014p000020vm8TAAQ",
+"company_name": "AGM BROTHERS WORLD TRADING LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": 1200000.0
+},
+{
+"company_id": "603611",
+"sfdc_id": "0014p000021zHQjAAM",
+"company_name": "GREEN OCEAN LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "608547",
+"sfdc_id": "0011L00002IGHtEQAX",
+"company_name": "MONTEROSAS LLC",
+"company_industry": "Floral - Grower",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 6000000.0
+},
+{
+"company_id": "608626",
+"sfdc_id": "0011L00002IGHqjQAH",
+"company_name": "The Farm Direct Company",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": 12000000.0
+},
+{
+"company_id": "609341",
+"sfdc_id": "0014p000021ebugAAA",
+"company_name": "ROYAL BASE (AMERICA) CORPORATION",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": 3000000.0
+},
+{
+"company_id": "610504",
+"sfdc_id": "0014p0000220MfNAAU",
+"company_name": "The Flower Emporium LLC",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 800000.0
+},
+{
+"company_id": "610510",
+"sfdc_id": "001G000001as1u1IAA",
+"company_name": "MYSTICFLOWERS LLC",
+"company_industry": "Floral - Grower",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 25000000.0
+},
+{
+"company_id": "610818",
+"sfdc_id": "0011L00002rEB34QAG",
+"company_name": "Farms Connect",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 600000.0
+},
+{
+"company_id": "612641",
+"sfdc_id": "0011600001uSNXnAAO",
+"company_name": "Florasource KC",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "612707",
+"sfdc_id": "0014p000022FmM4AAK",
+"company_name": "Miaflora Farms LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": 48000000.0
+},
+{
+"company_id": "612753",
+"sfdc_id": "0014p000022G3MUAA0",
+"company_name": "Budzi",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "612783",
+"sfdc_id": "0014p000022FEx7AAG",
+"company_name": "Faguaflowers Intl LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 3500000.0
+},
+{
+"company_id": "613695",
+"sfdc_id": "0014p000022EMZLAA4",
+"company_name": "*FLORAL1 INC",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 6000000.0
+},
+{
+"company_id": "613877",
+"sfdc_id": "0011L000027XAF5QAO",
+"company_name": "Blackriver Flowers",
+"company_industry": "Floral - Grower",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": 3366000.0
+},
+{
+"company_id": "614448",
+"sfdc_id": "0014p000022Gz8DAAS",
+"company_name": "The Queens Flowers, Corp",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "615898",
+"sfdc_id": "0014p000022GMTCAA4",
+"company_name": "Salter's Evergreen Supply",
+"company_industry": "Floral - Grower",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 2000000.0
+},
+{
+"company_id": "616760",
+"sfdc_id": "0011L000028VONDQA4",
+"company_name": "Flex Direct, LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": 3000000.0
+},
+{
+"company_id": "616761",
+"sfdc_id": "0014p000022V1GLAA0",
+"company_name": "Flex Direct Locations",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": 3000000.0
+},
+{
+"company_id": "617226",
+"sfdc_id": "0014p000021zpeLAAQ",
+"company_name": "CONNECTION FLOWERS SAS",
+"company_industry": "Floral - Grower",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "618305",
+"sfdc_id": "0011L00002IDeWhQAL",
+"company_name": "J&G SPECIALTY CROPS LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": 600000.0
+},
+{
+"company_id": "618758",
+"sfdc_id": "0014p000021zRPfAAM",
+"company_name": "Bo's Wholesale Florist",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 2200000.0
+},
+{
+"company_id": "619847",
+"sfdc_id": "0014p000022HqunAAC",
+"company_name": "MACUNDO FLOWERS AND GREENS LLC",
+"company_industry": "Floral - Grower",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "620160",
+"sfdc_id": "001VL000000ln6xYAA",
+"company_name": "Petals Direct",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "620453",
+"sfdc_id": "0011L00001zyyyYQAQ",
+"company_name": "MALIMA USA",
+"company_industry": "Floral - Grower",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 11000000.0
+},
+{
+"company_id": "620603",
+"sfdc_id": "0011L000029ka2aQAA",
+"company_name": "El Paso Floral Distributors",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": 2000000.0
+},
+{
+"company_id": "621198",
+"sfdc_id": "0014p000022QdhpAAC",
+"company_name": "The Floral Reserve",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "622743",
+"sfdc_id": "001VL000001pKqXYAU",
+"company_name": "Megaflor USA",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 1600000.0
+},
+{
+"company_id": "623433",
+"sfdc_id": "0014p000021eTR0AAM",
+"company_name": "Flowerlina",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": 1000000.0
+},
+{
+"company_id": "623491",
+"sfdc_id": "0011600001riCHoAAM",
+"company_name": "Baisch & Skinner",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 27000000.0
+},
+{
+"company_id": "624737",
+"sfdc_id": "0014p000020wFxeAAE",
+"company_name": "AMORES FLORES INC",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 2700000.0
+},
+{
+"company_id": "624816",
+"sfdc_id": "001VL000003MuLTYA0",
+"company_name": "CD Wholesale",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 2000000.0
+},
+{
+"company_id": "630858",
+"sfdc_id": "0014p000021ejlMAAQ",
+"company_name": "Propetals LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": 600000.0
+},
+{
+"company_id": "630920",
+"sfdc_id": "001VL000004mjWpYAI",
+"company_name": "Welyflor B.V.",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": 8000000.0
+},
+{
+"company_id": "631459",
+"sfdc_id": "0014p000022R9RlAAK",
+"company_name": "Honey Bee Wholesale Florist, LLC",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 500000.0
+},
+{
+"company_id": "631682",
+"sfdc_id": "001VL000005LLReYAO",
+"company_name": "Mojanda Corporation",
+"company_industry": "Floral - Importer",
+"komet_status": "Temporary Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": 250000.0
+},
+{
+"company_id": "632203",
+"sfdc_id": "001VL000003KcH9YAK",
+"company_name": "Tristate Wholesale Florist",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 2000000.0
+},
+{
+"company_id": "632275",
+"sfdc_id": "0011L00002IEBTHQA5",
+"company_name": "A. Perri Farms Inc.",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": 11000000.0
+},
+{
+"company_id": "632322",
+"sfdc_id": "0011600001lgc6sAAA",
+"company_name": "Northline Wholesale Flowers",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 2500000.0
+},
+{
+"company_id": "634665",
+"sfdc_id": "001VL000006k59KYAQ",
+"company_name": "Agrivaldani",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 6000000.0
+},
+{
+"company_id": "635064",
+"sfdc_id": "0014p000022HSvrAAG",
+"company_name": "Ensign Wholesale Flower Market",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 9000000.0
+},
+{
+"company_id": "635167",
+"sfdc_id": "001VL0000077mLdYAI",
+"company_name": "Valle Verde LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 3500000.0
+},
+{
+"company_id": "640251",
+"sfdc_id": "001VL00000A5ntfYAB",
+"company_name": "FreshLink",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "640460",
+"sfdc_id": "0014p0000220O7wAAE",
+"company_name": "Dr Delphinium",
+"company_industry": "Floral - Retailer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 9500000.0
+},
+{
+"company_id": "640563",
+"sfdc_id": "001VL000007zem5YAA",
+"company_name": "Hoja Verde - Rosen Financial",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 15550000.0
+},
+{
+"company_id": "640762",
+"sfdc_id": "0014p00001ycDwZAAU",
+"company_name": "Wellington Florist",
+"company_industry": "Floral - Retailer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 1500000.0
+},
+{
+"company_id": "640977",
+"sfdc_id": "001VL000001TMnmYAG",
+"company_name": "Ninfa Flowers",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 1000000.0
+},
+{
+"company_id": "641341",
+"sfdc_id": "001G000001ZFNa1IAH",
+"company_name": "Maple Grove Floral",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 1500000.0
+},
+{
+"company_id": "642076",
+"sfdc_id": "001G000001V5PivIAF",
+"company_name": "Full Pot - Ft. Lauderdale",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 15000000.0
+},
+{
+"company_id": "642221",
+"sfdc_id": "0011600001uSN0pAAG",
+"company_name": "CamFlor, Inc.",
+"company_industry": "Floral - Grower",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 6900000.0
+},
+{
+"company_id": "642311",
+"sfdc_id": "001VL00000AsdReYAJ",
+"company_name": "White Rose Flowers & Supplies Inc.",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 500000.0
+},
+{
+"company_id": "642882",
+"sfdc_id": "001VL00000BGaFiYAL",
+"company_name": "PRO PLAN",
+"company_industry": "Floral - Grower",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": 290000.0
+},
+{
+"company_id": "643672",
+"sfdc_id": "00116000020OCgLAAW",
+"company_name": "Allied Cut Flower",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 1000000.0
+},
+{
+"company_id": "644100",
+"sfdc_id": "001VL00000BKhP5YAL",
+"company_name": "HYDRAPOLIS INC",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": 600000.0
+},
+{
+"company_id": "644246",
+"sfdc_id": "0011600001zE3tTAAS",
+"company_name": "Agrirose S.A.",
+"company_industry": "Floral - Grower",
+"komet_status": "Deactivated",
+"record_type_name": "Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": 3600000.0
+},
+{
+"company_id": "644466",
+"sfdc_id": "001VL000002nSDJYA2",
+"company_name": "VICTORIA'S GARDEN",
+"company_industry": "Floral - Grower",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": 360000.0
+},
+{
+"company_id": "644486",
+"sfdc_id": "001VL00000Bvbz2YAB",
+"company_name": "Malar Horticulture International LLC",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 2000000.0
+},
+{
+"company_id": "644840",
+"sfdc_id": "001VL00000AhrxsYAB",
+"company_name": "Veraleza",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "644983",
+"sfdc_id": "001VL00000BZxmsYAD",
+"company_name": "AFLORA NOVA LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "647357",
+"sfdc_id": "001VL00000BqMKfYAN",
+"company_name": "Floreria La Ocasion LLC",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "647601",
+"sfdc_id": "001VL00000CLJnCYAX",
+"company_name": "INMORTFLOR SA",
+"company_industry": "Floral - Grower",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": 2000000.0
+},
+{
+"company_id": "648089",
+"sfdc_id": "0011600001mL9UEAA0",
+"company_name": "SAN FRANCISCO GARDENS",
+"company_industry": "Floral - Grower",
+"komet_status": "Deactivated",
+"record_type_name": "Prospect",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "649109",
+"sfdc_id": "0014p000022EYu3AAG",
+"company_name": "Blossoms Wholesale LLC",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "649176",
+"sfdc_id": "0011600001mKOx3AAG",
+"company_name": "Alkavat",
+"company_industry": "Floral - Grower",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": 12000000.0
+},
+{
+"company_id": "649249",
+"sfdc_id": "0014p000022EYtZAAW",
+"company_name": "So Cal Floral and Supply",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "649585",
+"sfdc_id": "001VL00000DSXzGYAX",
+"company_name": "Penelope’s Petals, LLC",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "649682",
+"sfdc_id": "001VL00000AoPdPYAV",
+"company_name": "GLAMOUR ROSES",
+"company_industry": "Floral - Grower",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "649745",
+"sfdc_id": "001VL00000DlwqkYAB",
+"company_name": "Miraflor LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 5500000.0
+},
+{
+"company_id": "649935",
+"sfdc_id": "001VL000002uhlyYAA",
+"company_name": "Sims Flower Distribution",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 1000000.0
+},
+{
+"company_id": "650252",
+"sfdc_id": "0011L00002IDjZOQA1",
+"company_name": "GRUPO DEL PACIFICO",
+"company_industry": "Floral - Grower",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 2000000.0
+},
+{
+"company_id": "650536",
+"sfdc_id": "001G000001TsIltIAF",
+"company_name": "R&W WHOLESALE, INC.",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "650640",
+"sfdc_id": "001VL00000EaCLxYAN",
+"company_name": "Prime Flowers LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "650721",
+"sfdc_id": "001VL00000F4yJVYAZ",
+"company_name": "Alders Wholesale Florist, Inc.",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "650767",
+"sfdc_id": "001G000001TsYWjIAN",
+"company_name": "Coastal Wholesale Flowers, Inc.",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "650815",
+"sfdc_id": "0014p0000220Lp4AAE",
+"company_name": "WB FLORAL GROUP, LLC.-MD",
+"company_industry": "Floral - Retailer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "650927",
+"sfdc_id": "001G000001fjbkmIAA",
+"company_name": "BONNETT WHSLE. FLORIST, INC",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "650986",
+"sfdc_id": "001G000001TsJPUIA3",
+"company_name": "Tennessee Florist Supply - Knox",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 12000000.0
+},
+{
+"company_id": "651039",
+"sfdc_id": "00116000021ALwyAAG",
+"company_name": "Marvin’s Wholesale Florist",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "651168",
+"sfdc_id": "001G000001VwrunIAB",
+"company_name": "TWI - DILLON FLORAL CORPORATION",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "651200",
+"sfdc_id": "0011L00002Y7yX7QAJ",
+"company_name": "Jacksonville Flower Market",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "651216",
+"sfdc_id": "001G000001GQ6u4IAD",
+"company_name": "HARDIN´S WHLSE - LIBERTY",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "651256",
+"sfdc_id": "0014p0000220KmjAAE",
+"company_name": "Trias Flowers Antiques & Gifts",
+"company_industry": "Floral - Retailer",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": null,
+"annual_total_sales": null
+},
+{
+"company_id": "651277",
+"sfdc_id": "001G000001V7resIAB",
+"company_name": "BAYSTATE FARM DIRECT FLOWERS - CRANSTON",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Implementation - Not Live",
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "651327",
+"sfdc_id": "0014p0000220KGUAA2",
+"company_name": "Lovingly Charlotte LLC",
+"company_industry": "Floral - Retailer",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": null,
+"annual_total_sales": 0.0
+},
+{
+"company_id": "651344",
+"sfdc_id": "0014p0000220KQkAAM",
+"company_name": "WESTWOOD FLORIST",
+"company_industry": "Floral - Retailer",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": null,
+"annual_total_sales": 0.0
+},
+{
+"company_id": "651390",
+"sfdc_id": "001VL00000A5kapYAB",
+"company_name": "TFS / Roanoke",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": null,
+"annual_total_sales": 0.0
+},
+{
+"company_id": "651394",
+"sfdc_id": "001G000001bG1CYIA0",
+"company_name": "TWI - OKCSOON SOONER WHOLESALE OKC ",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "651442",
+"sfdc_id": "001G000001TsJf8IAF",
+"company_name": "WISTON BROTHES INC",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Lead",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "651479",
+"sfdc_id": "0011L00001zzV3UQAU",
+"company_name": "FLORIST DISTRIBUTING",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Lead",
+"annual_total_sales": null
+},
+{
+"company_id": "651513",
+"sfdc_id": "001G000001K8yfgIAB",
+"company_name": "PETALS WEST, INC.",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "651574",
+"sfdc_id": "0014p000022EYw1AAG",
+"company_name": "M&M CUT FLORA",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "651632",
+"sfdc_id": "001G000001TsIVpIAN",
+"company_name": "NORTH AMERICAN WHSLE FLST",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "651671",
+"sfdc_id": "001G000001TsosVIAR",
+"company_name": "FIELD OF FLOWERS, INC.",
+"company_industry": "Floral - Retailer",
+"komet_status": "--None--",
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "651680",
+"sfdc_id": "0014p000022HSaFAAW",
+"company_name": "Flowers by Gil & Curt ",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "651684",
+"sfdc_id": "0011L00001zzDHwQAM",
+"company_name": "GREEN MOUNTAIN- SOUTH BURLINGTON",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "651721",
+"sfdc_id": "001G000001TsITyIAN",
+"company_name": "PHIL HUTCHENS DBA MUM'S THE WORD",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Lead",
+"annual_total_sales": null
+},
+{
+"company_id": "651742",
+"sfdc_id": "001G000001TsKQfIAN",
+"company_name": "BELVIEW WHOLESALE FLORIST",
+"company_industry": "Floral - Retailer",
+"komet_status": "--None--",
+"record_type_name": "Prospect",
+"komet_account_type": "Lead",
+"annual_total_sales": null
+},
+{
+"company_id": "651765",
+"sfdc_id": "0011L000028Vf02QAC",
+"company_name": "Halls Wholesale Florist - Opelika",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Lead",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "651922",
+"sfdc_id": "001G000001TtHfWIAV",
+"company_name": "HALL'S - ATLANTA",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "--None--",
+"record_type_name": "Prospect",
+"komet_account_type": "Lead",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "651959",
+"sfdc_id": "001G000001Tsg6jIAB",
+"company_name": "CINCINNATI WHSLE FLORIST INC.5643",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 1600000.0
+},
+{
+"company_id": "651992",
+"sfdc_id": "001G000001TsJHuIAN",
+"company_name": "SHAEFER WHOLESALE FLORIST",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "--None--",
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": 10000000.0
+},
+{
+"company_id": "652199",
+"sfdc_id": "0011600001lhbwBAAQ",
+"company_name": "JOHNSENS WHOLESALE FLORIST",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "652251",
+"sfdc_id": "001G000001DW4OTIA1",
+"company_name": "BOTANICA WHOLESALE FLORIST DALLAS (IRVING), LLC",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 8000000.0
+},
+{
+"company_id": "652302",
+"sfdc_id": "0014p0000220OCmAAM",
+"company_name": "CASCADE FLOWERS DBA STADIUM FLOWERS INC",
+"company_industry": "Floral - Retailer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "652505",
+"sfdc_id": "001VL00000FU42OYAT",
+"company_name": "LD Trading/ Lawrence Developments Inc.",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Customer",
+"komet_account_type": null,
+"annual_total_sales": null
+},
+{
+"company_id": "652551",
+"sfdc_id": "0011L000028VnGrQAK",
+"company_name": "LD Trading/ Lawrence Developments Inc.",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "652793",
+"sfdc_id": "001G000001DW4PQIA1",
+"company_name": "FALL RIVER WHOLESALE",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "652908",
+"sfdc_id": "001G000001DW4QuIAL",
+"company_name": "Magic Flowers",
+"company_industry": "Floral - Grower",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": 1000000.0
+},
+{
+"company_id": "653218",
+"sfdc_id": "001G000001W0DlOIAV",
+"company_name": "Rosa Flora Limited",
+"company_industry": "Floral - Grower",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "653842",
+"sfdc_id": "0011600001uSk8RAAS",
+"company_name": "TFS- Chattanooga",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 6000000.0
+},
+{
+"company_id": "654052",
+"sfdc_id": "001G000001TsKQBIA3",
+"company_name": "BELLE FLORAL WHOLESALE RURAL ROUTE #6",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "--None--",
+"record_type_name": "Prospect",
+"komet_account_type": "Inactive Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "654131",
+"sfdc_id": "001G000001TskmvIAB",
+"company_name": "DVFLORA SEWELL",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "654374",
+"sfdc_id": "001VL00000RiggjYAB",
+"company_name": "BOTANICA WHSLE FLORIST-HOUSTON",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "654434",
+"sfdc_id": "001G000001TsJKyIAN",
+"company_name": "TWI SCHMIDT AND KLAUS INC",
+"company_industry": "Floral - Retailer",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "654566",
+"sfdc_id": "0011600001lfVtAAAU",
+"company_name": "Gassafy Wholesale Florist Inc",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "654661",
+"sfdc_id": "0011600001uSjmkAAC",
+"company_name": "POTOMAC WHSLE",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "654721",
+"sfdc_id": "001G000001TsJdWIAV",
+"company_name": "WELCH WHOLSALE FLORIST",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Lead",
+"annual_total_sales": null
+},
+{
+"company_id": "654758",
+"sfdc_id": "001G000001DW4QoIAL",
+"company_name": "LIHML INC Fayetteville - #01235 GF Rep Kareena 19",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Implementation - Not Live",
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "654862",
+"sfdc_id": "0014p0000220M1hAAE",
+"company_name": "Maumee Valley Direct",
+"company_industry": "Floral - Retailer",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": null,
+"annual_total_sales": null
+},
+{
+"company_id": "654944",
+"sfdc_id": "001G000001TsKPSIA3",
+"company_name": "Apex Floral Distributors Mississauga",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 9000000.0
+},
+{
+"company_id": "655098",
+"sfdc_id": "001G000001TsMbNIAV",
+"company_name": "BRIEGER WHSLE -TX.",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "655327",
+"sfdc_id": "001G000001Ts3FPIAZ",
+"company_name": "United Kirby Floral, Inc.",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Lead",
+"annual_total_sales": null
+},
+{
+"company_id": "655382",
+"sfdc_id": "0011600001tWETgAAO",
+"company_name": "Staalduinen Floral-LTF1118",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "655608",
+"sfdc_id": "0014p0000220Nb4AAE",
+"company_name": "BACHMAN´S CO - BQT PRODUCT",
+"company_industry": "Floral - Retailer",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": null,
+"annual_total_sales": null
+},
+{
+"company_id": "655643",
+"sfdc_id": "0014p000021zRSBAA2",
+"company_name": "Solo Wholesale Flower LLC",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "655985",
+"sfdc_id": "001G000001DW4R5IAL",
+"company_name": "Mellano Sales",
+"company_industry": "Floral - Grower",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "664019",
+"sfdc_id": "0014p00001ndeAmAAI",
+"company_name": "FLOWERS OF NASHVILLE",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Implementation - Not Live",
+"record_type_name": "Prospect",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "664054",
+"sfdc_id": "001VL00000HI21dYAD",
+"company_name": "TFS Bristol",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "664096",
+"sfdc_id": "001G000001DW4SmIAL",
+"company_name": "Riverside Wholesale Florists KY",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 3200000.0
+},
+{
+"company_id": "664103",
+"sfdc_id": "0011L000029kbesQAA",
+"company_name": "JANAL WHOLESALE FLORIST",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "664133",
+"sfdc_id": "001VL00000HHz7rYAD",
+"company_name": "Littlefloyd Investments, LLC",
+"company_industry": "Floral - Retailer",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "664157",
+"sfdc_id": "0011L000029kOTRQA2",
+"company_name": "Tiptonhurst / Central Wholesale",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Lead",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "664201",
+"sfdc_id": "001160000276kVxAAI",
+"company_name": "San Antonio Flower CO",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 5000000.0
+},
+{
+"company_id": "664231",
+"sfdc_id": "001G000001TsGPsIAN",
+"company_name": "Mears Floral Products, Inc.",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Churned Customer",
+"komet_account_type": "Inactive Prospect",
+"annual_total_sales": 6200000.0
+},
+{
+"company_id": "664255",
+"sfdc_id": "001G000001TsGfBIAV",
+"company_name": "Mikes Finest Wholesale Flowers, Inc.",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 3000000.0
+},
+{
+"company_id": "664288",
+"sfdc_id": "0011L00001zzTX3QAM",
+"company_name": "Montgomery Wholesale Montgomery",
+"company_industry": "Floral - Wholesalers",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "664314",
+"sfdc_id": "001G000001DW4PaIAL",
+"company_name": "Florabundance.",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 5700000.0
+},
+{
+"company_id": "664341",
+"sfdc_id": "0011600001lfdddAAA",
+"company_name": "Hall´s Wholesale Florist Theodore",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "664381",
+"sfdc_id": "0011600001uSkCOAA0",
+"company_name": "Unifour Wholesale ",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 1500000.0
+},
+{
+"company_id": "664398",
+"sfdc_id": "0011L000028V89qQAC",
+"company_name": "Marissa",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "664422",
+"sfdc_id": "001G000001TswRxIAJ",
+"company_name": "Flowers Central-LTF1264",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "664451",
+"sfdc_id": "001G000001TsDjHIAV",
+"company_name": "TWI - KOEHLER AND DRAMM WHOLESALE FLORIST",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Inactive Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "664494",
+"sfdc_id": "001VL00000HVuQvYAL",
+"company_name": "MAGNOLIA HOLDINGS 301 LLC  ABSOLUTELY BEAUTIFUL FLOWERS",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "664509",
+"sfdc_id": "001G000001TsGSOIA3",
+"company_name": "Metro Whls Florist Dba Central Ms",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Lead",
+"annual_total_sales": null
+},
+{
+"company_id": "664532",
+"sfdc_id": "0014p0000220NmxAAE",
+"company_name": "Simply Roses, LLC",
+"company_industry": "Floral - Retailer",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": null,
+"annual_total_sales": 0.0
+},
+{
+"company_id": "664540",
+"sfdc_id": "001G000001bQpeJIAS",
+"company_name": "FMI, LLC.-FL",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "664567",
+"sfdc_id": "0014p0000220KtzAAE",
+"company_name": "Klis FK LLC",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "664575",
+"sfdc_id": "0014p0000220L29AAE",
+"company_name": "KENNICOTT ATL C/O CARITHERS FLOWERS",
+"company_industry": "Floral - Retailer",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": null,
+"annual_total_sales": null
+},
+{
+"company_id": "664587",
+"sfdc_id": "001VL00000HW1wxYAD",
+"company_name": "FLORIDA FRESH FLORAL,LLC",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "664595",
+"sfdc_id": "0014p0000220MTJAA2",
+"company_name": "Venetian Flowers",
+"company_industry": "Floral - Retailer",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "664602",
+"sfdc_id": "0014p0000220KdUAAU",
+"company_name": "GARFILED WHOLESALE FLOWERS",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "664623",
+"sfdc_id": "0011600001uSZVYAA4",
+"company_name": "Esprit Salt Lake, Inc",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "664648",
+"sfdc_id": "001G000001TtTOOIA3",
+"company_name": "Tradewinds/ KING FLORAL SUPPLY",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "664670",
+"sfdc_id": "001G000001TtIp8IAF",
+"company_name": "HORTON WHSLE",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "--None--",
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "664709",
+"sfdc_id": "0014p000022HSm8AAG",
+"company_name": "Rose Hill Flowers",
+"company_industry": "Floral - Retailer",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": null,
+"annual_total_sales": 0.0
+},
+{
+"company_id": "664713",
+"sfdc_id": "0014p0000220NOcAAM",
+"company_name": "South Florals Miami P&P",
+"company_industry": "Floral - Retailer",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "664719",
+"sfdc_id": "0011L00002ICyF3QAL",
+"company_name": "ALLIANCE FLORAL COMPANY. 6270",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 1800000.0
+},
+{
+"company_id": "664750",
+"sfdc_id": "0014p000021zRSAAA2",
+"company_name": "FST WHOLESALE LLC",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "664820",
+"sfdc_id": "001VL00000k6ul2YAA",
+"company_name": "Younger & Son Inc",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Prospect",
+"annual_total_sales": 4000000.0
+},
+{
+"company_id": "664944",
+"sfdc_id": "001VL000001CXvhYAG",
+"company_name": "POSIES TRUCK",
+"company_industry": "Floral - Retailer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "664988",
+"sfdc_id": "0011L00002IE8YMQA1",
+"company_name": "CALI WHOLESALE.-CA",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "665008",
+"sfdc_id": "0014p0000220LWHAA2",
+"company_name": "FLOWERS BY SHIRLEY, INC",
+"company_industry": "Floral - Retailer",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": null,
+"annual_total_sales": null
+},
+{
+"company_id": "665027",
+"sfdc_id": "001VL00000HW91gYAD",
+"company_name": "Mideast Flowers Distributors, Inc.",
+"company_industry": null,
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "665050",
+"sfdc_id": "0011L000029kb8PQAQ",
+"company_name": "TWI HAROLD'S WHOLESALE FLORISTS",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "665080",
+"sfdc_id": "0011600001uSYzvAAG",
+"company_name": "COWARD WHOLESALE",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "665110",
+"sfdc_id": "0011L000029kBjuQAE",
+"company_name": "TWI - Floral Accounting Services DBA Pugh's Flowers",
+"company_industry": "Floral - Retailer",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Lead",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "665136",
+"sfdc_id": "0011L000029kf1KQAQ",
+"company_name": "METRO WHOLESALE FLORIST, INC",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Lead",
+"annual_total_sales": null
+},
+{
+"company_id": "665147",
+"sfdc_id": "0011L000028VqupQAC",
+"company_name": "Mcnamara, LLC",
+"company_industry": "Floral - Retailer",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Lead",
+"annual_total_sales": null
+},
+{
+"company_id": "665167",
+"sfdc_id": "001G000001dOQ0XIAW",
+"company_name": "TWI ROMAN J CLAPROOD COMPANY",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "665210",
+"sfdc_id": "001G000001TsIdpIAF",
+"company_name": "PRASHE DECOR",
+"company_industry": "Floral - Retailer",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Lead",
+"annual_total_sales": null
+},
+{
+"company_id": "665216",
+"sfdc_id": "0011L000028V59qQAC",
+"company_name": "CURTIS FLOWER FARMS, INC",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "665232",
+"sfdc_id": "001G000001TsJVrIAN",
+"company_name": "The Flowerman, Inc.",
+"company_industry": "Floral - Retailer",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Lead",
+"annual_total_sales": null
+},
+{
+"company_id": "665261",
+"sfdc_id": "0011L000029kBirQAE",
+"company_name": "Tradewinds / Pristine Wholesale Floral",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 3000000.0
+},
+{
+"company_id": "665281",
+"sfdc_id": "0011600001zECBAAA4",
+"company_name": "carolinafloristsupply2",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "665296",
+"sfdc_id": "001G000001V5Q2WIAV",
+"company_name": "AD TRADING CORP.DBA AD FLORAL TRADI",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Lead",
+"annual_total_sales": null
+},
+{
+"company_id": "665316",
+"sfdc_id": "001VL00000HW85ZYAT",
+"company_name": "Flowers by Fudgie, Inc",
+"company_industry": null,
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "665326",
+"sfdc_id": "0014p000022HSRXAA4",
+"company_name": "UPSTATE/COGGINS FLOWERS",
+"company_industry": "Luxury Goods & Jewelry",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": null,
+"annual_total_sales": null
+},
+{
+"company_id": "665336",
+"sfdc_id": "0011600001uSU5jAAG",
+"company_name": "Torchio Nursery",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "665358",
+"sfdc_id": "0011600001uSd7yAAC",
+"company_name": "HIRE`S BEST FLOWERS",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Churned Customer",
+"komet_account_type": "Lead",
+"annual_total_sales": 952000.0
+},
+{
+"company_id": "665369",
+"sfdc_id": "0014p0000220KfFAAU",
+"company_name": "Celebrations LTD",
+"company_industry": "Floral - Retailer",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "665376",
+"sfdc_id": "001G000001TsLxYIAV",
+"company_name": "BFS - MIAMI",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Lead",
+"annual_total_sales": 4700000.0
+},
+{
+"company_id": "665425",
+"sfdc_id": "0014p000022EYjsAAG",
+"company_name": "Specialty Cut Flowers",
+"company_industry": "Floral - Grower",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": null,
+"annual_total_sales": null
+},
+{
+"company_id": "665432",
+"sfdc_id": "001VL00000HW7wjYAD",
+"company_name": "BLOOMINGDAYS FLOWER SHOP INC. 5929",
+"company_industry": null,
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "665443",
+"sfdc_id": "0011L000029kBhZQAU",
+"company_name": "POPPIES DESIGN STUDIO, LLC",
+"company_industry": "Floral - Retailer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 350000.0
+},
+{
+"company_id": "665453",
+"sfdc_id": "0014p0000220NmoAAE",
+"company_name": "MARKET FLOWERS",
+"company_industry": "Floral - Retailer",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": null,
+"annual_total_sales": null
+},
+{
+"company_id": "665466",
+"sfdc_id": "0014p0000220MOVAA2",
+"company_name": "Travis Wholesale Florists",
+"company_industry": "Floral - Retailer",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": null,
+"annual_total_sales": null
+},
+{
+"company_id": "665481",
+"sfdc_id": "0014p000022HSulAAG",
+"company_name": "BloomTown Flower Market",
+"company_industry": null,
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": null,
+"annual_total_sales": null
+},
+{
+"company_id": "667626",
+"sfdc_id": "001VL00000GL2fAYAT",
+"company_name": "Green Bouquet LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "669090",
+"sfdc_id": "001G000001TsIX2IAN",
+"company_name": "The Oklahoma Flower Market",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 5100000.0
+},
+{
+"company_id": "670288",
+"sfdc_id": "0014p0000220Km2AAE",
+"company_name": "Designs of the Times, Inc. dba: 321 Flower Market",
+"company_industry": "Floral - Retailer",
+"komet_status": "Implementation - Not Live",
+"record_type_name": "Customer",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "670302",
+"sfdc_id": "0014p0000220Ks5AAE",
+"company_name": "AL´S FLORIST",
+"company_industry": "Floral - Retailer",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": null,
+"annual_total_sales": null
+},
+{
+"company_id": "670311",
+"sfdc_id": "0014p0000220SneAAE",
+"company_name": "Floral Importers and Distributors Inc. /Buds",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Customer",
+"komet_account_type": null,
+"annual_total_sales": 11300000.0
+},
+{
+"company_id": "670366",
+"sfdc_id": "0011600001uScycAAC",
+"company_name": "HALL´S ST.PETERSBURG WHLSE FL",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "670410",
+"sfdc_id": "0014p000022HSYqAAO",
+"company_name": "Expressions Unlimited, Inc",
+"company_industry": "Furniture",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": null,
+"annual_total_sales": null
+},
+{
+"company_id": "670423",
+"sfdc_id": "0014p000022WUhzAAG",
+"company_name": "FLEURIGROS QUEBEC 1995 INC.",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": null,
+"annual_total_sales": null
+},
+{
+"company_id": "670437",
+"sfdc_id": "001G000001DW4PcIAL",
+"company_name": "Florasolusa",
+"company_industry": "Floral - Grower",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Lead",
+"annual_total_sales": null
+},
+{
+"company_id": "670450",
+"sfdc_id": "001G000001DW4PkIAL",
+"company_name": "FLORIAD- MONTREAL CANADA INC.",
+"company_industry": "Floral - Importer",
+"komet_status": "--None--",
+"record_type_name": "Prospect",
+"komet_account_type": "Lead",
+"annual_total_sales": null
+},
+{
+"company_id": "670473",
+"sfdc_id": "001160000219BLAAA2",
+"company_name": "FLORISTS SUPPLY WINNIPEG",
+"company_industry": "Floral - Importer",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Inactive Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "670508",
+"sfdc_id": "001G000001TtIBxIAN",
+"company_name": "Hartford Florist Supply",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 3000000.0
+},
+{
+"company_id": "670530",
+"sfdc_id": "001G000001DW4QYIA1",
+"company_name": "JOLO INC.",
+"company_industry": "Mass Market",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Lead",
+"annual_total_sales": null
+},
+{
+"company_id": "670546",
+"sfdc_id": "001VL00000TWORVYA5",
+"company_name": "MacArthur’s Quality Flowers & Plants Inc.",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "670554",
+"sfdc_id": "001VL00000YmEOTYA3",
+"company_name": "MAHONEYS ROCKY LEDGE FARM &",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": null,
+"annual_total_sales": null
+},
+{
+"company_id": "670569",
+"sfdc_id": "00116000021AUuBAAW",
+"company_name": "McCallum-Sauber Whlse",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Lead",
+"annual_total_sales": null
+},
+{
+"company_id": "670590",
+"sfdc_id": "0014p000022EYs1AAG",
+"company_name": "New Zealand Blooms",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": null,
+"annual_total_sales": null
+},
+{
+"company_id": "670596",
+"sfdc_id": "0014p0000220Ml3AAE",
+"company_name": "Plaza Flowers American Floral",
+"company_industry": "Floral - Retailer",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": null,
+"annual_total_sales": null
+},
+{
+"company_id": "670612",
+"sfdc_id": "0014p000021JBNBAA4",
+"company_name": "TERRA FLOWERS/ PLENTY FLOWERS",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": 1200000.0
+},
+{
+"company_id": "670628",
+"sfdc_id": "0011600001lhbWhAAI",
+"company_name": "TWI - RVF - River Valley Floral",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Lead",
+"annual_total_sales": null
+},
+{
+"company_id": "670660",
+"sfdc_id": "001VL00000YltyMYAR",
+"company_name": "SOUTHWEST (SCOTTS) WHOLESALE",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": null,
+"annual_total_sales": null
+},
+{
+"company_id": "670666",
+"sfdc_id": "001G000001DW4SwIAL",
+"company_name": "SEQUOIA WHOLESALE FLORIST, INC.",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Implementation - Not Live",
+"record_type_name": "Customer",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "670668",
+"sfdc_id": "0014p000022EZ85AAG",
+"company_name": "STRANGE`S FLORIST, INC.",
+"company_industry": "Nursery - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": null,
+"annual_total_sales": null
+},
+{
+"company_id": "670675",
+"sfdc_id": "0014p000022HSNzAAO",
+"company_name": "VELDKAMP´S FLOWERS",
+"company_industry": "Floral - Grower",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "670701",
+"sfdc_id": "0011600001uSkF3AAK",
+"company_name": "Webb’s Wholesale Florist",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 1000000.0
+},
+{
+"company_id": "671046",
+"sfdc_id": "001VL00000IAI7mYAH",
+"company_name": "Blossom Bliss LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "672046",
+"sfdc_id": "001VL00000HzEx8YAF",
+"company_name": "Atlantikko Corp",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "672147",
+"sfdc_id": "001VL00000Hqn2xYAB",
+"company_name": "A1 Floral Xpressions",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 500000.0
+},
+{
+"company_id": "672205",
+"sfdc_id": "001VL00000IFWlxYAH",
+"company_name": "Del Tropico/ Ameriblooms",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "672728",
+"sfdc_id": "0014p00001yqo0aAAA",
+"company_name": "Ecuador's Origin Product",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 2000000.0
+},
+{
+"company_id": "672781",
+"sfdc_id": "001VL00000GL9dQYAT",
+"company_name": "NY Floral Supply",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "672799",
+"sfdc_id": "0011L00001zzDSCQA2",
+"company_name": "Rokay Floral",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 5500000.0
+},
+{
+"company_id": "673823",
+"sfdc_id": "001VL00000HrwgpYAB",
+"company_name": "Flowerist LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "675361",
+"sfdc_id": "001VL00000JGRHRYA5",
+"company_name": "Fleurametz USA NYC",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "675363",
+"sfdc_id": "0014p0000220b01AAA",
+"company_name": "Palm Beach Whsle Flowers, Inc.",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 7600000.0
+},
+{
+"company_id": "675451",
+"sfdc_id": "001VL00000HxMM6YAN",
+"company_name": "Blossom Express",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "676090",
+"sfdc_id": "001VL00000KKWD8YAP",
+"company_name": "FleuraMetz Montreal Ltd",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "676091",
+"sfdc_id": "001VL00000IBmoZYAT",
+"company_name": "Farms and Petals",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "676861",
+"sfdc_id": "0011L000029kgNZQAY",
+"company_name": "Ontario Flower Growers Cooperative Ltd.",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "677319",
+"sfdc_id": "001G000001ZwODhIAN",
+"company_name": "! Juliet Wholesale Flowers LLC",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "680251",
+"sfdc_id": "0011600001uRvGlAAK",
+"company_name": "RUMHORA GREENS LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "680290",
+"sfdc_id": "001VL00000JomsvYAB",
+"company_name": "Ecuflower Roses Kft.",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "681293",
+"sfdc_id": "001VL000005T3ZAYA0",
+"company_name": "Flowers2Give",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "681686",
+"sfdc_id": "001VL000007liHtYAI",
+"company_name": "J van Vliet (NL) Group",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Customer",
+"komet_account_type": null,
+"annual_total_sales": null
+},
+{
+"company_id": "681739",
+"sfdc_id": "001VL00000L1SkaYAF",
+"company_name": "Fleurametz Chicago",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "699640",
+"sfdc_id": "001VL00000L1g7ZYAR",
+"company_name": "FleuraMetz - Dallas",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "699881",
+"sfdc_id": "0014p000022GDIuAAO",
+"company_name": "Elfi B Yes! exclusive flowers PTY LTD",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "699974",
+"sfdc_id": "0011600001uSvGlAAK",
+"company_name": "Florisert",
+"company_industry": "Floral - Grower",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "700069",
+"sfdc_id": "001G000001TtMY2IAN",
+"company_name": "Johnson Wholesale",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Lead",
+"annual_total_sales": null
+},
+{
+"company_id": "700340",
+"sfdc_id": "001VL00000L1QR0YAN",
+"company_name": "FleuraMetz LA",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "700747",
+"sfdc_id": "001VL00000HZFTqYAP",
+"company_name": "Premium Greens UK Ltd",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "701220",
+"sfdc_id": "001VL00000YlWTzYAN",
+"company_name": "McCarthy Wholesale",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "701292",
+"sfdc_id": "001G000001DW4SlIAL",
+"company_name": "Riverdale Farms",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 100000000.0
+},
+{
+"company_id": "702933",
+"sfdc_id": "001VL000007lmzjYAA",
+"company_name": "EZ flowers BV",
+"company_industry": "Floral - Grower",
+"komet_status": null,
+"record_type_name": "Customer",
+"komet_account_type": null,
+"annual_total_sales": 0.0
+},
+{
+"company_id": "702938",
+"sfdc_id": "0014p00001zrPfKAAU",
+"company_name": "J Van Vliet",
+"company_industry": "Floral - Importer",
+"komet_status": null,
+"record_type_name": "Customer",
+"komet_account_type": null,
+"annual_total_sales": null
+},
+{
+"company_id": "704005",
+"sfdc_id": "0011L00002eqjoaQAA",
+"company_name": "Nashville Flower Market",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Churned Customer",
+"komet_account_type": "Prospect",
+"annual_total_sales": 637000.0
+},
+{
+"company_id": "704636",
+"sfdc_id": "0011600001mKVtUAAW",
+"company_name": "UNITED WHOLESALE- FFL  ENTERPRISES ",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 4200000.0
+},
+{
+"company_id": "704680",
+"sfdc_id": "0014p0000220Lk7AAE",
+"company_name": "AVANT GARDENS 5079 / HANA HOLDINGS",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "704690",
+"sfdc_id": "0014p000022HzHdAAK",
+"company_name": "Quality Flowers&Greens-LTF1152",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": null,
+"annual_total_sales": null
+},
+{
+"company_id": "712429",
+"sfdc_id": "001VL00000OLqk9YAD",
+"company_name": "Rose Runners",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 300000.0
+},
+{
+"company_id": "713789",
+"sfdc_id": "0011600001uScxFAAS",
+"company_name": "HALL´S - BIRMINGHAM",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 3000000.0
+},
+{
+"company_id": "713840",
+"sfdc_id": "00116000022ofJ2AAI",
+"company_name": "WHOLESALE NORTON'S FLORIST",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 2500000.0
+},
+{
+"company_id": "716166",
+"sfdc_id": "0011600001uSZXFAA4",
+"company_name": "Exclusive Wholesale",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 2000000.0
+},
+{
+"company_id": "716378",
+"sfdc_id": "001VL00000Pos6tYAB",
+"company_name": "Moonlight Flowers",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 6000000.0
+},
+{
+"company_id": "724843",
+"sfdc_id": "001VL00000PSz3oYAD",
+"company_name": "The Paradise Flower CO",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "726631",
+"sfdc_id": "00116000021BPGhAAO",
+"company_name": "Wolfe Wholesale Florist, Inc. Waco",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 700000.0
+},
+{
+"company_id": "727131",
+"sfdc_id": "0011600001lgrcKAAQ",
+"company_name": "EQ Blooms by Flodecol",
+"company_industry": "Floral - Grower",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 11000000.0
+},
+{
+"company_id": "727605",
+"sfdc_id": "0014p000022EYvCAAW",
+"company_name": "Lucas and Greer, Inc. dba L & G Wholesale Florist",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 4600000.0
+},
+{
+"company_id": "728869",
+"sfdc_id": "001VL000007bS2wYAE",
+"company_name": "ROSAS DEL VIENTO",
+"company_industry": "Floral - Grower",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 800000.0
+},
+{
+"company_id": "729585",
+"sfdc_id": "0011L000029kZAyQAM",
+"company_name": "Clifton Wholesale Florist, Inc.",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Lead",
+"annual_total_sales": null
+},
+{
+"company_id": "729609",
+"sfdc_id": "0014p0000220MSlAAM",
+"company_name": "OBERER´S",
+"company_industry": "Floral - Retailer",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "729634",
+"sfdc_id": "001VL00000BHG22YAH",
+"company_name": "Colgarden Grp-LTF1125",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": null,
+"annual_total_sales": null
+},
+{
+"company_id": "729648",
+"sfdc_id": "00116000025Jwh1AAC",
+"company_name": "RAMIREZ WHOLESALE FLOWERS.-CA",
+"company_industry": "Floral - Wholesalers",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "729666",
+"sfdc_id": "0011600001uTOjKAAW",
+"company_name": "NORTHWEST WHOLESALE FLORIST",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Implementation - Not Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 10000000.0
+},
+{
+"company_id": "729684",
+"sfdc_id": "001VL00000SjEOTYA3",
+"company_name": "Adam Flower Truck",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": null,
+"annual_total_sales": null
+},
+{
+"company_id": "729692",
+"sfdc_id": "0011600001xGQ6FAAW",
+"company_name": "Fal Flowers Llc-LTF1157",
+"company_industry": "Floral - Grower",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "729696",
+"sfdc_id": "0011600001uSj1KAAS",
+"company_name": "METCALFE WHOLESALE FLORIST",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Lead",
+"annual_total_sales": null
+},
+{
+"company_id": "729712",
+"sfdc_id": "001VL00000Sj16lYAB",
+"company_name": "ABRAFLORA WHOLESALE FLOWERS, LLC",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": null,
+"annual_total_sales": null
+},
+{
+"company_id": "729719",
+"sfdc_id": "001VL00000Sj9iGYAR",
+"company_name": "PERRO'S WHOLESALE",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": null,
+"annual_total_sales": null
+},
+{
+"company_id": "729735",
+"sfdc_id": "001VL00000Sj9JxYAJ",
+"company_name": "ec flowers & more",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": null,
+"annual_total_sales": 0.0
+},
+{
+"company_id": "730903",
+"sfdc_id": "001VL000004CFfLYAW",
+"company_name": "SKY FLORAL FARMS",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 300000.0
+},
+{
+"company_id": "730920",
+"sfdc_id": "0011600001uSjyvAAC",
+"company_name": "Shamrock Wholesale Florist Memphis",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 2000000.0
+},
+{
+"company_id": "731091",
+"sfdc_id": "0011600001uSdIzAAK",
+"company_name": "KRUEGER WHOLESALE PROMO",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "731154",
+"sfdc_id": "001VL00000Tgk0yYAB",
+"company_name": "ZOOLARITY INC.",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": null,
+"annual_total_sales": null
+},
+{
+"company_id": "731176",
+"sfdc_id": "001VL000007lsTyYAI",
+"company_name": "BLOOMOLOGY GLOBAL.-TX",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": null,
+"annual_total_sales": null
+},
+{
+"company_id": "731381",
+"sfdc_id": "0014p000022EYvBAAW",
+"company_name": "CHICAGO´S WHOLESALE",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "731402",
+"sfdc_id": "001VL00000Yluj7YAB",
+"company_name": "HOUSE OF LILAC",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": null,
+"annual_total_sales": null
+},
+{
+"company_id": "731414",
+"sfdc_id": "001VL00000TqkCZYAZ",
+"company_name": "Amazing Floral Wholesaler",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": null,
+"annual_total_sales": null
+},
+{
+"company_id": "731437",
+"sfdc_id": "001VL00000TqBLIYA3",
+"company_name": "Younger and Son Cut Flower Exchange of Penna",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": null,
+"annual_total_sales": null
+},
+{
+"company_id": "731453",
+"sfdc_id": "001VL00000TqMN7YAN",
+"company_name": "Casas Adobes Flower Shop",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": null,
+"annual_total_sales": null
+},
+{
+"company_id": "731457",
+"sfdc_id": "0011600001uSczfAAC",
+"company_name": "TWI SON HARRISON WHOLESALE FLORAL",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "731480",
+"sfdc_id": "001VL00000Tq6tRYAR",
+"company_name": "BELLA ROSA FLORIST",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": null,
+"annual_total_sales": null
+},
+{
+"company_id": "731500",
+"sfdc_id": "001VL00000Tq1P7YAJ",
+"company_name": "DIRECT FLOWERS OF BOSTON.-MA",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "731540",
+"sfdc_id": "0014p0000220MNyAAM",
+"company_name": "Kittelberger Florist & Gifts",
+"company_industry": "Floral - Retailer",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": null,
+"annual_total_sales": null
+},
+{
+"company_id": "731558",
+"sfdc_id": "001G000001DW4S5IAL",
+"company_name": "MRS. BLOOM’S DIRECT, INC.",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 3900000.0
+},
+{
+"company_id": "732448",
+"sfdc_id": "001G000001DW4SGIA1",
+"company_name": "Nazcaflor USA, Inc",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "732518",
+"sfdc_id": "001G000001TskZ7IAJ",
+"company_name": "DKAY WHOLESALE INC",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 4700000.0
+},
+{
+"company_id": "732830",
+"sfdc_id": "00116000026WSexAAG",
+"company_name": "First Choice Floral",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 8900000.0
+},
+{
+"company_id": "733250",
+"sfdc_id": "001VL00000U1C7VYAV",
+"company_name": "ROYAL BASE (U.S.A) CORPORATION",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "733807",
+"sfdc_id": "001160000222AFqAAM",
+"company_name": "Metropolitan Wholesale/Cityside Flowers",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 3400000.0
+},
+{
+"company_id": "734065",
+"sfdc_id": "001VL00000Pk117YAB",
+"company_name": "BlossomR",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 4000000.0
+},
+{
+"company_id": "734128",
+"sfdc_id": "00116000020OMNhAAO",
+"company_name": "Details Direct - Core",
+"company_industry": "Floral - Retailer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "734327",
+"sfdc_id": "001VL00000Pl0XeYAJ",
+"company_name": "Star Roses",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": 6000000.0
+},
+{
+"company_id": "734521",
+"sfdc_id": "001VL00000LYFbdYAH",
+"company_name": "Promoflor SRL",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 3900000.0
+},
+{
+"company_id": "735220",
+"sfdc_id": "0011L000028TcCRQA0",
+"company_name": "WE GOT FLOWERS",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 4600000.0
+},
+{
+"company_id": "735300",
+"sfdc_id": "001VL00000UN5fFYAT",
+"company_name": "Cataleya Flowers D&A",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "735488",
+"sfdc_id": "001VL00000RkBqXYAV",
+"company_name": "Acassia Wholesale Flowers LLC",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 800000.0
+},
+{
+"company_id": "735642",
+"sfdc_id": "001VL00000TxtpOYAR",
+"company_name": "Verdnatura",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Prospect",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": 150000000.0
+},
+{
+"company_id": "738936",
+"sfdc_id": "001G000001a07MXIAY",
+"company_name": "ACA Flowers",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "739329",
+"sfdc_id": "001VL00000LmynPYAR",
+"company_name": "Penn Valley Flora",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 1500000.0
+},
+{
+"company_id": "739704",
+"sfdc_id": "001VL00000PXLCAYA5",
+"company_name": "Prestige Blooms",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 200000.0
+},
+{
+"company_id": "740646",
+"sfdc_id": "001VL00000YHEixYAH",
+"company_name": "Valley Floral Co. - Wichita",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 3750000.0
+},
+{
+"company_id": "740696",
+"sfdc_id": "001VL00000YHLNpYAP",
+"company_name": "Valley Floral Co. of Oklahoma LLC - Tulsa",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 2500000.0
+},
+{
+"company_id": "740734",
+"sfdc_id": "0011L00002KVe1mQAD",
+"company_name": "Valley Floral Co. of OKC - Oklahoma",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 2500000.0
+},
+{
+"company_id": "742781",
+"sfdc_id": "0011600001uSjSfAAK",
+"company_name": "New England Wholesale Florist",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 3000000.0
+},
+{
+"company_id": "742939",
+"sfdc_id": "001VL00000V2gNuYAJ",
+"company_name": "Stemline Wholesale",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 1500000.0
+},
+{
+"company_id": "743217",
+"sfdc_id": "001VL00000TUGt3YAH",
+"company_name": "Nova Packaging Solutions, Inc.",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 3000000.0
+},
+{
+"company_id": "743373",
+"sfdc_id": "001VL00000WEFo0YAH",
+"company_name": "Twins Flower Farm",
+"company_industry": "Floral - Grower",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 10000000.0
+},
+{
+"company_id": "743648",
+"sfdc_id": "0014p0000220KDPAA2",
+"company_name": "Zeidler Floral",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 3000000.0
+},
+{
+"company_id": "743681",
+"sfdc_id": "0011L00002WO7dMQAT",
+"company_name": "Alpha Fern Company, LLC",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 5000000.0
+},
+{
+"company_id": "746233",
+"sfdc_id": "001VL00000Wy5buYAB",
+"company_name": "MARAFLOR",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 1000000.0
+},
+{
+"company_id": "751334",
+"sfdc_id": "001VL000007zWbfYAE",
+"company_name": "Much Flowers - UIO",
+"company_industry": "Floral - Grower",
+"komet_status": "Deactivated",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "751341",
+"sfdc_id": "0011L00002SYckRQAT",
+"company_name": "Olimpo Flowers Finca",
+"company_industry": "Floral - Grower",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 4500000.0
+},
+{
+"company_id": "751350",
+"sfdc_id": "0011600001rj9yaAAA",
+"company_name": "Grupo Vegaflor - Medellin",
+"company_industry": "Floral - Grower",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 28000000.0
+},
+{
+"company_id": "751359",
+"sfdc_id": "0014p00001wqCdiAAE",
+"company_name": "JYR Quality Flowers Solutions",
+"company_industry": "Floral - Grower",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": null,
+"annual_total_sales": 750000.0
+},
+{
+"company_id": "751391",
+"sfdc_id": "001VL00000dIwWvYAK",
+"company_name": "MegaFlor - UIO",
+"company_industry": "Floral - Grower",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "755509",
+"sfdc_id": "0011L000029ajdrQAA",
+"company_name": "Vimass Flora S.L.",
+"company_industry": "Floral - Importer",
+"komet_status": "Implementation - Not Live",
+"record_type_name": "Prospect",
+"komet_account_type": "Churned Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "755593",
+"sfdc_id": "001VL00000PwohBYAR",
+"company_name": "Kontikiflor BV",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "756108",
+"sfdc_id": "001VL00000bMO6QYAW",
+"company_name": "Schaefer Greenhouses",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "756140",
+"sfdc_id": "001VL00000acaTxYAI",
+"company_name": "Flower List",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "761636",
+"sfdc_id": "001VL00000cRQuzYAG",
+"company_name": "Panhandle Whosale Florist",
+"company_industry": "Floral - Wholesaler",
+"komet_status": null,
+"record_type_name": "Prospect",
+"komet_account_type": null,
+"annual_total_sales": null
+},
+{
+"company_id": "762172",
+"sfdc_id": "001VL00000bryvBYAQ",
+"company_name": "Floropolis",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "762941",
+"sfdc_id": "001VL000006l9ajYAA",
+"company_name": "FOB UIO -  Alma Spray / Agrinag / Natuflor",
+"company_industry": "Floral - Grower",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "764867",
+"sfdc_id": "001VL00000Vp156YAB",
+"company_name": "Hana Farms Inc.",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "765491",
+"sfdc_id": "001G000001DW4PBIA1",
+"company_name": "Dreisbach Wholesale",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "765583",
+"sfdc_id": "001G000001DW4OLIA1",
+"company_name": "Bellaflor Group Inc.",
+"company_industry": "Floral - Grower",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 16000000.0
+},
+{
+"company_id": "767361",
+"sfdc_id": "001VL00000baxM1YAI",
+"company_name": "UNIVERSAL FLOWER SERVICE CORP",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "768931",
+"sfdc_id": "001VL00000f0PV3YAM",
+"company_name": "Medellin Flowers & Greens - BOG",
+"company_industry": "Floral - Grower",
+"komet_status": "Deactivated",
+"record_type_name": "Prospect",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "769085",
+"sfdc_id": "001VL00000gC7ITYA0",
+"company_name": "Ecoroses - Floropolis",
+"company_industry": "Floral - Grower",
+"komet_status": "Implementation - Not Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "769099",
+"sfdc_id": "001VL00000gC6uHYAS",
+"company_name": "Flodecol - Floropolis",
+"company_industry": "Floral - Grower",
+"komet_status": "Implementation - Not Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "770224",
+"sfdc_id": "001VL00000gBuLGYA0",
+"company_name": "Magic Flowers - Floropolis",
+"company_industry": "Floral - Grower",
+"komet_status": "Implementation - Not Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "770598",
+"sfdc_id": "001VL00000e0nBQYAY",
+"company_name": "Green Dream Foliage SAS - BOG",
+"company_industry": "Floral - Grower",
+"komet_status": "Deactivated",
+"record_type_name": "Prospect",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "770796",
+"sfdc_id": "001VL00000fpcExYAI",
+"company_name": "VERA",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "795517",
+"sfdc_id": "001VL00000WNEfpYAH",
+"company_name": "Nathalia Bloemenexport LLC - MIA",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 300000.0
+},
+{
+"company_id": "795674",
+"sfdc_id": "001VL00000egpjqYAA",
+"company_name": "Akarana Farms - UIO",
+"company_industry": "Floral - Grower",
+"komet_status": "Deactivated",
+"record_type_name": "Prospect",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "796715",
+"sfdc_id": "001VL00000ehkNEYAY",
+"company_name": "ADEESE FLOWERS LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 200000.0
+},
+{
+"company_id": "796779",
+"sfdc_id": "001VL00000at0XJYAY",
+"company_name": "Kennicott Brothers West",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "796848",
+"sfdc_id": "001VL00000WatzeYAB",
+"company_name": "FGS.Flowers",
+"company_industry": "Floral - Importer",
+"komet_status": "Deactivated",
+"record_type_name": "Prospect",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "798243",
+"sfdc_id": "0014p00001xlhgkAAA",
+"company_name": "Alison Flowers - UIO",
+"company_industry": "Floral - Grower",
+"komet_status": "Deactivated",
+"record_type_name": "Prospect",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "799014",
+"sfdc_id": "001VL00000fUtUIYA0",
+"company_name": "Matthioli Flowers Ecuador",
+"company_industry": "Floral - Grower",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "800562",
+"sfdc_id": "0011L00001zyz09QAA",
+"company_name": "Jetty USA LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "801947",
+"sfdc_id": "001VL00000gNTHFYA4",
+"company_name": "Flora Traders LLC - MIA",
+"company_industry": "Floral - Grower",
+"komet_status": "Deactivated",
+"record_type_name": "Prospect",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "802079",
+"sfdc_id": "001VL00000kyzu9YAA",
+"company_name": "Vistaflor Ecommerce (Petal Delivery)",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": null,
+"annual_total_sales": null
+},
+{
+"company_id": "802590",
+"sfdc_id": "0011L00002KYI4OQAX",
+"company_name": "Pacifica Farms - CAL",
+"company_industry": "Floral - Grower",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "804758",
+"sfdc_id": "001VL00000jjhrhYAA",
+"company_name": "FGS.Flowers.MIA",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": null,
+"annual_total_sales": null
+},
+{
+"company_id": "805612",
+"sfdc_id": "001VL00000grr66YAA",
+"company_name": "Quality Harvest Farm",
+"company_industry": "Floral - Grower",
+"komet_status": "Deactivated",
+"record_type_name": "Churned Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "806417",
+"sfdc_id": "0011L00002eqDgTQAU",
+"company_name": "Hyperactive Farms Inc.",
+"company_industry": "Floral - Importer",
+"komet_status": "Implementation - Not Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "808064",
+"sfdc_id": "001VL00000jkf6KYAQ",
+"company_name": "Universal Flower Farms Inc.",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "808079",
+"sfdc_id": "00116000021bflwAAA",
+"company_name": "JFS Wholesale Floral",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 3400000.0
+},
+{
+"company_id": "808448",
+"sfdc_id": "001VL00000LVfPRYA1",
+"company_name": "Derita Floral Floral Supply Co",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "808527",
+"sfdc_id": "001VL000005qn9pYAA",
+"company_name": "Hortensias Cabogana Cia Ltda",
+"company_industry": "Floral - Grower",
+"komet_status": "Implementation - Not Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "809201",
+"sfdc_id": "001VL00000hSd5hYAC",
+"company_name": "San Jose Floral",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 150000.0
+},
+{
+"company_id": "809546",
+"sfdc_id": "001VL00000kXPUzYAO",
+"company_name": "Expobloom - BOG",
+"company_industry": "Floral - Grower",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "811196",
+"sfdc_id": "001VL00000gB1JzYAK",
+"company_name": "Everflorals",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "811368",
+"sfdc_id": "001VL00000leyK9YAI",
+"company_name": "Asiri Blooms LLC",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "812278",
+"sfdc_id": "001VL00000lLmD4YAK",
+"company_name": "Quimflowers - UIO",
+"company_industry": "Floral - Grower",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "812869",
+"sfdc_id": "0011L000028VL26QAG",
+"company_name": "Gypso S.A. UIO",
+"company_industry": "Floral - Grower",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Prospect",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "813857",
+"sfdc_id": "001VL00000mJQuTYAW",
+"company_name": "Expo Flora S.A.",
+"company_industry": "Floral - Grower",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "813947",
+"sfdc_id": "001VL00000lGG96YAG",
+"company_name": "Llanos De Alba LLADEAL - UIO",
+"company_industry": "Floral - Grower",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "814810",
+"sfdc_id": "001VL00000n94eUYAQ",
+"company_name": "Lartisan Roses LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Prospect",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "815425",
+"sfdc_id": "001G000001buCmhIAE",
+"company_name": "Coward & Glisson Whsl. Flst.",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "815558",
+"sfdc_id": "001VL00000ndtN0YAI",
+"company_name": "Florens Group LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": null,
+"annual_total_sales": null
+},
+{
+"company_id": "815945",
+"sfdc_id": "001VL00000o9iOSYAY",
+"company_name": "Fuji Wholesale Flowers",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": null,
+"annual_total_sales": null
+},
+{
+"company_id": "816515",
+"sfdc_id": "0014p000022EYtaAAG",
+"company_name": "Price's Floral Wholesale, LLC",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": null,
+"annual_total_sales": 1800000.0
+},
+{
+"company_id": "816923",
+"sfdc_id": "001VL00000LDVbNYAX",
+"company_name": "Remi Flowers FOB UIO",
+"company_industry": "Floral - Grower",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "816979",
+"sfdc_id": "001VL00000oU8ZfYAK",
+"company_name": "Verisar Flowers - UIO",
+"company_industry": "Floral - Grower",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "817168",
+"sfdc_id": "0014p000022Vab1AAC",
+"company_name": "International Fresh Group LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 600000.0
+},
+{
+"company_id": "817285",
+"sfdc_id": "001VL00000mScY9YAK",
+"company_name": "Flores de los Lagos",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "819114",
+"sfdc_id": "001VL00000q86lRYAQ",
+"company_name": "Details Direct",
+"company_industry": "Floral - Retailer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": null,
+"annual_total_sales": null
+},
+{
+"company_id": "821576",
+"sfdc_id": "0011600001zVU4vAAG",
+"company_name": "MAIN WHOLESALE FLORIST LLC / PENNSAUKEN",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "821768",
+"sfdc_id": "001VL00000bzq64YAA",
+"company_name": "Coquette Roses",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "822905",
+"sfdc_id": "001VL00000raiIYYAY",
+"company_name": "GQ FLOWERS",
+"company_industry": "Floral - Grower",
+"komet_status": "Production - Live",
+"record_type_name": "Prospect",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "822938",
+"sfdc_id": "001VL00000k74R0YAI",
+"company_name": "Flores San Miguel",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Prospect",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "825239",
+"sfdc_id": "001VL00000lXjePYAS",
+"company_name": "Pampa Products LLC",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "825773",
+"sfdc_id": "001VL00000r1tVOYAY",
+"company_name": "Creations From Heaven",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Prospect",
+"annual_total_sales": 0.0
+},
+{
+"company_id": "827180",
+"sfdc_id": "001VL00000qmfPWYAY",
+"company_name": "Main Wholesale Florist LLC / Clifton",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "828336",
+"sfdc_id": "001G000001L8zkpIAB",
+"company_name": "SPRINGFIELD FLORIST SUPPLY INC",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Lead",
+"annual_total_sales": 3800000.0
+},
+{
+"company_id": "828357",
+"sfdc_id": "001VL00000tTNWIYA4",
+"company_name": "Syrius Inc.",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "830406",
+"sfdc_id": "001G000001DW4OGIA1",
+"company_name": "Avon Valley Floral",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": 4600000.0
+},
+{
+"company_id": "831651",
+"sfdc_id": "001G000001f8NvuIAE",
+"company_name": "La Rosaleda",
+"company_industry": "Floral - Grower",
+"komet_status": "Implementation - Not Live",
+"record_type_name": "Customer",
+"komet_account_type": "Lead",
+"annual_total_sales": null
+},
+{
+"company_id": "831754",
+"sfdc_id": "001VL00000sK4BfYAK",
+"company_name": "Nexa Flowers Group",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Implementation - Not Live",
+"record_type_name": "Customer",
+"komet_account_type": null,
+"annual_total_sales": null
+},
+{
+"company_id": "833444",
+"sfdc_id": "001VL00000sy1IKYAY",
+"company_name": "Abloom Floral Group",
+"company_industry": "Floral - Importer",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": null,
+"annual_total_sales": 0.0
+},
+{
+"company_id": "833529",
+"sfdc_id": "001VL00000w4tCdYAI",
+"company_name": "DA and Son LLC",
+"company_industry": "Floral - Grower",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Customer",
+"annual_total_sales": null
+},
+{
+"company_id": "833756",
+"sfdc_id": "001VL000010799UYAQ",
+"company_name": "ALIS LUXURY BQTS CORP",
+"company_industry": "Floral - Importer",
+"komet_status": "Implementation - Not Live",
+"record_type_name": "Customer",
+"komet_account_type": null,
+"annual_total_sales": 0.0
+},
+{
+"company_id": "834122",
+"sfdc_id": "001VL00000xYROpYAO",
+"company_name": "Main Wholesale - Hawthorne",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "834751",
+"sfdc_id": "001VL00000sSdk6YAC",
+"company_name": "Statewide Wholesale",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Implementation - Not Live",
+"record_type_name": "Customer",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "835654",
+"sfdc_id": "001VL00000zzBBXYA2",
+"company_name": "VaseReady",
+"company_industry": "Floral - Importer",
+"komet_status": "Implementation - Not Live",
+"record_type_name": "Customer",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "835773",
+"sfdc_id": "001VL000012GtDOYA0",
+"company_name": "Komet Sales LLC - Test Account",
+"company_industry": "Floral - Retailer",
+"komet_status": null,
+"record_type_name": "Customer",
+"komet_account_type": null,
+"annual_total_sales": null
+},
+{
+"company_id": "836288",
+"sfdc_id": "0011L00002eoFCZQA2",
+"company_name": "Bloomology Global LLC",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Implementation - Not Live",
+"record_type_name": "Customer",
+"komet_account_type": "Prospect",
+"annual_total_sales": null
+},
+{
+"company_id": "837349",
+"sfdc_id": "001G000001TseygIAB",
+"company_name": "Choice Flower Exchange",
+"company_industry": "Floral - Wholesaler",
+"komet_status": "Production - Live",
+"record_type_name": "Customer",
+"komet_account_type": "Lead",
+"annual_total_sales": null
+}
+]
+}

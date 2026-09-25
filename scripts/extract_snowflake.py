@@ -57,6 +57,7 @@ MANIFIESTO: dict[str, tuple[str, int]] = {
     "catalog_sell":   ("sql/evidence/catalog_reach.sql", 0),
     "catalog_buy":    ("sql/evidence/catalog_reach.sql", 1),
     "inventory":      ("sql/evidence/inventory_current.sql", 0),
+    "companies_universe": ("sql/evidence/companies_universe.sql", 0),
     # Pendientes de cablear: hardgoods, config_evidence, buyers, vendors,
     # temporal. Sus .sql están en sql/evidence pero conviene sumarlos de a uno
     # y comparar contra la corrida manual antes de confiar en ellos.

@@ -72,6 +72,7 @@ const GMV_SOURCE_EN: Record<string, string> = {
   'Estimado': 'Estimated',
   'Estimado (verificar)': 'Estimated (to verify)',
   'Estimado (AnnualRevenue×0.11)': 'Estimated (AnnualRevenue × 0.11)',
+  'Annual Total Sales': 'Annual Total Sales (SFDC)',
   'Sin dato': 'No data',
   'No vende (Koronet)': 'Does not sell (Koronet)',
   'not in Christine cascade': 'Not in Christine cascade',
